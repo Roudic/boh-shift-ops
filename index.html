@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
   <title>BOH Shift Ops — Schedule &amp; Setup</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -160,7 +162,7 @@
     .table-wrap { overflow-x: auto; border-radius: 0 0 var(--radius) var(--radius); }
     table.roster {
       width: 100%; border-collapse: separate; border-spacing: 0 4px;
-      min-width: 1100px; table-layout: fixed;
+      min-width: 1280px; table-layout: fixed;
     }
     table.roster th, table.roster td { border-bottom: none; }
     table.roster thead th {
@@ -231,7 +233,7 @@
     .day-shift-chip.empty { background: transparent; color: #6B7280; border: 1px dashed var(--border); }
 
     .cell {
-      min-height: 108px; border-radius: 14px; cursor: pointer;
+      min-height: 100px; border-radius: 14px; cursor: pointer;
       display: flex; flex-direction: column; justify-content: stretch; padding: 6px;
       margin: 4px; border: 1px solid transparent; transition: all .15s ease;
       background: transparent; overflow: visible;
@@ -251,11 +253,11 @@
     }
     .cell-off:hover { border-color: var(--border); background: rgba(0,0,0,.2); transform: none; box-shadow: none; }
 
-    /* Classic shift cards — always show In + Out fully, drag to move */
+    /* Classic shift cards — START + END times are the main thing you see */
     .cv-card {
       position: relative; flex: 1; display: flex; flex-direction: column;
-      min-height: 100px; border-radius: 12px; padding: 10px 10px 8px 12px;
-      overflow: visible; border: 1px solid rgba(255,255,255,.1);
+      min-height: 96px; border-radius: 12px; padding: 10px 8px 8px 10px;
+      overflow: visible; border: 1px solid rgba(255,255,255,.12);
       box-shadow: 0 6px 16px rgba(0,0,0,.24);
       transition: box-shadow .15s, transform .15s, opacity .15s;
       cursor: grab;
@@ -272,56 +274,49 @@
     }
     .cv-card::before {
       content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
-      background: rgba(255,255,255,.85); border-radius: 12px 0 0 12px;
+      background: rgba(255,255,255,.9); border-radius: 12px 0 0 12px;
     }
     .cv-card.tone-early {
-      background: linear-gradient(145deg, rgba(14,165,233,.95) 0%, rgba(3,105,161,.92) 100%);
+      background: linear-gradient(145deg, rgba(14,165,233,.97) 0%, rgba(3,105,161,.94) 100%);
     }
     .cv-card.tone-mid {
-      background: linear-gradient(145deg, rgba(245,158,11,.95) 0%, rgba(194,65,12,.92) 100%);
+      background: linear-gradient(145deg, rgba(245,158,11,.97) 0%, rgba(194,65,12,.94) 100%);
     }
     .cv-card.tone-late {
-      background: linear-gradient(145deg, rgba(139,92,246,.95) 0%, rgba(91,33,182,.92) 100%);
+      background: linear-gradient(145deg, rgba(139,92,246,.97) 0%, rgba(91,33,182,.94) 100%);
     }
     .cv-card.tone-custom {
-      background: linear-gradient(145deg, rgba(240,58,95,.96) 0%, rgba(159,18,57,.94) 100%);
+      background: linear-gradient(145deg, rgba(240,58,95,.97) 0%, rgba(159,18,57,.95) 100%);
     }
     .cv-card.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 6px 16px rgba(0,0,0,.24); }
-    .cv-card-top {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 6px;
-      min-width: 0;
-    }
+    /* Big start / end block — never hide these */
     .cv-times {
-      display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;
+      display: block; width: 100%; min-width: 0;
     }
-    /* Always show BOTH start and end — stacked rows so nothing clips */
-    .cv-time-row {
-      display: flex; align-items: baseline; gap: 5px;
-      font-weight: 800; color: #fff; line-height: 1.2;
-      text-shadow: 0 1px 2px rgba(0,0,0,.2);
-      min-width: 0;
+    .cv-time-range {
+      display: block;
+      font-size: 15px; font-weight: 800; line-height: 1.25;
+      color: #FFFFFF; letter-spacing: -.02em;
+      text-shadow: 0 1px 3px rgba(0,0,0,.35);
+      white-space: normal; word-break: break-word;
     }
-    .cv-time-row .cv-k {
-      flex-shrink: 0; font-size: 9px; font-weight: 800; letter-spacing: .05em;
-      text-transform: uppercase; opacity: .85; width: 22px;
+    .cv-time-range .cv-sep {
+      display: inline; opacity: .75; font-weight: 700; margin: 0 2px;
     }
-    .cv-time-row .cv-v {
-      font-size: 13px; font-weight: 800; letter-spacing: -.01em;
-      white-space: nowrap; overflow: visible;
+    .cv-time-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 6px; margin-top: 6px;
     }
     .cv-hrs-pill {
-      flex-shrink: 0; font-size: 10px; font-weight: 800; color: #0F172A;
-      background: rgba(255,255,255,.92); padding: 3px 7px; border-radius: 999px;
-      letter-spacing: -.01em; margin-top: 1px; line-height: 1.2;
+      flex-shrink: 0; font-size: 11px; font-weight: 800; color: #0F172A;
+      background: rgba(255,255,255,.95); padding: 3px 8px; border-radius: 999px;
+      letter-spacing: -.01em; line-height: 1.2;
     }
     .cv-role {
-      margin-top: 5px; font-size: 10px; font-weight: 700; color: rgba(255,255,255,.88);
-      letter-spacing: .02em; line-height: 1.25;
+      min-width: 0; flex: 1; font-size: 10px; font-weight: 700; color: rgba(255,255,255,.9);
+      letter-spacing: .01em; line-height: 1.2;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .cv-drag-hint {
-      font-size: 9px; font-weight: 700; color: rgba(255,255,255,.55);
-      margin-top: 3px; letter-spacing: .03em;
+      text-align: right;
     }
     .cv-actions {
       margin-top: 6px; padding-top: 0; display: flex; gap: 4px; flex-wrap: wrap;
@@ -6256,8 +6251,8 @@ function renderRoster() {
         ).join('');
         const sel = selectedCell?.staffId === p.id && selectedCell?.dateKey === dk ? ' selected' : '';
         const hrs = shiftHours(entry);
-        const tIn = formatTime12(entry.start);
-        const tOut = formatTime12(entry.end);
+        const tStart = formatTime12(entry.start) || entry.start || '?';
+        const tEnd = formatTime12(entry.end) || entry.end || '?';
         return `<td>
           <div class="cell assigned ${avCls}${sel}" data-staff="${p.id}" data-date="${dk}"
             onclick="handleCellClick('${p.id}','${dk}',${di},event)"
@@ -6270,16 +6265,15 @@ function renderRoster() {
               draggable="${schedulePublished ? 'false' : 'true'}"
               ondragstart="classicDragStart(event,'${p.id}','${dk}',${di})"
               ondragend="classicDragEnd(event)"
-              title="${tIn} – ${tOut} · ${hrs}h — drag to move · double-click to edit">
+              title="Start ${tStart} · End ${tEnd} · ${hrs}h — drag to move · double-click to edit">
               ${conflict ? `<span class="cv-warn" title="${escAttr(conflict)}">⚠</span>` : ''}
-              <div class="cv-card-top">
-                <div class="cv-times">
-                  <div class="cv-time-row"><span class="cv-k">In</span><span class="cv-v">${tIn}</span></div>
-                  <div class="cv-time-row"><span class="cv-k">Out</span><span class="cv-v">${tOut}</span></div>
+              <div class="cv-times">
+                <div class="cv-time-range">${escAttr(tStart)} <span class="cv-sep">–</span> ${escAttr(tEnd)}</div>
+                <div class="cv-time-meta">
+                  <span class="cv-hrs-pill">${hrs}h</span>
+                  <span class="cv-role">${escAttr(roleLabel)}</span>
                 </div>
-                <div class="cv-hrs-pill">${hrs}h</div>
               </div>
-              <div class="cv-role">${escAttr(roleLabel)}</div>
               ${setupBtns ? `<div class="cv-setups">${setupBtns}</div>` : ''}
               <div class="cv-actions">
                 <button type="button" class="cv-act primary" onclick="event.stopPropagation(); openAssign('${p.id}','${dk}',${di})">Edit</button>
