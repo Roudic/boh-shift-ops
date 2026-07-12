@@ -159,8 +159,8 @@
     /* Roster table — roomy ClassicView (big shift blocks) */
     .table-wrap { overflow-x: auto; border-radius: 0 0 var(--radius) var(--radius); }
     table.roster {
-      width: 100%; border-collapse: separate; border-spacing: 0 6px;
-      min-width: 1480px; table-layout: fixed;
+      width: 100%; border-collapse: separate; border-spacing: 0 4px;
+      min-width: 1100px; table-layout: fixed;
     }
     table.roster th, table.roster td { border-bottom: none; }
     table.roster thead th {
@@ -170,9 +170,9 @@
       padding: 18px 14px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase;
       letter-spacing: .06em; color: var(--muted); background: var(--surface-2); text-align: center;
     }
-    table.roster th:first-child { text-align: left; padding-left: 24px; width: 220px; }
-    table.roster th:last-child { width: 80px; }
-    table.roster td { padding: 8px 10px; vertical-align: middle; }
+    table.roster th:first-child { text-align: left; padding-left: 18px; width: 180px; }
+    table.roster th:last-child { width: 64px; }
+    table.roster td { padding: 4px 6px; vertical-align: middle; }
     table.roster tbody tr {
       transition: background .15s ease;
     }
@@ -183,11 +183,11 @@
       background: linear-gradient(90deg, rgba(240,58,95,.12), rgba(240,58,95,.03));
     }
     table.roster td.name-cell {
-      padding: 22px 22px; font-weight: 700; font-size: 15px; white-space: nowrap;
+      padding: 12px 16px; font-weight: 700; font-size: 13px; white-space: nowrap;
       color: #F1F5F9; letter-spacing: -.01em;
     }
     table.roster td.hours-cell {
-      text-align: center; font-weight: 800; color: var(--red); font-size: 16px; padding: 22px 12px;
+      text-align: center; font-weight: 800; color: var(--red); font-size: 13px; padding: 12px 8px;
     }
     .name-meta { font-size: 12px !important; color: var(--muted) !important; font-weight: 600 !important; margin-top: 6px !important; letter-spacing: 0; }
     .day-head .dow {
@@ -201,8 +201,8 @@
       background: rgba(240,58,95,.1);
     }
     .day-head-inner {
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-      min-width: 176px; padding: 12px 10px; border-radius: 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      min-width: 128px; padding: 8px 6px; border-radius: 12px;
       transition: background .15s, box-shadow .15s;
     }
     .day-sort { display: flex; gap: 6px; }
@@ -231,36 +231,36 @@
     .day-shift-chip.empty { background: transparent; color: #6B7280; border: 1px dashed var(--border); }
 
     .cell {
-      min-height: 148px; border-radius: 18px; cursor: pointer;
-      display: flex; flex-direction: column; justify-content: stretch; padding: 10px;
-      margin: 6px; border: 1px solid transparent; transition: all .18s ease;
+      min-height: 88px; border-radius: 14px; cursor: pointer;
+      display: flex; flex-direction: column; justify-content: stretch; padding: 6px;
+      margin: 4px; border: 1px solid transparent; transition: all .15s ease;
       background: transparent;
     }
-    .cell:hover { transform: translateY(-2px); }
+    .cell:hover { transform: translateY(-1px); }
     .cell.assigned { background: transparent; border-color: transparent; }
     .cell.selected .cv-card,
     .cell.selected .cv-empty {
-      box-shadow: 0 0 0 2px var(--red), 0 12px 32px rgba(240,58,95,.2);
+      box-shadow: 0 0 0 2px var(--red), 0 8px 20px rgba(240,58,95,.18);
     }
-    .cell-empty { color: #64748B; font-size: 14px; align-items: center; text-align: center; }
+    .cell-empty { color: #64748B; font-size: 13px; align-items: center; text-align: center; }
     .cell-off {
       background: rgba(0,0,0,.2); border-style: solid; border-color: var(--border);
-      color: var(--muted); font-weight: 700; font-size: 13px; letter-spacing: .06em;
-      align-items: center; text-align: center; cursor: default; min-height: 148px;
-      border-radius: 18px;
+      color: var(--muted); font-weight: 700; font-size: 12px; letter-spacing: .06em;
+      align-items: center; text-align: center; cursor: default; min-height: 88px;
+      border-radius: 14px;
     }
     .cell-off:hover { border-color: var(--border); background: rgba(0,0,0,.2); transform: none; box-shadow: none; }
 
-    /* Classic shift cards — full-cell redesign (not mini Gantt) */
+    /* Classic shift cards — compact so times stay readable on the grid */
     .cv-card {
       position: relative; flex: 1; display: flex; flex-direction: column;
-      min-height: 128px; border-radius: 16px; padding: 14px 14px 12px 16px;
+      min-height: 76px; border-radius: 12px; padding: 10px 10px 8px 12px;
       overflow: hidden; border: 1px solid rgba(255,255,255,.1);
-      box-shadow: 0 10px 28px rgba(0,0,0,.28);
-      transition: box-shadow .18s, transform .18s;
+      box-shadow: 0 6px 16px rgba(0,0,0,.24);
+      transition: box-shadow .15s, transform .15s;
     }
     .cv-card::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
       background: rgba(255,255,255,.85);
     }
     .cv-card.tone-early {
@@ -275,75 +275,75 @@
     .cv-card.tone-custom {
       background: linear-gradient(145deg, rgba(240,58,95,.96) 0%, rgba(159,18,57,.94) 100%);
     }
-    .cv-card.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 10px 28px rgba(0,0,0,.28); }
+    .cv-card.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 6px 16px rgba(0,0,0,.24); }
     .cv-card-top {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
     }
     .cv-times {
-      display: flex; flex-direction: column; gap: 2px; min-width: 0;
+      display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1;
     }
     .cv-time-main {
-      font-size: 17px; font-weight: 800; color: #fff; letter-spacing: -.03em;
-      line-height: 1.15; text-shadow: 0 1px 2px rgba(0,0,0,.2);
-      white-space: nowrap;
+      font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -.02em;
+      line-height: 1.2; text-shadow: 0 1px 2px rgba(0,0,0,.2);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .cv-time-sub {
-      font-size: 12px; font-weight: 700; color: rgba(255,255,255,.88);
+      display: none; /* hide second time line — keeps card compact, main line shows times */
     }
     .cv-hrs-pill {
-      flex-shrink: 0; font-size: 12px; font-weight: 800; color: #0F172A;
-      background: rgba(255,255,255,.92); padding: 5px 10px; border-radius: 999px;
+      flex-shrink: 0; font-size: 11px; font-weight: 800; color: #0F172A;
+      background: rgba(255,255,255,.92); padding: 3px 8px; border-radius: 999px;
       letter-spacing: -.01em;
     }
     .cv-role {
-      margin-top: 10px; font-size: 11px; font-weight: 700; color: rgba(255,255,255,.9);
-      letter-spacing: .02em; line-height: 1.3;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+      margin-top: 6px; font-size: 10px; font-weight: 700; color: rgba(255,255,255,.88);
+      letter-spacing: .02em; line-height: 1.25;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .cv-actions {
-      margin-top: auto; padding-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;
-      opacity: 0; transition: opacity .15s;
+      margin-top: 8px; padding-top: 0; display: flex; gap: 4px; flex-wrap: wrap;
+      opacity: 0; transition: opacity .12s;
     }
     .cv-card:hover .cv-actions,
     .cell.selected .cv-actions { opacity: 1; }
     .cv-act {
-      border: none; border-radius: 9px; padding: 6px 10px; font-family: inherit;
-      font-size: 11px; font-weight: 800; cursor: pointer;
+      border: none; border-radius: 7px; padding: 4px 8px; font-family: inherit;
+      font-size: 10px; font-weight: 800; cursor: pointer;
       background: rgba(0,0,0,.28); color: #fff; transition: background .12s;
     }
     .cv-act:hover { background: rgba(0,0,0,.45); }
     .cv-act.primary { background: rgba(255,255,255,.92); color: #0F172A; }
     .cv-act.primary:hover { background: #fff; }
     .cv-warn {
-      position: absolute; top: 10px; right: 10px; font-size: 13px;
+      position: absolute; top: 6px; right: 8px; font-size: 12px;
       filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
     }
     .cv-empty {
-      flex: 1; min-height: 128px; border-radius: 16px;
+      flex: 1; min-height: 76px; border-radius: 12px;
       border: 1.5px dashed rgba(148,163,184,.35);
       background: rgba(0,0,0,.14);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 8px; transition: all .18s; padding: 16px 12px;
+      gap: 4px; transition: all .15s; padding: 10px 8px;
     }
     .cell:hover .cv-empty {
       border-color: rgba(240,58,95,.5); border-style: solid;
       background: linear-gradient(160deg, rgba(240,58,95,.12), rgba(240,58,95,.04));
     }
     .cv-empty-plus {
-      width: 40px; height: 40px; border-radius: 12px;
+      width: 28px; height: 28px; border-radius: 8px;
       display: grid; place-items: center;
-      font-size: 22px; font-weight: 300; color: #94A3B8;
+      font-size: 18px; font-weight: 300; color: #94A3B8;
       background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
     }
     .cell:hover .cv-empty-plus { color: #FDA4AF; border-color: rgba(240,58,95,.35); background: var(--red-light); }
-    .cv-empty-label { font-size: 12px; font-weight: 700; color: #7C869A; letter-spacing: .02em; }
+    .cv-empty-label { font-size: 11px; font-weight: 700; color: #7C869A; letter-spacing: .02em; }
     .cell:hover .cv-empty-label { color: #FDA4AF; }
     .cv-avail {
-      font-size: 10px; font-weight: 600; color: #6B7280; text-align: center;
+      font-size: 9px; font-weight: 600; color: #6B7280; text-align: center;
       max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     .cv-setups {
-      display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;
+      display: none; /* hide period chips on card — less clutter; use Shift Setup from menu */
     }
     .cv-setups .cell-setup-btn {
       flex: 0 1 auto; background: rgba(0,0,0,.25); color: rgba(255,255,255,.9);
