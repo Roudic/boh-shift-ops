@@ -251,13 +251,24 @@
     }
     .cell-off:hover { border-color: var(--border); background: rgba(0,0,0,.2); transform: none; box-shadow: none; }
 
-    /* Classic shift cards — compact so times stay readable on the grid */
+    /* Classic shift cards — always show In + Out, drag to move */
     .cv-card {
       position: relative; flex: 1; display: flex; flex-direction: column;
-      min-height: 76px; border-radius: 12px; padding: 10px 10px 8px 12px;
+      min-height: 92px; border-radius: 12px; padding: 10px 10px 8px 12px;
       overflow: hidden; border: 1px solid rgba(255,255,255,.1);
       box-shadow: 0 6px 16px rgba(0,0,0,.24);
-      transition: box-shadow .15s, transform .15s;
+      transition: box-shadow .15s, transform .15s, opacity .15s;
+      cursor: grab;
+    }
+    .cv-card:active { cursor: grabbing; }
+    .cv-card.cv-dragging {
+      opacity: .45; transform: scale(.97);
+    }
+    .cell.cv-drop-target .cv-empty,
+    .cell.cv-drop-target .cv-card {
+      outline: 2px dashed rgba(240,58,95,.75);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(240,58,95,.15);
     }
     .cv-card::before {
       content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
@@ -277,31 +288,42 @@
     }
     .cv-card.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 6px 16px rgba(0,0,0,.24); }
     .cv-card-top {
-      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
     }
     .cv-times {
-      display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1;
+      display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1;
     }
-    .cv-time-main {
-      font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -.02em;
-      line-height: 1.2; text-shadow: 0 1px 2px rgba(0,0,0,.2);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    /* Always show BOTH start and end — stacked so nothing clips */
+    .cv-time-row {
+      display: flex; align-items: baseline; gap: 6px;
+      font-weight: 800; color: #fff; line-height: 1.15;
+      text-shadow: 0 1px 2px rgba(0,0,0,.2);
     }
-    .cv-time-sub {
-      display: none; /* hide second time line — keeps card compact, main line shows times */
+    .cv-time-row .cv-k {
+      flex-shrink: 0; font-size: 9px; font-weight: 800; letter-spacing: .06em;
+      text-transform: uppercase; opacity: .8; min-width: 22px;
     }
+    .cv-time-row .cv-v {
+      font-size: 14px; font-weight: 800; letter-spacing: -.02em;
+      white-space: nowrap;
+    }
+    .cv-time-main, .cv-time-sub { display: none; }
     .cv-hrs-pill {
       flex-shrink: 0; font-size: 11px; font-weight: 800; color: #0F172A;
-      background: rgba(255,255,255,.92); padding: 3px 8px; border-radius: 999px;
-      letter-spacing: -.01em;
+      background: rgba(255,255,255,.92); padding: 4px 8px; border-radius: 999px;
+      letter-spacing: -.01em; margin-top: 2px;
     }
     .cv-role {
       margin-top: 6px; font-size: 10px; font-weight: 700; color: rgba(255,255,255,.88);
       letter-spacing: .02em; line-height: 1.25;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
+    .cv-drag-hint {
+      font-size: 9px; font-weight: 700; color: rgba(255,255,255,.55);
+      margin-top: 4px; letter-spacing: .03em;
+    }
     .cv-actions {
-      margin-top: 8px; padding-top: 0; display: flex; gap: 4px; flex-wrap: wrap;
+      margin-top: 6px; padding-top: 0; display: flex; gap: 4px; flex-wrap: wrap;
       opacity: 0; transition: opacity .12s;
     }
     .cv-card:hover .cv-actions,
@@ -319,7 +341,7 @@
       filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
     }
     .cv-empty {
-      flex: 1; min-height: 76px; border-radius: 12px;
+      flex: 1; min-height: 88px; border-radius: 12px;
       border: 1.5px dashed rgba(148,163,184,.35);
       background: rgba(0,0,0,.14);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
