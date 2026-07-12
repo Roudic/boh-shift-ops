@@ -231,27 +231,125 @@
     .day-shift-chip.empty { background: transparent; color: #6B7280; border: 1px dashed var(--border); }
 
     .cell {
-      min-height: 168px; border-radius: 16px; cursor: pointer;
-      display: flex; flex-direction: column; justify-content: center; padding: 16px 14px;
-      margin: 6px; border: 1px dashed rgba(148,163,184,.25); transition: all .18s ease;
-      background: rgba(0,0,0,.18);
+      min-height: 148px; border-radius: 18px; cursor: pointer;
+      display: flex; flex-direction: column; justify-content: stretch; padding: 10px;
+      margin: 6px; border: 1px solid transparent; transition: all .18s ease;
+      background: transparent;
     }
-    .cell:hover {
-      border-color: rgba(240,58,95,.55); background: var(--red-light);
-      transform: translateY(-1px); box-shadow: 0 10px 28px rgba(0,0,0,.22);
+    .cell:hover { transform: translateY(-2px); }
+    .cell.assigned { background: transparent; border-color: transparent; }
+    .cell.selected .cv-card,
+    .cell.selected .cv-empty {
+      box-shadow: 0 0 0 2px var(--red), 0 12px 32px rgba(240,58,95,.2);
     }
-    .cell.assigned {
-      border-style: solid; border-color: rgba(255,255,255,.07);
-      background: rgba(255,255,255,.025);
-    }
-    .cell.assigned:hover { border-color: rgba(240,58,95,.35); }
     .cell-empty { color: #64748B; font-size: 14px; align-items: center; text-align: center; }
     .cell-off {
-      background: rgba(0,0,0,.22); border-style: solid; border-color: var(--border);
+      background: rgba(0,0,0,.2); border-style: solid; border-color: var(--border);
       color: var(--muted); font-weight: 700; font-size: 13px; letter-spacing: .06em;
-      align-items: center; text-align: center; cursor: default; min-height: 168px;
+      align-items: center; text-align: center; cursor: default; min-height: 148px;
+      border-radius: 18px;
     }
-    .cell-off:hover { border-color: var(--border); background: rgba(0,0,0,.22); transform: none; box-shadow: none; }
+    .cell-off:hover { border-color: var(--border); background: rgba(0,0,0,.2); transform: none; box-shadow: none; }
+
+    /* Classic shift cards — full-cell redesign (not mini Gantt) */
+    .cv-card {
+      position: relative; flex: 1; display: flex; flex-direction: column;
+      min-height: 128px; border-radius: 16px; padding: 14px 14px 12px 16px;
+      overflow: hidden; border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 10px 28px rgba(0,0,0,.28);
+      transition: box-shadow .18s, transform .18s;
+    }
+    .cv-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+      background: rgba(255,255,255,.85);
+    }
+    .cv-card.tone-early {
+      background: linear-gradient(145deg, rgba(14,165,233,.95) 0%, rgba(3,105,161,.92) 100%);
+    }
+    .cv-card.tone-mid {
+      background: linear-gradient(145deg, rgba(245,158,11,.95) 0%, rgba(194,65,12,.92) 100%);
+    }
+    .cv-card.tone-late {
+      background: linear-gradient(145deg, rgba(139,92,246,.95) 0%, rgba(91,33,182,.92) 100%);
+    }
+    .cv-card.tone-custom {
+      background: linear-gradient(145deg, rgba(240,58,95,.96) 0%, rgba(159,18,57,.94) 100%);
+    }
+    .cv-card.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 10px 28px rgba(0,0,0,.28); }
+    .cv-card-top {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+    }
+    .cv-times {
+      display: flex; flex-direction: column; gap: 2px; min-width: 0;
+    }
+    .cv-time-main {
+      font-size: 17px; font-weight: 800; color: #fff; letter-spacing: -.03em;
+      line-height: 1.15; text-shadow: 0 1px 2px rgba(0,0,0,.2);
+      white-space: nowrap;
+    }
+    .cv-time-sub {
+      font-size: 12px; font-weight: 700; color: rgba(255,255,255,.88);
+    }
+    .cv-hrs-pill {
+      flex-shrink: 0; font-size: 12px; font-weight: 800; color: #0F172A;
+      background: rgba(255,255,255,.92); padding: 5px 10px; border-radius: 999px;
+      letter-spacing: -.01em;
+    }
+    .cv-role {
+      margin-top: 10px; font-size: 11px; font-weight: 700; color: rgba(255,255,255,.9);
+      letter-spacing: .02em; line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .cv-actions {
+      margin-top: auto; padding-top: 12px; display: flex; gap: 6px; flex-wrap: wrap;
+      opacity: 0; transition: opacity .15s;
+    }
+    .cv-card:hover .cv-actions,
+    .cell.selected .cv-actions { opacity: 1; }
+    .cv-act {
+      border: none; border-radius: 9px; padding: 6px 10px; font-family: inherit;
+      font-size: 11px; font-weight: 800; cursor: pointer;
+      background: rgba(0,0,0,.28); color: #fff; transition: background .12s;
+    }
+    .cv-act:hover { background: rgba(0,0,0,.45); }
+    .cv-act.primary { background: rgba(255,255,255,.92); color: #0F172A; }
+    .cv-act.primary:hover { background: #fff; }
+    .cv-warn {
+      position: absolute; top: 10px; right: 10px; font-size: 13px;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
+    }
+    .cv-empty {
+      flex: 1; min-height: 128px; border-radius: 16px;
+      border: 1.5px dashed rgba(148,163,184,.35);
+      background: rgba(0,0,0,.14);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; transition: all .18s; padding: 16px 12px;
+    }
+    .cell:hover .cv-empty {
+      border-color: rgba(240,58,95,.5); border-style: solid;
+      background: linear-gradient(160deg, rgba(240,58,95,.12), rgba(240,58,95,.04));
+    }
+    .cv-empty-plus {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: grid; place-items: center;
+      font-size: 22px; font-weight: 300; color: #94A3B8;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
+    }
+    .cell:hover .cv-empty-plus { color: #FDA4AF; border-color: rgba(240,58,95,.35); background: var(--red-light); }
+    .cv-empty-label { font-size: 12px; font-weight: 700; color: #7C869A; letter-spacing: .02em; }
+    .cell:hover .cv-empty-label { color: #FDA4AF; }
+    .cv-avail {
+      font-size: 10px; font-weight: 600; color: #6B7280; text-align: center;
+      max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .cv-setups {
+      display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;
+    }
+    .cv-setups .cell-setup-btn {
+      flex: 0 1 auto; background: rgba(0,0,0,.25); color: rgba(255,255,255,.9);
+      font-size: 10px; padding: 4px 8px; border-radius: 999px;
+    }
+    .cv-setups .cell-setup-btn:hover { background: rgba(0,0,0,.4); color: #fff; }
     .hours-over { color: var(--red) !important; }
     .hours-warn { font-size: 10px; color: var(--red); font-weight: 600; }
     .cell-actions { display: flex; gap: 6px; margin-top: 8px; width: 100%; }
@@ -1664,12 +1762,12 @@
         <div class="classic-hero">
           <div>
             <h2>Classic week schedule</h2>
-            <p id="rosterSubtitle">Room to build shifts here — paint, stretch, sort by start time. Use SmartView when you need hour marks.</p>
+            <p id="rosterSubtitle">Clean shift cards — click empty to add, Edit for times. Use SmartView for hour-by-hour drag &amp; stretch.</p>
             <div class="classic-hint-pills">
-              <span><em>Drag</em> empty cell to paint</span>
-              <span><em>Edges</em> stretch times</span>
+              <span><em>Click</em> empty → add shift</span>
+              <span><em>Edit</em> card for times</span>
               <span><em>▲ ▼</em> sort by start</span>
-              <span><em>→</em> copy to people</span>
+              <span><em>SmartView</em> for timeline</span>
             </div>
           </div>
           <div class="classic-hero-actions">
@@ -2487,7 +2585,7 @@ function closeSmartSchedule() {
   if (smartBtn) smartBtn.style.display = 'inline-flex';
   if (weekBtn) weekBtn.style.display = 'none';
   const sub = document.getElementById('rosterSubtitle');
-  if (sub) sub.textContent = 'Room to build shifts here — paint, stretch, sort by start time. Use SmartView when you need hour marks.';
+  if (sub) sub.textContent = 'Clean shift cards — click empty to add, Edit for times. Use SmartView for hour-by-hour drag & stretch.';
   renderRoster();
   renderHeaders();
 }
@@ -3184,7 +3282,23 @@ function handleCellClick(staffId, dateKey, dayIndex, e) {
   if (pasteMode && clipboardShift) {
     pasteShiftToCell(staffId, dateKey, dayIndex);
   }
-  // No modal on single click — paint/drag on timeline, double-click to edit
+  // Classic cards: double-click or Edit button opens modal; SmartView still paints
+}
+
+/** Classic empty cell — one click to add (or paste if copy mode). */
+function handleClassicEmptyClick(staffId, dateKey, dayIndex, e) {
+  if (suppressNextCellClick || shiftDrag) return;
+  if (e?.target?.closest?.('.cv-act, button, a')) return;
+  setSelectedCell(staffId, dateKey, dayIndex);
+  if (schedulePublished) {
+    openAssign(staffId, dateKey, dayIndex);
+    return;
+  }
+  if (pasteMode && clipboardShift) {
+    pasteShiftToCell(staffId, dateKey, dayIndex);
+    return;
+  }
+  openAssign(staffId, dateKey, dayIndex);
 }
 
 function handleCellDblClick(staffId, dateKey, dayIndex, e) {
@@ -6015,60 +6129,60 @@ function renderRoster() {
       if (entry) {
         const conflict = scheduleConflict(p.id, dk, entry.start, entry.end);
         const tone = shiftTone(entry.start, entry.end);
-        const startMin = timeToMinutes(entry.start);
-        const endMin = timeToMinutes(entry.end);
-        const leftPct = minutesToPct(Math.max(DAY_TL_START, Math.min(startMin, DAY_TL_END)));
-        const rightPct = minutesToPct(Math.max(DAY_TL_START, Math.min(endMin, DAY_TL_END)));
-        const widthPct = Math.max(8, rightPct - leftPct);
         const coveredPeriods = periodsForTimes(entry.start, entry.end);
-        const setupBtns = coveredPeriods.map(per =>
-          `<button type="button" class="cell-setup-btn" onclick="goToSetup('${dk}','${per.id}',event)">${per.name}</button>`
+        const roleLabel = coveredPeriods.length
+          ? coveredPeriods.map(per => per.name).join(' · ')
+          : (p.role || 'Custom shift');
+        const setupBtns = coveredPeriods.slice(0, 3).map(per =>
+          `<button type="button" class="cell-setup-btn" onclick="goToSetup('${dk}','${per.id}',event)">${escAttr(per.name)}</button>`
         ).join('');
         const sel = selectedCell?.staffId === p.id && selectedCell?.dateKey === dk ? ' selected' : '';
-        return `<td><div class="cell assigned ${avCls}${sel}" data-staff="${p.id}" data-date="${dk}" onclick="handleCellClick('${p.id}','${dk}',${di},event)" ondblclick="handleCellDblClick('${p.id}','${dk}',${di},event)" oncontextmenu="handleCellContextMenu('${p.id}','${dk}',${di},event)">
-          <div class="cell-inner">
-            <div class="hs-shift-track" title="Drag block to move · drag edges to stretch (4a–11p) · double-click to edit">
-              ${timelineDecorHtml({ showLabels: true })}
-              <div class="hs-shift tone-${tone}${conflict ? ' has-conflict' : ''}" role="button" tabindex="0"
-                style="left:${leftPct}%;width:${widthPct}%"
-                onpointerdown="if(event.target.closest('.hs-handle,.hs-copy-btn,.hs-copy-to-btn'))return; onShiftPointerDown(event,'move','${p.id}','${dk}',${di})"
-                ondblclick="handleCellDblClick('${p.id}','${dk}',${di},event)">
-                <button type="button" class="hs-handle hs-handle-start" title="Drag to change start"
-                  onpointerdown="onShiftPointerDown(event,'start','${p.id}','${dk}',${di})"></button>
-                <span class="hs-shift-time">${compactShiftRange(entry.start, entry.end)}</span>
-                <span class="hs-shift-hours">${shiftHours(entry)}h</span>
-                ${conflict ? `<span class="hs-shift-warn" title="${escAttr(conflict)}">⚠</span>` : ''}
-                <div class="hs-shift-actions">
-                  <button type="button" class="hs-copy-btn" title="Copy (paste mode)" onclick="event.stopPropagation(); copyShiftFromCell('${p.id}','${dk}',${di})">⎘</button>
-                  <button type="button" class="hs-copy-to-btn" title="Copy to employees…" onclick="event.stopPropagation(); openCopyToModal('${p.id}','${dk}',${di})">→</button>
+        const hrs = shiftHours(entry);
+        return `<td>
+          <div class="cell assigned ${avCls}${sel}" data-staff="${p.id}" data-date="${dk}"
+            onclick="handleCellClick('${p.id}','${dk}',${di},event)"
+            ondblclick="handleCellDblClick('${p.id}','${dk}',${di},event)"
+            oncontextmenu="handleCellContextMenu('${p.id}','${dk}',${di},event)">
+            <div class="cv-card tone-${tone}${conflict ? ' has-conflict' : ''}"
+              title="${compactShiftRange(entry.start, entry.end)} · ${hrs}h — double-click to edit">
+              ${conflict ? `<span class="cv-warn" title="${escAttr(conflict)}">⚠</span>` : ''}
+              <div class="cv-card-top">
+                <div class="cv-times">
+                  <div class="cv-time-main">${compactTime12(entry.start)} – ${compactTime12(entry.end)}</div>
+                  <div class="cv-time-sub">${formatTime12(entry.start)} → ${formatTime12(entry.end)}</div>
                 </div>
-                <button type="button" class="hs-handle hs-handle-end" title="Drag to change end"
-                  onpointerdown="onShiftPointerDown(event,'end','${p.id}','${dk}',${di})"></button>
+                <div class="cv-hrs-pill">${hrs}h</div>
+              </div>
+              <div class="cv-role">${escAttr(roleLabel)}</div>
+              ${setupBtns ? `<div class="cv-setups">${setupBtns}</div>` : ''}
+              <div class="cv-actions">
+                <button type="button" class="cv-act primary" onclick="event.stopPropagation(); openAssign('${p.id}','${dk}',${di})">Edit</button>
+                <button type="button" class="cv-act" onclick="event.stopPropagation(); copyShiftFromCell('${p.id}','${dk}',${di})" title="Copy">Copy</button>
+                <button type="button" class="cv-act" onclick="event.stopPropagation(); openCopyToModal('${p.id}','${dk}',${di})" title="Copy to people">To…</button>
               </div>
             </div>
-            ${setupBtns ? `<div class="cell-actions">${setupBtns}</div>` : ''}
-            ${editBtn}
           </div>
-        </div></td>`;
+        </td>`;
       }
       if (isRotationOffDay(p.id, dk)) {
         const selOff = selectedCell?.staffId === p.id && selectedCell?.dateKey === dk ? ' selected' : '';
         return `<td><div class="cell cell-off${selOff}" data-staff="${p.id}" data-date="${dk}" onclick="handleCellClick('${p.id}','${dk}',${di},event)" ondblclick="handleCellDblClick('${p.id}','${dk}',${di},event)" oncontextmenu="handleCellContextMenu('${p.id}','${dk}',${di},event)">
-          <div class="cell-inner"><span title="Rotation off day">OFF</span>${editBtn}</div>
+          <div class="cell-inner"><span title="Rotation off day">OFF</span></div>
         </div></td>`;
       }
       const selEmpty = selectedCell?.staffId === p.id && selectedCell?.dateKey === dk ? ' selected' : '';
-      return `<td><div class="cell ${avCls}${selEmpty}" data-staff="${p.id}" data-date="${dk}" onclick="handleCellClick('${p.id}','${dk}',${di},event)" ondblclick="handleCellDblClick('${p.id}','${dk}',${di},event)" oncontextmenu="handleCellContextMenu('${p.id}','${dk}',${di},event)">
-        <div class="cell-inner">
-          <div class="hs-shift-track empty-track" title="Click-drag to paint shift times (4a–11p) · double-click for menu"
-            onpointerdown="onPaintTrackPointerDown(event,'${p.id}','${dk}',${di})">
-            ${timelineDecorHtml({ showLabels: true })}
-            <span class="paint-hint">drag to schedule</span>
+      return `<td>
+        <div class="cell ${avCls}${selEmpty}" data-staff="${p.id}" data-date="${dk}"
+          onclick="handleClassicEmptyClick('${p.id}','${dk}',${di},event)"
+          ondblclick="handleCellDblClick('${p.id}','${dk}',${di},event)"
+          oncontextmenu="handleCellContextMenu('${p.id}','${dk}',${di},event)">
+          <div class="cv-empty">
+            <div class="cv-empty-plus">+</div>
+            <div class="cv-empty-label">Add shift</div>
+            ${avHint ? `<div class="cv-avail">${avHint}</div>` : ''}
           </div>
-          ${avHint}
-          ${editBtn}
         </div>
-      </div></td>`;
+      </td>`;
     }).join('');
     const hrs = calcHours(p.id);
     const hrsCls = hrs > maxH ? ' hours-over' : '';
