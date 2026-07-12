@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOH Shift Ops · Share Links &amp; Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #DD0033; --red-dark: #B8002A; --ink: #0F172A; --muted: #64748B;
+      --border: #E2E8F0; --bg: #F1F5F9; --card: #FFFFFF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: radial-gradient(1200px 600px at 10% -10%, #FEE2E2 0%, transparent 50%),
+                  radial-gradient(900px 500px at 100% 0%, #DBEAFE 0%, transparent 45%),
+                  var(--bg);
+      color: var(--ink); line-height: 1.5; min-height: 100vh;
+    }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 28px 18px 64px; }
+    .hero {
+      background: linear-gradient(120deg, #0F172A 0%, #1E3A5F 55%, #DD0033 120%);
+      color: #fff; border-radius: 22px; padding: 28px 26px; margin-bottom: 22px;
+      box-shadow: 0 16px 40px rgba(15,23,42,.25);
+    }
+    .hero .kicker {
+      display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .08em;
+      text-transform: uppercase; opacity: .85; margin-bottom: 10px;
+    }
+    .hero h1 { font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 800; line-height: 1.15; margin-bottom: 8px; }
+    .hero p { opacity: .9; font-size: 15px; max-width: 38rem; }
+    .hero .pin {
+      margin-top: 16px; display: inline-flex; gap: 8px; flex-wrap: wrap;
+      font-size: 12px; font-weight: 700;
+    }
+    .hero .pin span {
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.18);
+      padding: 6px 12px; border-radius: 999px;
+    }
+    h2 {
+      font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--muted); margin: 22px 0 12px;
+    }
+    .links { display: grid; gap: 12px; }
+    @media (min-width: 700px) { .links.two { grid-template-columns: 1fr 1fr; } }
+    a.card {
+      display: block; text-decoration: none; color: inherit;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px 18px; transition: transform .12s, box-shadow .12s, border-color .12s;
+      box-shadow: 0 1px 3px rgba(15,23,42,.04);
+    }
+    a.card:hover {
+      transform: translateY(-2px); border-color: #FECACA;
+      box-shadow: 0 12px 28px rgba(221,0,51,.12);
+    }
+    a.card.primary {
+      background: linear-gradient(135deg, #fff 0%, #FFF0F3 100%);
+      border-color: #FECACA;
+    }
+    a.card .label {
+      font-size: 11px; font-weight: 800; color: var(--red); text-transform: uppercase;
+      letter-spacing: .05em; margin-bottom: 4px;
+    }
+    a.card .title { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+    a.card .desc { font-size: 13px; color: var(--muted); font-weight: 600; }
+    a.card .url {
+      margin-top: 10px; font-size: 12px; font-weight: 600; color: #0EA5E9;
+      word-break: break-all;
+    }
+    .howto {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 8px; overflow: hidden;
+    }
+    .step {
+      display: grid; grid-template-columns: 1fr; gap: 12px;
+      padding: 16px; border-bottom: 1px solid var(--border);
+    }
+    .step:last-child { border-bottom: none; }
+    @media (min-width: 720px) {
+      .step { grid-template-columns: 1.1fr .9fr; align-items: center; }
+    }
+    .step img {
+      width: 100%; border-radius: 12px; border: 1px solid var(--border);
+      background: #F8FAFC; display: block;
+    }
+    .step h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+    .step p { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+    .step ol { margin-left: 18px; font-size: 13px; font-weight: 600; color: #334155; }
+    .step ol li { margin: 4px 0; }
+    .badge {
+      display: inline-block; font-size: 11px; font-weight: 800; color: #fff;
+      background: var(--red); border-radius: 999px; padding: 3px 10px; margin-bottom: 8px;
+    }
+    footer {
+      margin-top: 28px; text-align: center; font-size: 12px; color: var(--muted); font-weight: 600;
+    }
+    footer a { color: var(--red); font-weight: 800; text-decoration: none; }
+    .copy-row {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+    }
+    .copy-row button {
+      border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.12);
+      color: #fff; font-family: inherit; font-weight: 700; font-size: 12px;
+      padding: 8px 12px; border-radius: 10px; cursor: pointer;
+    }
+    .copy-row button:hover { background: rgba(255,255,255,.2); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="kicker">Always-handy share page</div>
+      <h1>BOH Shift Ops — Links &amp; How to use</h1>
+      <p>Chick-fil-A Vestavia Hills schedule tool. Bookmark this page and send it to anyone who needs the app, GitHub, guide, or cloud setup.</p>
+      <div class="pin">
+        <span>Live app</span>
+        <span>GitHub</span>
+        <span>Photo guide</span>
+        <span>Supabase SQL</span>
+      </div>
+      <div class="copy-row">
+        <button type="button" onclick="copyLink(location.href, this)">Copy this page link</button>
+        <button type="button" onclick="copyLink('https://roudic.github.io/boh-shift-ops/', this)">Copy app link</button>
+      </div>
+    </header>
+
+    <h2>Quick links (click)</h2>
+    <div class="links two">
+      <a class="card primary" href="https://roudic.github.io/boh-shift-ops/" target="_blank" rel="noopener">
+        <div class="label">Open app</div>
+        <div class="title">Live BOH Shift Ops</div>
+        <div class="desc">Schedule · SmartView · Shift Setup · Cloud badge</div>
+        <div class="url">https://roudic.github.io/boh-shift-ops/</div>
+      </a>
+      <a class="card" href="https://github.com/Roudic/boh-shift-ops" target="_blank" rel="noopener">
+        <div class="label">Source</div>
+        <div class="title">GitHub repository</div>
+        <div class="desc">Code, schema, and project files</div>
+        <div class="url">https://github.com/Roudic/boh-shift-ops</div>
+      </a>
+      <a class="card" href="./HOW-TO.md" target="_blank" rel="noopener">
+        <div class="label">Guide</div>
+        <div class="title">Full how-to (with photos)</div>
+        <div class="desc">Step-by-step README for the team</div>
+        <div class="url">guide/HOW-TO.md</div>
+      </a>
+      <a class="card" href="https://github.com/Roudic/boh-shift-ops/blob/master/supabase-schema.sql" target="_blank" rel="noopener">
+        <div class="label">Database</div>
+        <div class="title">Supabase SQL schema</div>
+        <div class="desc">Run once in Supabase SQL Editor</div>
+        <div class="url">supabase-schema.sql</div>
+      </a>
+      <a class="card" href="https://supabase.com/dashboard" target="_blank" rel="noopener">
+        <div class="label">Cloud</div>
+        <div class="title">Supabase dashboard</div>
+        <div class="desc">SQL Editor · API keys · Table Editor</div>
+        <div class="url">https://supabase.com/dashboard</div>
+      </a>
+      <a class="card" href="https://supabase.com/dashboard/project/oikrcoccaepgtvdswuuo/editor" target="_blank" rel="noopener">
+        <div class="label">Your project</div>
+        <div class="title">Table Editor (this store)</div>
+        <div class="desc">View boh_app_state row after Push</div>
+        <div class="url">project · oikrcoccaepgtvdswuuo</div>
+      </a>
+    </div>
+
+    <h2>How to use (photo demos)</h2>
+    <div class="howto">
+      <div class="step">
+        <div>
+          <div class="badge">1 · Home</div>
+          <h3>Open the app</h3>
+          <p>Start on the live site. Top bar: Schedule / Shift Setup, week nav, cloud badge, Export.</p>
+          <ol>
+            <li>Open the Live app link above</li>
+            <li>Use Schedule for the week grid</li>
+            <li>Use Export to download a JSON backup</li>
+          </ol>
+        </div>
+        <img src="./images/01-app-home.png" alt="App home screenshot">
+      </div>
+      <div class="step">
+        <div>
+          <div class="badge">2 · Classic</div>
+          <h3>Paint the week schedule</h3>
+          <p>Click-drag empty cells, stretch edges, sort by start time with day arrows.</p>
+          <ol>
+            <li>Drag empty cell to create a shift</li>
+            <li>Drag block to move · edges to stretch</li>
+            <li>▲ earliest first · ▼ latest first</li>
+          </ol>
+        </div>
+        <img src="./images/02-classic-schedule.png" alt="Classic schedule how-to">
+      </div>
+      <div class="step">
+        <div>
+          <div class="badge">3 · SmartView</div>
+          <h3>Hour timelines</h3>
+          <p>HotSchedules-style multi-day hours with labor footer.</p>
+          <ol>
+            <li>Click SmartView</li>
+            <li>Scroll Mon–Sat hour rulers</li>
+            <li>Sort with ▲ ▼ on day headers</li>
+            <li>ClassicView to exit</li>
+          </ol>
+        </div>
+        <img src="./images/03-smartview-guide.png" alt="SmartView how-to">
+      </div>
+      <div class="step">
+        <div>
+          <div class="badge">4 · Setup</div>
+          <h3>Periods, positions, handovers</h3>
+          <p>Build your own period blocks and station boards. Stack people for 3pm handovers.</p>
+          <ol>
+            <li>Period Blocks → + Add period</li>
+            <li>Shift Setup → Edit Positions</li>
+            <li>Link layout to multiple periods</li>
+            <li>+ Add person / handover on same spot</li>
+          </ol>
+        </div>
+        <img src="./images/04-periods-positions.png" alt="Periods and positions how-to">
+      </div>
+      <div class="step">
+        <div>
+          <div class="badge">5 · Cloud</div>
+          <h3>Connect &amp; share</h3>
+          <p>Top bar cloud badge → paste Supabase URL + anon key → Save · Test · Push.</p>
+          <ol>
+            <li>Project URL: https://oikrcoccaepgtvdswuuo.supabase.co</li>
+            <li>Paste your anon public key in the app only</li>
+            <li>Push once · others Pull on their devices</li>
+            <li>Share this guide page link with the team</li>
+          </ol>
+        </div>
+        <img src="./images/05-cloud-share.png" alt="Cloud sharing how-to">
+      </div>
+    </div>
+
+    <footer>
+      Vestavia Hills BOH · <a href="https://roudic.github.io/boh-shift-ops/">Open app</a>
+      · <a href="https://roudic.github.io/boh-shift-ops/guide/">This share page</a>
+      · Bookmark it and send the link anytime
+    </footer>
+  </div>
+  <script>
+    async function copyLink(url, btn) {
+      try {
+        await navigator.clipboard.writeText(url);
+        const old = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = old; }, 1500);
+      } catch {
+        prompt('Copy this link:', url);
+      }
+    }
+  </script>
+</body>
+</html>

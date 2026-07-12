@@ -2,36 +2,50 @@
 
 Chick-fil-A Vestavia Hills BOH scheduling + shift setup app.
 
-- **Live (GitHub Pages):** https://roudic.github.io/boh-shift-ops/
-- **Local data:** browser `localStorage`
-- **Cloud DB (optional):** [Supabase](https://supabase.com) free project
+## Share this (always handy)
 
-## Cloud database setup (5 minutes)
+**Team hub (bookmark & send):**  
+### https://roudic.github.io/boh-shift-ops/guide/
 
-1. Create a free project at https://supabase.com  
-2. Open **SQL Editor** → New query  
-3. Paste everything from [`supabase-schema.sql`](./supabase-schema.sql) → **Run**  
-4. Open **Project Settings → API**  
-5. Copy **Project URL** and **anon public** key  
-6. Open the live app → click the **Local only / Cloud** badge  
-7. Paste URL + key → **Save connection** → **Test** → **Push**
+| Link | URL |
+|------|-----|
+| Live app | https://roudic.github.io/boh-shift-ops/ |
+| Share hub + photo demos | https://roudic.github.io/boh-shift-ops/guide/ |
+| Full how-to README | [guide/HOW-TO.md](./guide/HOW-TO.md) |
+| Short share card | [guide/SHARE.md](./guide/SHARE.md) |
+| GitHub | https://github.com/Roudic/boh-shift-ops |
+| Supabase SQL | [supabase-schema.sql](./supabase-schema.sql) |
 
-After that, saves auto-sync to the database so any browser can **Pull** the same schedule.
+## What’s included
+
+- **Schedule** — Classic week grid + SmartView hour timelines  
+- **Period blocks** — create / edit / delete your own  
+- **Shift Setup** — custom positions, multi-period layout link, handovers  
+- **Cloud** — Supabase sync (localStorage + DB)  
+- **guide/** — photo demos + shareable link page  
+
+## Cloud database (quick)
+
+1. Run [`supabase-schema.sql`](./supabase-schema.sql) in Supabase SQL Editor  
+2. Copy Project URL + anon key (Settings → API)  
+3. Live app → **Local only** badge → paste → Save · Test · Push  
+
+This project URL form: `https://oikrcoccaepgtvdswuuo.supabase.co`
 
 ## Local file
 
-Open `index.html` in a browser, or serve the folder:
+Open `index.html`, or:
 
 ```bash
 npx --yes serve .
 ```
 
-## Deploy / update GitHub Pages
+## Deploy updates
 
 ```bash
 git add -A
 git commit -m "Update BOH Shift Ops"
-git push origin main
+git push origin master
 ```
 
-Pages is served from the `main` branch root (`index.html`).
+GitHub Pages serves from the `master` branch root.
