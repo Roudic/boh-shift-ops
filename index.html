@@ -231,10 +231,10 @@
     .day-shift-chip.empty { background: transparent; color: #6B7280; border: 1px dashed var(--border); }
 
     .cell {
-      min-height: 88px; border-radius: 14px; cursor: pointer;
+      min-height: 108px; border-radius: 14px; cursor: pointer;
       display: flex; flex-direction: column; justify-content: stretch; padding: 6px;
       margin: 4px; border: 1px solid transparent; transition: all .15s ease;
-      background: transparent;
+      background: transparent; overflow: visible;
     }
     .cell:hover { transform: translateY(-1px); }
     .cell.assigned { background: transparent; border-color: transparent; }
@@ -251,11 +251,11 @@
     }
     .cell-off:hover { border-color: var(--border); background: rgba(0,0,0,.2); transform: none; box-shadow: none; }
 
-    /* Classic shift cards — always show In + Out, drag to move */
+    /* Classic shift cards — always show In + Out fully, drag to move */
     .cv-card {
       position: relative; flex: 1; display: flex; flex-direction: column;
-      min-height: 92px; border-radius: 12px; padding: 10px 10px 8px 12px;
-      overflow: hidden; border: 1px solid rgba(255,255,255,.1);
+      min-height: 100px; border-radius: 12px; padding: 10px 10px 8px 12px;
+      overflow: visible; border: 1px solid rgba(255,255,255,.1);
       box-shadow: 0 6px 16px rgba(0,0,0,.24);
       transition: box-shadow .15s, transform .15s, opacity .15s;
       cursor: grab;
@@ -272,7 +272,7 @@
     }
     .cv-card::before {
       content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
-      background: rgba(255,255,255,.85);
+      background: rgba(255,255,255,.85); border-radius: 12px 0 0 12px;
     }
     .cv-card.tone-early {
       background: linear-gradient(145deg, rgba(14,165,233,.95) 0%, rgba(3,105,161,.92) 100%);
@@ -288,39 +288,40 @@
     }
     .cv-card.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 6px 16px rgba(0,0,0,.24); }
     .cv-card-top {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 6px;
+      min-width: 0;
     }
     .cv-times {
-      display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1;
+      display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;
     }
-    /* Always show BOTH start and end — stacked so nothing clips */
+    /* Always show BOTH start and end — stacked rows so nothing clips */
     .cv-time-row {
-      display: flex; align-items: baseline; gap: 6px;
-      font-weight: 800; color: #fff; line-height: 1.15;
+      display: flex; align-items: baseline; gap: 5px;
+      font-weight: 800; color: #fff; line-height: 1.2;
       text-shadow: 0 1px 2px rgba(0,0,0,.2);
+      min-width: 0;
     }
     .cv-time-row .cv-k {
-      flex-shrink: 0; font-size: 9px; font-weight: 800; letter-spacing: .06em;
-      text-transform: uppercase; opacity: .8; min-width: 22px;
+      flex-shrink: 0; font-size: 9px; font-weight: 800; letter-spacing: .05em;
+      text-transform: uppercase; opacity: .85; width: 22px;
     }
     .cv-time-row .cv-v {
-      font-size: 14px; font-weight: 800; letter-spacing: -.02em;
-      white-space: nowrap;
+      font-size: 13px; font-weight: 800; letter-spacing: -.01em;
+      white-space: nowrap; overflow: visible;
     }
-    .cv-time-main, .cv-time-sub { display: none; }
     .cv-hrs-pill {
-      flex-shrink: 0; font-size: 11px; font-weight: 800; color: #0F172A;
-      background: rgba(255,255,255,.92); padding: 4px 8px; border-radius: 999px;
-      letter-spacing: -.01em; margin-top: 2px;
+      flex-shrink: 0; font-size: 10px; font-weight: 800; color: #0F172A;
+      background: rgba(255,255,255,.92); padding: 3px 7px; border-radius: 999px;
+      letter-spacing: -.01em; margin-top: 1px; line-height: 1.2;
     }
     .cv-role {
-      margin-top: 6px; font-size: 10px; font-weight: 700; color: rgba(255,255,255,.88);
+      margin-top: 5px; font-size: 10px; font-weight: 700; color: rgba(255,255,255,.88);
       letter-spacing: .02em; line-height: 1.25;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .cv-drag-hint {
       font-size: 9px; font-weight: 700; color: rgba(255,255,255,.55);
-      margin-top: 4px; letter-spacing: .03em;
+      margin-top: 3px; letter-spacing: .03em;
     }
     .cv-actions {
       margin-top: 6px; padding-top: 0; display: flex; gap: 4px; flex-wrap: wrap;
@@ -1784,12 +1785,12 @@
         <div class="classic-hero">
           <div>
             <h2>Classic week schedule</h2>
-            <p id="rosterSubtitle">Clean shift cards — click empty to add, Edit for times. Use SmartView for hour-by-hour drag &amp; stretch.</p>
+            <p id="rosterSubtitle">Cards show In + Out times. Drag a card onto another day/person to move it. SmartView for hour stretch.</p>
             <div class="classic-hint-pills">
-              <span><em>Click</em> empty → add shift</span>
-              <span><em>Edit</em> card for times</span>
-              <span><em>▲ ▼</em> sort by start</span>
-              <span><em>SmartView</em> for timeline</span>
+              <span><em>Drag</em> card to move</span>
+              <span><em>In / Out</em> always shown</span>
+              <span><em>Click</em> empty to add</span>
+              <span><em>SmartView</em> timeline</span>
             </div>
           </div>
           <div class="classic-hero-actions">
@@ -3309,7 +3310,7 @@ function handleCellClick(staffId, dateKey, dayIndex, e) {
 
 /** Classic empty cell — one click to add (or paste if copy mode). */
 function handleClassicEmptyClick(staffId, dateKey, dayIndex, e) {
-  if (suppressNextCellClick || shiftDrag) return;
+  if (suppressNextCellClick || shiftDrag || classicDragActive) return;
   if (e?.target?.closest?.('.cv-act, button, a')) return;
   setSelectedCell(staffId, dateKey, dayIndex);
   if (schedulePublished) {
@@ -3321,6 +3322,101 @@ function handleClassicEmptyClick(staffId, dateKey, dayIndex, e) {
     return;
   }
   openAssign(staffId, dateKey, dayIndex);
+}
+
+// ── Classic View drag-and-drop move shifts ──
+let classicDrag = null; // { staffId, dateKey, dayIndex }
+let classicDragActive = false;
+
+function classicDragStart(e, staffId, dateKey, dayIndex) {
+  if (schedulePublished) { e.preventDefault(); return; }
+  if (e.target.closest('.cv-act, button')) {
+    e.preventDefault();
+    return;
+  }
+  classicDrag = { staffId, dateKey, dayIndex };
+  classicDragActive = true;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/boh-shift', JSON.stringify(classicDrag));
+  e.dataTransfer.setData('text/plain', `${staffId}|${dateKey}`);
+  const card = e.currentTarget;
+  requestAnimationFrame(() => card.classList.add('cv-dragging'));
+  e.stopPropagation();
+}
+
+function classicDragEnd(e) {
+  classicDragActive = false;
+  classicDrag = null;
+  e.currentTarget?.classList?.remove('cv-dragging');
+  document.querySelectorAll('.cell.cv-drop-target').forEach(el => el.classList.remove('cv-drop-target'));
+}
+
+function classicDragOver(e) {
+  if (!classicDrag && !e.dataTransfer?.types?.includes('text/boh-shift') && !e.dataTransfer?.types?.includes('text/plain')) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const cell = e.currentTarget;
+  if (cell && !cell.classList.contains('cell-off')) {
+    cell.classList.add('cv-drop-target');
+  }
+}
+
+function classicDragLeave(e) {
+  const cell = e.currentTarget;
+  if (!cell.contains(e.relatedTarget)) cell.classList.remove('cv-drop-target');
+}
+
+function classicDrop(e, toStaffId, toDateKey, toDayIndex) {
+  e.preventDefault();
+  e.stopPropagation();
+  const cell = e.currentTarget;
+  cell?.classList?.remove('cv-drop-target');
+  if (schedulePublished) return;
+
+  let from = classicDrag;
+  try {
+    const raw = e.dataTransfer.getData('text/boh-shift');
+    if (raw) from = JSON.parse(raw);
+  } catch (_) {}
+  if (!from?.staffId || !from?.dateKey) return;
+
+  // Same cell — nothing to do
+  if (from.staffId === toStaffId && from.dateKey === toDateKey) {
+    classicDragActive = false;
+    classicDrag = null;
+    return;
+  }
+
+  const entry = getScheduleEntry(from.staffId, from.dateKey);
+  if (!entry) return;
+
+  const existing = getScheduleEntry(toStaffId, toDateKey);
+  const fromName = staff.find(s => s.id === from.staffId)?.name || 'Someone';
+  const toName = staff.find(s => s.id === toStaffId)?.name || 'Someone';
+  if (existing) {
+    const ok = confirm(
+      `Move ${fromName}'s ${compactShiftRange(entry.start, entry.end)} onto ${toName} (${toDateKey})?\n\n` +
+      `This replaces ${toName}'s existing ${compactShiftRange(existing.start, existing.end)}.`
+    );
+    if (!ok) {
+      classicDragActive = false;
+      classicDrag = null;
+      return;
+    }
+  }
+
+  // Move: clear source, set target with same times
+  delete schedule[`${from.staffId}_${from.dateKey}`];
+  setScheduleEntry(toStaffId, toDateKey, entry.start, entry.end);
+  schedulePublished = false;
+  setSelectedCell(toStaffId, toDateKey, toDayIndex);
+  classicDragActive = false;
+  classicDrag = null;
+  save();
+  renderRoster();
+  renderHeaders();
+  renderStats();
+  if (typeof renderLaborPanel === 'function') renderLaborPanel();
 }
 
 function handleCellDblClick(staffId, dateKey, dayIndex, e) {
@@ -6160,18 +6256,26 @@ function renderRoster() {
         ).join('');
         const sel = selectedCell?.staffId === p.id && selectedCell?.dateKey === dk ? ' selected' : '';
         const hrs = shiftHours(entry);
+        const tIn = formatTime12(entry.start);
+        const tOut = formatTime12(entry.end);
         return `<td>
           <div class="cell assigned ${avCls}${sel}" data-staff="${p.id}" data-date="${dk}"
             onclick="handleCellClick('${p.id}','${dk}',${di},event)"
             ondblclick="handleCellDblClick('${p.id}','${dk}',${di},event)"
-            oncontextmenu="handleCellContextMenu('${p.id}','${dk}',${di},event)">
+            oncontextmenu="handleCellContextMenu('${p.id}','${dk}',${di},event)"
+            ondragover="classicDragOver(event)"
+            ondragleave="classicDragLeave(event)"
+            ondrop="classicDrop(event,'${p.id}','${dk}',${di})">
             <div class="cv-card tone-${tone}${conflict ? ' has-conflict' : ''}"
-              title="${compactShiftRange(entry.start, entry.end)} · ${hrs}h — double-click to edit">
+              draggable="${schedulePublished ? 'false' : 'true'}"
+              ondragstart="classicDragStart(event,'${p.id}','${dk}',${di})"
+              ondragend="classicDragEnd(event)"
+              title="${tIn} – ${tOut} · ${hrs}h — drag to move · double-click to edit">
               ${conflict ? `<span class="cv-warn" title="${escAttr(conflict)}">⚠</span>` : ''}
               <div class="cv-card-top">
                 <div class="cv-times">
-                  <div class="cv-time-main">${compactTime12(entry.start)} – ${compactTime12(entry.end)}</div>
-                  <div class="cv-time-sub">${formatTime12(entry.start)} → ${formatTime12(entry.end)}</div>
+                  <div class="cv-time-row"><span class="cv-k">In</span><span class="cv-v">${tIn}</span></div>
+                  <div class="cv-time-row"><span class="cv-k">Out</span><span class="cv-v">${tOut}</span></div>
                 </div>
                 <div class="cv-hrs-pill">${hrs}h</div>
               </div>
@@ -6197,7 +6301,10 @@ function renderRoster() {
         <div class="cell ${avCls}${selEmpty}" data-staff="${p.id}" data-date="${dk}"
           onclick="handleClassicEmptyClick('${p.id}','${dk}',${di},event)"
           ondblclick="handleCellDblClick('${p.id}','${dk}',${di},event)"
-          oncontextmenu="handleCellContextMenu('${p.id}','${dk}',${di},event)">
+          oncontextmenu="handleCellContextMenu('${p.id}','${dk}',${di},event)"
+          ondragover="classicDragOver(event)"
+          ondragleave="classicDragLeave(event)"
+          ondrop="classicDrop(event,'${p.id}','${dk}',${di})">
           <div class="cv-empty">
             <div class="cv-empty-plus">+</div>
             <div class="cv-empty-label">Add shift</div>
