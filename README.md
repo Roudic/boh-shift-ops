@@ -2,7 +2,15 @@
 
 Chick-fil-A Vestavia Hills BOH scheduling + shift setup app.
 
-**iPhone & iPad app** — native iOS shell via [Capacitor](https://capacitorjs.com/) (see [iOS build](#ios-app-iphone--ipad) below).
+**One app, three surfaces (same `index.html`):**
+
+| Surface | How you use it |
+|---------|----------------|
+| **Desktop / laptop** | [Live web app](https://roudic.github.io/boh-shift-ops/) or open `index.html` in a browser — full layout, all toolbar actions |
+| **Phone & tablet (browser)** | Same site — responsive layout (bottom tabs on phone, split setup on tablet) |
+| **iPhone & iPad (native app)** | Capacitor iOS shell — see [iOS build](#ios-app-iphone--ipad) |
+
+Desktop is still the primary BOH office experience. Mobile/iOS adapts the same app; it does not replace the desktop site.
 
 ## Share this (always handy)
 
@@ -54,7 +62,9 @@ GitHub Pages serves from the `master` branch root.
 
 ## iOS app (iPhone & iPad)
 
-The same web app runs inside a native iOS shell. Layout adapts for **phone** (bottom tab bar, action sheet) and **tablet** (split layouts, sticky pool).
+Optional native wrapper around the **same** web app. Desktop users keep using GitHub Pages or a local browser — no change required.
+
+On phone/tablet layouts: **phone** gets a bottom tab bar + action sheet; **tablet** gets split setup layouts. Viewports ≥1101px keep the full desktop chrome.
 
 ### Requirements
 

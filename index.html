@@ -4657,7 +4657,7 @@
       .icon-btn { min-width: 44px; min-height: 44px; }
     }
 
-    /* Tablet portrait + small iPad */
+    /* Tablet portrait + small iPad (not desktop) */
     @media (min-width: 768px) and (max-width: 1100px) {
       .header-inner { padding: 8px 16px; }
       .tabs .tab { padding: 8px 12px; font-size: 12px; }
@@ -4687,17 +4687,37 @@
       .skills-matrix { min-width: 680px; }
     }
 
-    /* iPad landscape / large tablet */
-    @media (min-width: 1101px) and (max-width: 1366px) {
-      .header-inner { max-width: 100%; padding: 0 20px; }
-      .main { max-width: 100%; padding: 1.5rem 20px 2rem; }
-      .ss-layout { grid-template-columns: 1fr 300px; }
-      #view-setup .ss-gp-grid {
-        grid-template-columns: 1fr 1fr minmax(40px, 0.4fr) 1fr 1fr;
+    /*
+      Desktop (≥1101px) — full web layout unchanged.
+      Phone/tablet UI chrome stays off so GitHub Pages / monitors keep
+      the original header tabs, action buttons, and wide boards.
+    */
+    @media (min-width: 1101px) {
+      :root { --mobile-tab-h: 0px; }
+      .mobile-tab-bar,
+      .mobile-more-btn,
+      .mobile-actions-overlay,
+      .mobile-actions-sheet {
+        display: none !important;
+      }
+      .header .tabs { display: flex; }
+      .header-actions > .week-nav,
+      .header-actions > .week-label,
+      .header-actions > a.btn,
+      .header-actions > label.btn,
+      .header-actions > #exportBtn,
+      .header-actions > .btn-danger {
+        display: inline-flex !important;
+      }
+      .header-actions > .week-label { display: block !important; }
+      .main {
+        max-width: 1680px;
+        margin: 0 auto;
+        padding: 1.75rem 1.5rem 2.5rem;
       }
     }
 
-    /* Capacitor / standalone: extra bottom padding when tab bar hidden on tablet */
+    /* Phone/tablet chrome only under 1101px — desktop never gets tab bar padding */
     @media (min-width: 768px) {
       :root { --mobile-tab-h: 0px; }
     }
