@@ -2420,6 +2420,15 @@
       padding-bottom: 3px; margin-bottom: 4px;
       text-align: center;
     }
+    .gp-raw-block {
+      margin-top: 10px; padding-top: 6px;
+      border-top: 1px dashed rgba(52,211,153,.45);
+    }
+    .gp-raw-label {
+      font-size: 7.5px; font-weight: 800; letter-spacing: .08em;
+      text-transform: uppercase; color: #6EE7B7;
+      text-align: center; margin-bottom: 4px;
+    }
     .gp-line {
       display: grid;
       grid-template-columns: 1fr;
@@ -2704,6 +2713,15 @@
       font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
       color: #F03A5F; border-bottom: 1px dotted rgba(240,58,95,.65);
       padding-bottom: 3px; margin-bottom: 6px; text-align: center;
+    }
+    .ex-gp-raw-block {
+      margin-top: 12px; padding-top: 8px;
+      border-top: 1px dashed rgba(52,211,153,.45);
+    }
+    .ex-gp-raw-label {
+      font-size: 8px; font-weight: 800; letter-spacing: .08em;
+      text-transform: uppercase; color: #6EE7B7;
+      text-align: center; margin-bottom: 6px;
     }
     .ex-gp-line { margin-bottom: 8px; }
     .ex-gp-line-label {
@@ -3454,11 +3472,131 @@
       box-shadow: 0 0 16px rgba(240,58,95,.45);
     }
 
-    /* Board groups — light float shelves (content stays clickable) */
+    /* Board = interactive CFASCD gameplan map */
     #view-setup .ss-board {
-      gap: 1.35rem;
-      perspective: 1100px;
+      gap: 0;
+      perspective: none;
     }
+    #view-setup .ss-gp-board {
+      background:
+        linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02)),
+        #0E2A3D;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 22px;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.12) inset,
+        0 22px 48px rgba(0,0,0,.4);
+      padding: 16px 16px 18px;
+      overflow: hidden;
+    }
+    #view-setup .ss-gp-board-head {
+      text-align: center;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    #view-setup .ss-gp-board-title {
+      font-size: 15px; font-weight: 900; letter-spacing: .1em;
+      text-transform: uppercase; color: #F8FAFC;
+    }
+    #view-setup .ss-gp-board-title span {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px; font-weight: 700; letter-spacing: .02em;
+      color: #7DD3FC; text-transform: none;
+    }
+    #view-setup .ss-gp-hint {
+      margin-top: 6px;
+      font-size: 11px; font-weight: 700; color: #94A3B8;
+    }
+    #view-setup .ss-gp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr minmax(52px, 0.55fr) 1.15fr 1fr;
+      gap: 10px 12px;
+      align-items: start;
+    }
+    @media (max-width: 980px) {
+      #view-setup .ss-gp-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      #view-setup .ss-gp-center { display: none; }
+    }
+    #view-setup .ss-gp-col {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    #view-setup .ss-gp-col-title {
+      font-size: 10px; font-weight: 900; letter-spacing: .1em;
+      text-transform: uppercase; text-align: center;
+      color: #F03A5F;
+      border-bottom: 1px dotted rgba(240,58,95,.55);
+      padding-bottom: 5px; margin-bottom: 2px;
+    }
+    #view-setup .ss-gp-col-count {
+      font-weight: 800; color: #94A3B8; letter-spacing: 0;
+      text-transform: none; font-size: 10px;
+    }
+    #view-setup .ss-gp-center {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: stretch; min-height: 180px; padding-top: 28px;
+      opacity: .9;
+    }
+    #view-setup .ss-gp-center .bar {
+      width: 100%; height: 3px; border-radius: 2px;
+      background: rgba(255,255,255,.35);
+    }
+    #view-setup .ss-gp-center .stem {
+      width: 3px; flex: 1; min-height: 80px; border-radius: 2px;
+      background: linear-gradient(180deg, rgba(255,255,255,.4), rgba(240,58,95,.45));
+      margin: 6px 0;
+    }
+    #view-setup .ss-gp-center .lbl {
+      font-size: 9px; font-weight: 900; letter-spacing: .14em;
+      writing-mode: vertical-rl; transform: rotate(180deg);
+      color: rgba(255,255,255,.55);
+    }
+    /* Pads denser in gameplan columns */
+    #view-setup .ss-gp-col .ss-slot {
+      min-height: 108px !important;
+    }
+    #view-setup .ss-gp-col .ss-slot-hit {
+      min-height: 108px;
+      padding: 10px !important;
+      gap: 6px !important;
+    }
+    #view-setup .ss-gp-col .ss-slot-title {
+      font-size: 12px !important;
+    }
+    #view-setup .ss-gp-col .ss-add-seg {
+      font-size: 10px !important;
+      padding: 5px 6px !important;
+    }
+    #view-setup .ss-gp-empty-col {
+      font-size: 11px; font-weight: 700; color: #64748B;
+      text-align: center; padding: 16px 8px;
+      border: 1px dashed rgba(255,255,255,.12);
+      border-radius: 12px;
+    }
+    /* Machines line: Raw / Breading sits lower under machine pads */
+    #view-setup .ss-gp-raw-block {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(52,211,153,.4);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    #view-setup .ss-gp-raw-label {
+      font-size: 10px; font-weight: 900; letter-spacing: .1em;
+      text-transform: uppercase; text-align: center;
+      color: #6EE7B7;
+    }
+    #view-setup .ss-gp-raw-label span {
+      font-weight: 800; color: #94A3B8; letter-spacing: 0; text-transform: none;
+    }
+    /* Legacy group styles (layout editor previews may still use) */
     #view-setup .ss-group {
       background: rgba(16, 20, 32, .92) !important;
       border: 1px solid rgba(255,255,255,.12) !important;
@@ -3467,15 +3605,6 @@
       box-shadow:
         0 1px 0 rgba(255,255,255,.1) inset,
         0 18px 40px rgba(0,0,0,.35) !important;
-      transform: rotateX(1.5deg);
-      transform-origin: 50% 0;
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-    }
-    #view-setup .ss-group:hover {
-      transform: rotateX(0deg) translateY(-2px);
-      box-shadow:
-        0 1px 0 rgba(255,255,255,.14) inset,
-        0 24px 48px rgba(0,0,0,.4) !important;
     }
     #view-setup .ss-group-head {
       background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)) !important;
@@ -3490,11 +3619,6 @@
     #view-setup .ss-group-dot {
       width: 10px; height: 10px;
       box-shadow: 0 0 12px currentColor;
-      animation: ssDotPulse 2.4s ease-in-out infinite;
-    }
-    @keyframes ssDotPulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.25); opacity: .75; }
     }
     #view-setup .ss-group-count {
       font-size: 12px !important;
@@ -4623,9 +4747,9 @@
       <div class="ss-hero-glow" aria-hidden="true"></div>
       <div class="ss-hero-top">
         <div>
-          <div class="ss-hero-kicker">BOH station board</div>
+          <div class="ss-hero-kicker">BOH gameplan board</div>
           <h2>Shift Setup</h2>
-          <p class="ss-hero-sub" id="setupSubtitle">Drag team members onto station slots — or click a person, then click a slot.</p>
+          <p class="ss-hero-sub" id="setupSubtitle">Floor map: Support · Secondary · Primary · Machines — drag people onto pads.</p>
           <div class="ss-leaders-bar" id="setupLeadersBar" aria-label="Period leaders"></div>
         </div>
         <div class="ss-hero-metrics">
@@ -4948,26 +5072,30 @@
     <div class="modal-head">
       <div>
         <h3>Edit Positions</h3>
-        <div style="font-size:12px;color:var(--muted)" id="layoutEditorSub">Build groups &amp; positions once, link to multiple periods</div>
+        <div style="font-size:12px;color:var(--muted)" id="layoutEditorSub">Per daypart board · sticks every day &amp; week</div>
       </div>
       <button type="button" class="icon-btn" onclick="closeLayoutEditor()">&#10005;</button>
     </div>
     <div class="modal-body">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">
-        Build your station board below, then check every <strong>period block</strong> that should use it. One save applies to all selected periods so you don’t redo the same groups over and over. Optional times are default cover windows — handovers still work on the board.
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.45">
+        Set the station board for each <strong>daypart</strong> (Breakfast, Lunch, Afternoon, Dinner…).
+        Once saved, that daypart’s positions stay the same on <strong>every day and every week</strong> —
+        only who you put on the pads changes. Unchecked dayparts are left alone (so Lunch won’t overwrite Breakfast).
       </p>
 
       <div class="layout-link-panel">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-          <label class="field-label" style="margin:0">Apply this layout to period blocks</label>
+          <label class="field-label" style="margin:0">Save this board to which dayparts?</label>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button type="button" class="btn btn-sm" onclick="layoutLinkSelectAll(true)">Select all</button>
             <button type="button" class="btn btn-sm" onclick="layoutLinkSelectAll(false)">Clear</button>
-            <button type="button" class="btn btn-sm" onclick="layoutLinkSameAsCurrent()">Same layout as current</button>
+            <button type="button" class="btn btn-sm" onclick="layoutLinkSourceOnly()">This daypart only</button>
           </div>
         </div>
         <div class="layout-link-list" id="layoutLinkList"></div>
-        <p style="font-size:11px;color:var(--muted);margin-top:8px" id="layoutLinkHint">Check Breakfast + Mid + Closing (etc.) to share one board.</p>
+        <p style="font-size:11px;color:var(--muted);margin-top:8px" id="layoutLinkHint">
+          Tip: edit Breakfast → check only Breakfast → Save. Then do Lunch separately. Each keeps its own board forever.
+        </p>
       </div>
 
       <div id="layoutEditorList" style="margin-top:14px"></div>
@@ -4979,7 +5107,7 @@
     </div>
     <div class="modal-foot">
       <button type="button" class="btn" onclick="closeLayoutEditor()">Cancel</button>
-      <button type="button" class="btn btn-primary" id="layoutSaveBtn" onclick="saveLayoutEditor()">Save to selected periods</button>
+      <button type="button" class="btn btn-primary" id="layoutSaveBtn" onclick="saveLayoutEditor()">Save to selected dayparts</button>
     </div>
   </div>
 </div>
@@ -11608,10 +11736,12 @@ function cloneTemplateLayout(carCount) {
 
 function ensureShiftLayout(shift) {
   if (!shift) return cloneTemplateLayout(150);
+  // Only seed a template if this daypart has never had a board.
+  // Never replace an existing custom layout (must persist every day / week).
   if (!Array.isArray(shift.layout) || !shift.layout.length) {
     shift.layout = cloneTemplateLayout(shiftCarCount(shift) || 150);
   }
-  // normalize group shape: group vs name
+  // normalize group shape: group vs name — keep ids stable so assignments survive
   shift.layout.forEach(g => {
     if (!g.name && g.group) g.name = g.group;
     if (!g.id) g.id = 'g' + Math.random().toString(36).slice(2, 8);
@@ -11624,9 +11754,10 @@ function ensureShiftLayout(shift) {
   return shift.layout;
 }
 
+/** Positions live on the daypart (period block), not on the calendar day — same board every week */
 function getSetupLayout(shift, setup) {
   if (shift) return ensureShiftLayout(shift);
-  if (setup?.layout?.length) return setup.layout;
+  // Do not use per-day setup.layout for the board — that caused dayparts to "forget" fixes
   return cloneTemplateLayout(setup?.carCount || 150);
 }
 
@@ -12119,6 +12250,155 @@ function removeSegmentById(slotId, segId) {
   renderSetup();
 }
 
+/** One interactive station pad (drop target) for Shift Setup gameplan board */
+function setupSlotCardHtml(slot, gName, color, gi, si, setup) {
+  const segs = getSlotSegments(setup, slot.id);
+  const cls = segs.length ? (segs.length > 1 ? 'has-people' : 'filled') : 'empty-required';
+  const icon = ssSlotIcon(slot.label);
+  const win = (slot.start && slot.end)
+    ? `<div class="ss-slot-sub">${compactTime12(slot.start)} – ${compactTime12(slot.end)} cover</div>`
+    : (slot.sub ? `<div class="ss-slot-sub">${escAttr(slot.sub)}</div>` : '');
+  const handovers = detectHandovers(segs);
+  const segHtml = segs.map(seg => {
+    const person = staff.find(s => s.id === seg.personId);
+    const t0 = seg.start ? compactTime12(seg.start) : '—';
+    const t1 = seg.end ? compactTime12(seg.end) : '—';
+    const fit = person ? personSlotFit(person, slot) : { flag: null };
+    const flagCls = fit.flag === 'untrained' ? ' skill-mismatch' : (fit.flag === 'watch' ? ' skill-watch' : '');
+    const flagHtml = fit.flag
+      ? `<div class="skill-flag ${fit.className}" title="Edit on Skills tab">${escAttr(fit.label)}</div>`
+      : '';
+    const tip = fit.flag
+      ? ` · ${fit.label} on this position (Skills tab)`
+      : '';
+    return `<div class="ss-seg${flagCls}" data-action="edit-seg" data-slot-id="${slot.id}" data-seg-id="${seg.id}" title="Click to edit times${escAttr(tip)}">
+      <div class="ss-seg-info">
+        <div class="ss-seg-name">${escAttr(person?.name || 'Unknown')}</div>
+        <div class="ss-seg-time">${t0} – ${t1}</div>
+        ${flagHtml}
+      </div>
+      <button type="button" class="ss-seg-x" data-action="remove-seg" data-slot-id="${slot.id}" data-seg-id="${seg.id}" title="Remove">&#10005;</button>
+    </div>`;
+  }).join('');
+  const empty = !segs.length
+    ? '<span class="ss-slot-placeholder">Drop person · or + handover</span>'
+    : '';
+  const clickTarget = setupSelectedPersonId ? ' click-target' : '';
+  const delay = ((gi * 0.35 + si * 0.18) % 4).toFixed(2);
+  const poseRx = (6 + ((gi * 3 + si * 5) % 8)).toFixed(1);
+  const poseRy = (-8 + ((gi * 2 + si * 4) % 10)).toFixed(1);
+  const statusBadge = !segs.length
+    ? '<span class="ss-status-badge open">Open</span>'
+    : (segs.length > 1
+      ? `<span class="ss-status-badge multi">${segs.length} on</span>`
+      : '<span class="ss-status-badge ok">✓ Filled</span>');
+  return `<div class="ss-slot ${cls}${clickTarget}" data-drop-zone="station" data-slot-id="${slot.id}"
+    style="--ss-delay:-${delay}s;--ss-rx:${poseRx}deg;--ss-ry:${poseRy}deg">
+    <div class="ss-slot-fx" aria-hidden="true"></div>
+    <div class="ss-slot-hit">
+      ${statusBadge}
+      <div class="ss-slot-head">
+        <div class="ss-slot-icon" style="background:${color}">${icon}</div>
+        <div style="flex:1;min-width:0;padding-right:48px">
+          <div class="ss-slot-title">${escAttr(slot.label)}</div>
+          ${win}
+          ${slot.sub && !(slot.start && slot.end) ? '' : (slot.sub && slot.start ? `<div class="ss-slot-sub">${escAttr(slot.sub)}</div>` : '')}
+        </div>
+      </div>
+      <div class="ss-slot-drop">
+        ${segHtml || empty}
+        ${handovers.map(h => `<div class="ss-handover-note">${escAttr(h)}</div>`).join('')}
+        <button type="button" class="ss-add-seg" data-action="add-seg" data-slot-id="${slot.id}">+ Add / handover</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/**
+ * Interactive Shift Setup board laid out like the print gameplan:
+ * Support | Secondary | CENTERLINE | Primary | Machines
+ */
+function buildSetupGameplanBoardHtml(layout, setup, shift) {
+  // sideR = machines (top of line); sideR_raw = raw/breading (lower on same line)
+  const cols = { sideL: [], secondary: [], primary: [], sideR: [], sideR_raw: [] };
+  let filled = 0, required = 0, totalSegs = 0;
+
+  layout.forEach((g, gi) => {
+    const gName = g.name || g.group || 'Stations';
+    const color = ssGroupColor(gName);
+    (g.slots || []).forEach((slot, si) => {
+      required++;
+      const segs = getSlotSegments(setup, slot.id);
+      if (segs.length) filled++;
+      totalSegs += segs.length;
+      const col = gameplanColumnForLabel(slot.label, gName);
+      cols[col].push(setupSlotCardHtml(slot, gName, color, gi, si, setup));
+    });
+  });
+
+  const colBlock = (key, title) => {
+    const cards = cols[key];
+    const n = cards.length;
+    const body = n
+      ? cards.join('')
+      : '<div class="ss-gp-empty-col">No positions here · Edit Positions</div>';
+    return `<div class="ss-gp-col" data-gp-col="${key}">
+      <div class="ss-gp-col-title">${escAttr(title)} <span class="ss-gp-col-count">(${n})</span></div>
+      ${body}
+    </div>`;
+  };
+
+  // Machines column: machine pads first, then Raw / Breading lower
+  const machinesCol = () => {
+    const mach = cols.sideR || [];
+    const raw = cols.sideR_raw || [];
+    const total = mach.length + raw.length;
+    let body = '';
+    if (mach.length) body += mach.join('');
+    else if (!raw.length) {
+      body += '<div class="ss-gp-empty-col">No machine positions · Edit Positions</div>';
+    }
+    if (raw.length) {
+      body += `<div class="ss-gp-raw-block">
+        <div class="ss-gp-raw-label">Raw / Breading <span>(${raw.length})</span></div>
+        ${raw.join('')}
+      </div>`;
+    }
+    return `<div class="ss-gp-col" data-gp-col="sideR">
+      <div class="ss-gp-col-title">Machines <span class="ss-gp-col-count">(${total})</span></div>
+      ${body}
+    </div>`;
+  };
+
+  const icon = gameplanPeriodIcon(shift);
+  const titleName = (shift?.name || 'Period').toUpperCase();
+  const win = shift
+    ? `${formatTime12(shift.start)} – ${formatTime12(shift.end)}`
+    : '';
+
+  const html = `<div class="ss-gp-board">
+    <div class="ss-gp-board-head">
+      <div class="ss-gp-board-title">${icon} ${escAttr(titleName)}
+        <span>${escAttr(win)} · floor map (same as print gameplan)</span>
+      </div>
+      <div class="ss-gp-hint">Drag from team pool → drop on a pad · Machines on top · Raw / Breading lower on that line</div>
+    </div>
+    <div class="ss-gp-grid">
+      ${colBlock('sideL', 'Support')}
+      ${colBlock('secondary', 'Secondary')}
+      <div class="ss-gp-center" aria-hidden="true">
+        <div class="bar"></div>
+        <div class="stem"></div>
+        <div class="lbl">CENTERLINE</div>
+      </div>
+      ${colBlock('primary', 'Primary')}
+      ${machinesCol()}
+    </div>
+  </div>`;
+
+  return { html, filled, required, totalSegs };
+}
+
 function renderSetup() {
   populateSetupSelectors();
   const dateKey = document.getElementById('setupDay').value;
@@ -12146,83 +12426,11 @@ function renderSetup() {
       <button class="btn btn-sm" style="margin-top:12px" onclick="layoutSeedPreset(150); save(); renderSetup();">Load 150 starter</button>
     </div>`;
   } else {
-    groupsEl.innerHTML = layout.map((g, gi) => {
-      const gName = g.name || g.group || 'Stations';
-      const color = ssGroupColor(gName);
-      const slots = (g.slots || []).map((slot, si) => {
-        required++;
-        const segs = getSlotSegments(setup, slot.id);
-        if (segs.length) filled++;
-        totalSegs += segs.length;
-        const cls = segs.length ? (segs.length > 1 ? 'has-people' : 'filled') : 'empty-required';
-        const icon = ssSlotIcon(slot.label);
-        const win = (slot.start && slot.end)
-          ? `<div class="ss-slot-sub">${compactTime12(slot.start)} – ${compactTime12(slot.end)} cover</div>`
-          : (slot.sub ? `<div class="ss-slot-sub">${escAttr(slot.sub)}</div>` : '');
-        const handovers = detectHandovers(segs);
-        const segHtml = segs.map(seg => {
-          const person = staff.find(s => s.id === seg.personId);
-          const t0 = seg.start ? compactTime12(seg.start) : '—';
-          const t1 = seg.end ? compactTime12(seg.end) : '—';
-          const fit = person ? personSlotFit(person, slot) : { flag: null };
-          const flagCls = fit.flag === 'untrained' ? ' skill-mismatch' : (fit.flag === 'watch' ? ' skill-watch' : '');
-          const flagHtml = fit.flag
-            ? `<div class="skill-flag ${fit.className}" title="Edit on Skills tab">${escAttr(fit.label)}</div>`
-            : '';
-          const tip = fit.flag
-            ? ` · ${fit.label} on this position (Skills tab)`
-            : '';
-          return `<div class="ss-seg${flagCls}" data-action="edit-seg" data-slot-id="${slot.id}" data-seg-id="${seg.id}" title="Click to edit times${escAttr(tip)}">
-            <div class="ss-seg-info">
-              <div class="ss-seg-name">${escAttr(person?.name || 'Unknown')}</div>
-              <div class="ss-seg-time">${t0} – ${t1}</div>
-              ${flagHtml}
-            </div>
-            <button type="button" class="ss-seg-x" data-action="remove-seg" data-slot-id="${slot.id}" data-seg-id="${seg.id}" title="Remove">&#10005;</button>
-          </div>`;
-        }).join('');
-        const empty = !segs.length
-          ? '<span class="ss-slot-placeholder">Drop person · or + Add for handover</span>'
-          : '';
-        const clickTarget = setupSelectedPersonId ? ' click-target' : '';
-        const delay = ((gi * 0.35 + si * 0.18) % 4).toFixed(2);
-        const poseRx = (6 + ((gi * 3 + si * 5) % 8)).toFixed(1);
-        const poseRy = (-8 + ((gi * 2 + si * 4) % 10)).toFixed(1);
-        const statusBadge = !segs.length
-          ? '<span class="ss-status-badge open">Open</span>'
-          : (segs.length > 1
-            ? `<span class="ss-status-badge multi">${segs.length} on</span>`
-            : '<span class="ss-status-badge ok">✓ Filled</span>');
-        return `<div class="ss-slot ${cls}${clickTarget}" data-drop-zone="station" data-slot-id="${slot.id}"
-          style="--ss-delay:-${delay}s;--ss-rx:${poseRx}deg;--ss-ry:${poseRy}deg">
-          <div class="ss-slot-fx" aria-hidden="true"></div>
-          <div class="ss-slot-hit">
-            ${statusBadge}
-            <div class="ss-slot-head">
-              <div class="ss-slot-icon" style="background:${color}">${icon}</div>
-              <div style="flex:1;min-width:0;padding-right:52px">
-                <div class="ss-slot-title">${escAttr(slot.label)}</div>
-                ${win}
-                ${slot.sub && !(slot.start && slot.end) ? '' : (slot.sub && slot.start ? `<div class="ss-slot-sub">${escAttr(slot.sub)}</div>` : '')}
-              </div>
-            </div>
-            <div class="ss-slot-drop">
-              ${segHtml || empty}
-              ${handovers.map(h => `<div class="ss-handover-note">${escAttr(h)}</div>`).join('')}
-              <button type="button" class="ss-add-seg" data-action="add-seg" data-slot-id="${slot.id}">+ Add person / handover</button>
-            </div>
-          </div>
-        </div>`;
-      }).join('');
-      const gFilled = (g.slots || []).filter(s => getSlotSegments(setup, s.id).length).length;
-      return `<div class="ss-group">
-        <div class="ss-group-head">
-          <h4><span class="ss-group-dot" style="background:${color}"></span>${escAttr(gName)}</h4>
-          <span class="ss-group-count">${gFilled}/${(g.slots || []).length}</span>
-        </div>
-        <div class="ss-slots">${slots}</div>
-      </div>`;
-    }).join('');
+    const board = buildSetupGameplanBoardHtml(layout, setup, shift);
+    groupsEl.innerHTML = board.html;
+    filled = board.filled;
+    required = board.required;
+    totalSegs = board.totalSegs;
   }
 
   const dayDate = parseDateKey(dateKey);
@@ -12402,16 +12610,34 @@ function assignStation(slotId, personId) {
   openSlotAssignModal(slotId, null, personId);
 }
 
-/** Classify a station into gameplan columns (CFASCD centerline board) */
+/** Classify a station into gameplan columns (CFASCD centerline board)
+ *  sideR = machines (top of right line)
+ *  sideR_raw = raw / breading (lower on same right line)
+ */
 function gameplanColumnForLabel(label, groupName) {
   const g = String(groupName || '').toLowerCase();
   const l = String(label || '').toLowerCase();
   if (/primary/.test(g) || /primary|bun|builder/.test(l)) return 'primary';
   if (/secondary/.test(g) || /secondary|special|nugget|chute/.test(l)) return 'secondary';
-  if (/machine/.test(g) || /machine/.test(l)) return 'sideR';
-  if (/bread|raw/.test(g) || /bread|raw/.test(l)) return 'sideR';
+  // Raw / breading sits under machines on the right line
+  if (/bread|raw|table/.test(g) || /bread|raw|coater|milk\s*wash/.test(l)) return 'sideR_raw';
+  if (/machine/.test(g) || /machine|fryer|press/.test(l)) return 'sideR';
   if (/fries|fry|hash|egg|prep|dish|float|flex|support|flow/.test(g + ' ' + l)) return 'sideL';
   return 'sideL';
+}
+
+/** Render Machines column lines with Raw block lower (print / export) */
+function gameplanMachineColumnLinesHtml(cols) {
+  const mach = cols.sideR || [];
+  const raw = cols.sideR_raw || [];
+  let html = gameplanLinesHtml(mach);
+  if (raw.length) {
+    html += `<div class="gp-raw-block">
+      <div class="gp-raw-label">Raw / Breading</div>
+      ${gameplanLinesHtml(raw)}
+    </div>`;
+  }
+  return html || gameplanLinesHtml([]);
 }
 
 function gameplanPeriodIcon(period) {
@@ -12452,13 +12678,14 @@ function gameplanPersonOnLine(segs) {
 function buildGameplanStationLines(dateKey, period) {
   const setup = getSetup(dateKey, period.id);
   const layout = getSetupLayout(period, setup);
-  const cols = { sideL: [], secondary: [], primary: [], sideR: [] };
+  const cols = { sideL: [], secondary: [], primary: [], sideR: [], sideR_raw: [] };
   layout.forEach(g => {
     const gName = g.name || g.group || '';
     (g.slots || []).forEach(slot => {
       const segs = getSlotSegments(setup, slot.id);
       const info = gameplanPersonOnLine(segs);
       const col = gameplanColumnForLabel(slot.label, gName);
+      if (!cols[col]) cols[col] = [];
       cols[col].push({
         label: slot.label,
         name: info.name,
@@ -12617,7 +12844,7 @@ function buildGameplanPrintHtml(dateKey) {
           </div>
           <div>
             <div class="gp-col-title">Machines</div>
-            ${gameplanLinesHtml(cols.sideR)}
+            ${gameplanMachineColumnLinesHtml(cols)}
           </div>
         </div>
       </section>
@@ -13053,19 +13280,13 @@ function openLayoutEditor() {
   const shiftId = document.getElementById('setupShift')?.value || shifts[0].id;
   const shift = shifts.find(s => s.id === shiftId) || shifts[0];
   layoutSourceShiftId = shift.id;
+  // Edit THIS daypart’s board only (do not pull another daypart’s layout)
   layoutDraft = JSON.parse(JSON.stringify(ensureShiftLayout(shift)));
-  // Default: link current period; also pre-check periods that already share this layout fingerprint
+  // Default: only the daypart you’re on — so Breakfast save never overwrites Lunch
   layoutLinkIds = new Set([shift.id]);
-  const fingerprint = layoutFingerprint(shift.layout);
-  if (fingerprint) {
-    shifts.forEach(s => {
-      if (s.id !== shift.id && layoutFingerprint(s.layout) === fingerprint) {
-        layoutLinkIds.add(s.id);
-      }
-    });
-  }
+  const nPos = layoutDraft.reduce((n, g) => n + (g.slots || []).length, 0);
   document.getElementById('layoutEditorSub').textContent =
-    `Editing from ${shift.name} · link to as many periods as you want`;
+    `${shift.name} board · ${nPos} position${nPos === 1 ? '' : 's'} · sticks every day & week once saved`;
   renderLayoutLinkList();
   renderLayoutEditor();
   updateLayoutSaveLabel();
@@ -13100,7 +13321,7 @@ function renderLayoutLinkList() {
     const checked = layoutLinkIds.has(s.id) ? 'checked' : '';
     const nPos = (s.layout || []).reduce((n, g) => n + (g.slots || []).length, 0);
     const linked = layoutLinkIds.has(s.id) ? ' linked' : '';
-    const isSrc = s.id === layoutSourceShiftId ? ' · source' : '';
+    const isSrc = s.id === layoutSourceShiftId ? ' · editing' : '';
     return `<label class="layout-link-row${linked}">
       <input type="checkbox" value="${s.id}" ${checked} onchange="onLayoutLinkToggle(this)">
       <span class="dot" style="background:${s.color};width:10px;height:10px;border-radius:50%;flex-shrink:0"></span>
@@ -13114,36 +13335,44 @@ function renderLayoutLinkList() {
 function onLayoutLinkToggle(el) {
   if (el.checked) layoutLinkIds.add(el.value);
   else layoutLinkIds.delete(el.value);
+  // Always keep the daypart you’re editing selected
+  if (layoutSourceShiftId) layoutLinkIds.add(layoutSourceShiftId);
   renderLayoutLinkList();
 }
 
 function layoutLinkSelectAll(on) {
-  layoutLinkIds = on ? new Set(shifts.map(s => s.id)) : new Set();
-  // Always keep source checked if it still exists? User said clear - allow empty with warning on save
-  if (on === false && layoutSourceShiftId) {
-    // leave empty so they can re-select
+  if (on) {
+    layoutLinkIds = new Set(shifts.map(s => s.id));
+  } else {
+    // Clear others but keep the source daypart
+    layoutLinkIds = layoutSourceShiftId ? new Set([layoutSourceShiftId]) : new Set();
   }
   renderLayoutLinkList();
 }
 
+function layoutLinkSourceOnly() {
+  layoutLinkIds = layoutSourceShiftId ? new Set([layoutSourceShiftId]) : new Set();
+  renderLayoutLinkList();
+}
+
 function layoutLinkSameAsCurrent() {
-  // Select all periods (common case: one board for every block)
-  layoutLinkSelectAll(true);
+  layoutLinkSourceOnly();
 }
 
 function updateLayoutSaveLabel() {
   const btn = document.getElementById('layoutSaveBtn');
   if (!btn) return;
   const n = layoutLinkIds.size;
+  const names = [...layoutLinkIds].map(id => shifts.find(s => s.id === id)?.name).filter(Boolean);
   btn.textContent = n
-    ? `Save to ${n} period${n === 1 ? '' : 's'}`
-    : 'Save (pick periods above)';
+    ? `Save to ${n} daypart${n === 1 ? '' : 's'} (every day & week)`
+    : 'Save (pick dayparts above)';
   btn.disabled = !n;
   const hint = document.getElementById('layoutLinkHint');
   if (hint) {
-    hint.textContent = n
-      ? `This board will be copied onto ${n} period block${n === 1 ? '' : 's'}. Assignments keep matching slot ids where possible.`
-      : 'Check at least one period block above before saving.';
+    hint.innerHTML = n
+      ? `Will update: <strong>${names.map(escAttr).join(' · ')}</strong>. Other dayparts stay as they are. This board repeats every day and week for those dayparts.`
+      : 'Check at least one daypart (Breakfast, Lunch…) before saving.';
   }
 }
 
@@ -13232,8 +13461,9 @@ function layoutSeedPreset(n) {
 
 function saveLayoutEditor() {
   if (!layoutDraft) return;
+  if (layoutSourceShiftId) layoutLinkIds.add(layoutSourceShiftId);
   if (!layoutLinkIds.size) {
-    alert('Check at least one period block to apply this layout to.');
+    alert('Check at least one daypart (e.g. Breakfast) to save this board to.');
     return;
   }
   const cleaned = cleanLayoutDraft(layoutDraft);
@@ -13241,11 +13471,12 @@ function saveLayoutEditor() {
     alert('Add at least one position (with a name) before saving.');
     return;
   }
+  // Only update checked dayparts — never overwrite Breakfast when saving Lunch
   const names = [];
   layoutLinkIds.forEach(id => {
     const s = shifts.find(x => x.id === id);
     if (!s) return;
-    // Deep clone so periods share structure but can diverge later if edited alone
+    // Deep clone so each daypart keeps its own copy of the board
     s.layout = JSON.parse(JSON.stringify(cleaned));
     names.push(s.name);
   });
@@ -13253,7 +13484,11 @@ function saveLayoutEditor() {
   closeLayoutEditor();
   renderSetup();
   renderShifts();
-  alert(`Positions saved to ${names.length} period${names.length === 1 ? '' : 's'}:\n• ${names.join('\n• ')}`);
+  alert(
+    `Positions saved for:\n• ${names.join('\n• ')}\n\n` +
+    `This board stays on those dayparts every day and every week.\n` +
+    `Other dayparts were not changed. Only who you assign changes by day.`
+  );
 }
 
 function openLoadLayoutPreset() {
@@ -13437,10 +13672,12 @@ function saveShift() {
     const s = shifts.find(x => x.id === editingShiftId);
     if (!s) return;
     Object.assign(s, { name, start, end, color: selectedColor, min, max, carCount });
+    // Keep existing positions — never wipe a daypart board when editing times/name
     if ((!s.layout || !s.layout.length) && tplVal !== 'custom') {
       s.layout = cloneTemplateLayout(carCount);
     }
   } else {
+    // New daypart starts with template only (set positions via Edit Positions for that daypart)
     const layout = tplVal === 'custom' ? [] : cloneTemplateLayout(carCount);
     shifts.push({
       id: 'sh' + Date.now() + Math.random().toString(36).slice(2, 5),
@@ -13912,9 +14149,21 @@ function buildExportPeriodBlockHtml(dateKey, p) {
       '<div><div class="ex-gp-col-title">Secondary</div>' + lines(cols.secondary) + '</div>' +
       '<div class="ex-gp-center"><div class="bar"></div><div class="stem"></div><div class="lbl">CENTERLINE</div></div>' +
       '<div><div class="ex-gp-col-title">Primary</div>' + lines(cols.primary) + '</div>' +
-      '<div><div class="ex-gp-col-title">Machines</div>' + lines(cols.sideR) + '</div>' +
+      '<div><div class="ex-gp-col-title">Machines</div>' + exportMachineColumnLinesHtml(cols, lines) + '</div>' +
     '</div>' +
   '</section>';
+}
+
+/** Export/print: machines on top, Raw/Breading lower on the same column */
+function exportMachineColumnLinesHtml(cols, linesFn) {
+  const mach = cols.sideR || [];
+  const raw = cols.sideR_raw || [];
+  let html = linesFn(mach);
+  if (raw.length) {
+    html += '<div class="ex-gp-raw-block"><div class="ex-gp-raw-label">Raw / Breading</div>' +
+      linesFn(raw) + '</div>';
+  }
+  return html || linesFn([]);
 }
 
 /**
