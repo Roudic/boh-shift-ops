@@ -292,20 +292,33 @@
       content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
       background: rgba(255,255,255,.9); border-radius: 12px 0 0 12px;
     }
-    /* Simple 3-band colors: Morning / Mid / Late (by clock-in) */
-    .cv-card.tone-morning {
-      background: linear-gradient(145deg, #0EA5E9 0%, #0369A1 100%);
+    /* Period palette: Yellow BF · Blue Lunch · Pink Afternoon · Purple Late */
+    .cv-card.tone-breakfast {
+      background: linear-gradient(145deg, #FACC15 0%, #CA8A04 100%);
+      color: #1C1917;
     }
-    .cv-card.tone-midday {
-      background: linear-gradient(145deg, #F59E0B 0%, #C2410C 100%);
+    .cv-card.tone-breakfast .cv-time-range,
+    .cv-card.tone-breakfast .cv-role { color: #1C1917; text-shadow: none; }
+    .cv-card.tone-breakfast .cv-band-tag { background: rgba(0,0,0,.12); color: #1C1917; }
+    .cv-card.tone-lunch {
+      background: linear-gradient(145deg, #38BDF8 0%, #0284C7 100%);
     }
-    .cv-card.tone-evening {
-      background: linear-gradient(145deg, #8B5CF6 0%, #5B21B6 100%);
+    .cv-card.tone-afternoon {
+      background: linear-gradient(145deg, #F472B6 0%, #DB2777 100%);
     }
-    /* legacy class names still used in a few places */
-    .cv-card.tone-early { background: linear-gradient(145deg, #0EA5E9 0%, #0369A1 100%); }
-    .cv-card.tone-mid { background: linear-gradient(145deg, #F59E0B 0%, #C2410C 100%); }
-    .cv-card.tone-late { background: linear-gradient(145deg, #8B5CF6 0%, #5B21B6 100%); }
+    .cv-card.tone-late, .cv-card.tone-evening {
+      background: linear-gradient(145deg, #A78BFA 0%, #6D28D9 100%);
+    }
+    .cv-card.tone-bf-lunch {
+      background: linear-gradient(135deg, #FACC15 0%, #FDE047 35%, #38BDF8 100%);
+    }
+    .cv-card.tone-bf-lunch .cv-time-range { color: #1C1917; text-shadow: 0 1px 0 rgba(255,255,255,.25); }
+    .cv-card.tone-mix {
+      background: linear-gradient(135deg, #FACC15 0%, #F472B6 50%, #8B5CF6 100%);
+    }
+    /* legacy aliases */
+    .cv-card.tone-morning, .cv-card.tone-early { background: linear-gradient(145deg, #FACC15 0%, #CA8A04 100%); }
+    .cv-card.tone-midday, .cv-card.tone-mid { background: linear-gradient(145deg, #38BDF8 0%, #0284C7 100%); }
     .cv-card.tone-custom { background: linear-gradient(145deg, #F03A5F 0%, #9F1239 100%); }
     .cv-card.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 6px 16px rgba(0,0,0,.24); }
     .cv-band-tag {
@@ -911,12 +924,17 @@
     }
     #weekScheduleWrap .hs-shift:hover { box-shadow: 0 12px 30px rgba(0,0,0,.4); z-index: 3; transform: translateY(-1px); }
     #weekScheduleWrap .hs-shift.dragging { cursor: grabbing; box-shadow: 0 14px 36px rgba(0,0,0,.45); z-index: 5; opacity: .97; }
+    #weekScheduleWrap .hs-shift.tone-breakfast,
     #weekScheduleWrap .hs-shift.tone-morning,
-    #weekScheduleWrap .hs-shift.tone-early { background: linear-gradient(145deg, #0EA5E9, #0369A1); }
+    #weekScheduleWrap .hs-shift.tone-early { background: linear-gradient(145deg, #FACC15, #CA8A04); color: #1C1917; }
+    #weekScheduleWrap .hs-shift.tone-lunch,
     #weekScheduleWrap .hs-shift.tone-midday,
-    #weekScheduleWrap .hs-shift.tone-mid { background: linear-gradient(145deg, #F59E0B, #C2410C); }
+    #weekScheduleWrap .hs-shift.tone-mid { background: linear-gradient(145deg, #38BDF8, #0284C7); }
+    #weekScheduleWrap .hs-shift.tone-afternoon { background: linear-gradient(145deg, #F472B6, #DB2777); }
     #weekScheduleWrap .hs-shift.tone-evening,
-    #weekScheduleWrap .hs-shift.tone-late { background: linear-gradient(145deg, #8B5CF6, #5B21B6); }
+    #weekScheduleWrap .hs-shift.tone-late { background: linear-gradient(145deg, #A78BFA, #6D28D9); }
+    #weekScheduleWrap .hs-shift.tone-bf-lunch { background: linear-gradient(135deg, #FACC15, #38BDF8); }
+    #weekScheduleWrap .hs-shift.tone-mix { background: linear-gradient(135deg, #FACC15, #F472B6, #8B5CF6); }
     #weekScheduleWrap .hs-shift.tone-custom { background: linear-gradient(145deg, #F03A5F, #BE123C); }
     #weekScheduleWrap .hs-shift.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 8px 22px rgba(0,0,0,.32); }
     #weekScheduleWrap .hs-shift-time {
@@ -1331,17 +1349,29 @@
       z-index: 3;
       touch-action: none;
     }
+    .ssched-row-track .hs-shift.tone-breakfast,
     .ssched-row-track .hs-shift.tone-morning,
     .ssched-row-track .hs-shift.tone-early {
-      background: linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%) !important;
+      background: linear-gradient(135deg, #FACC15 0%, #CA8A04 100%) !important;
+      color: #1C1917 !important;
     }
+    .ssched-row-track .hs-shift.tone-lunch,
     .ssched-row-track .hs-shift.tone-midday,
     .ssched-row-track .hs-shift.tone-mid {
-      background: linear-gradient(135deg, #F59E0B 0%, #C2410C 100%) !important;
+      background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%) !important;
+    }
+    .ssched-row-track .hs-shift.tone-afternoon {
+      background: linear-gradient(135deg, #F472B6 0%, #DB2777 100%) !important;
     }
     .ssched-row-track .hs-shift.tone-evening,
     .ssched-row-track .hs-shift.tone-late {
-      background: linear-gradient(135deg, #8B5CF6 0%, #5B21B6 100%) !important;
+      background: linear-gradient(135deg, #A78BFA 0%, #6D28D9 100%) !important;
+    }
+    .ssched-row-track .hs-shift.tone-bf-lunch {
+      background: linear-gradient(135deg, #FACC15 0%, #FDE047 40%, #38BDF8 100%) !important;
+    }
+    .ssched-row-track .hs-shift.tone-mix {
+      background: linear-gradient(135deg, #FACC15 0%, #F472B6 50%, #8B5CF6 100%) !important;
     }
     .ssched-row-track .hs-shift.tone-custom {
       background: linear-gradient(135deg, #DD0033 0%, #9F1239 100%) !important;
@@ -1847,7 +1877,7 @@
               <span><em>Drag</em> card to move</span>
               <span><em>In / Out</em> always shown</span>
               <span><em>Click</em> empty to add</span>
-              <span><em>Blue</em> morning · <em>Orange</em> mid · <em>Purple</em> late</span>
+              <span><em>Yellow</em> BF · <em>Blue</em> Lunch · <em>Pink</em> Afternoon · <em>Purple</em> Late</span>
             </div>
             <div id="periodColorLegend"></div>
           </div>
@@ -3128,51 +3158,132 @@ function entryDisplayColor(entry) {
   return p?.color || COLORS[0];
 }
 
-/**
- * Simple color bands by clock-in time (easy to read at a glance):
- *   Blue  Morning  — start before 10:30 (breakfast / open)
- *   Orange Mid     — start 10:30–3:59 (lunch / mid)
- *   Purple Late    — start 4:00+ (dinner / close)
- */
-function shiftBand(start, end) {
-  const s = timeToMinutes(start);
-  if (s < 10 * 60 + 30) {
-    return { key: 'morning', label: 'Morning', className: 'tone-morning' };
+/** Fixed palette the user asked for */
+const SHIFT_BUCKET_META = {
+  breakfast: { label: 'Breakfast', className: 'tone-breakfast', color: '#FACC15' },
+  lunch: { label: 'Lunch', className: 'tone-lunch', color: '#38BDF8' },
+  afternoon: { label: 'Afternoon', className: 'tone-afternoon', color: '#F472B6' },
+  late: { label: 'Late', className: 'tone-late', color: '#A78BFA' }
+};
+const SHIFT_BUCKET_ORDER = ['breakfast', 'lunch', 'afternoon', 'late'];
+
+/** Map a period block (or time) → breakfast | lunch | afternoon | late */
+function periodBucketKey(periodOrStart, maybeEnd) {
+  if (periodOrStart && typeof periodOrStart === 'object') {
+    const n = String(periodOrStart.name || '').toLowerCase();
+    if (/break|early|open|\bbf\b/.test(n)) return 'breakfast';
+    if (/lunch|\bmid\b|midday/.test(n) && !/after/.test(n)) return 'lunch';
+    if (/after|\baft\b/.test(n)) return 'afternoon';
+    if (/dinner|close|clos|late|even/.test(n)) return 'late';
+    return periodBucketKey(periodOrStart.start, periodOrStart.end);
   }
-  if (s < 16 * 60) {
-    return { key: 'midday', label: 'Mid', className: 'tone-midday' };
-  }
-  return { key: 'evening', label: 'Late', className: 'tone-evening' };
+  const s = timeToMinutes(periodOrStart);
+  if (s < 10 * 60 + 30) return 'breakfast';
+  if (s < 14 * 60) return 'lunch';
+  if (s < 17 * 60) return 'afternoon';
+  return 'late';
 }
 
-/** @deprecated alias — prefer shiftBand */
+/** Which daypart buckets a shift covers (for color + mix). */
+function shiftBuckets(start, end) {
+  const periods = periodsForTimes(start, end);
+  let keys;
+  if (periods.length) {
+    keys = periods.map(p => periodBucketKey(p));
+  } else {
+    // No period blocks — infer from time overlap with default dayparts
+    const dayparts = [
+      { key: 'breakfast', start: '04:00', end: '10:30' },
+      { key: 'lunch', start: '10:30', end: '14:00' },
+      { key: 'afternoon', start: '14:00', end: '17:00' },
+      { key: 'late', start: '17:00', end: '23:59' }
+    ];
+    keys = dayparts.filter(dp => timesOverlap(start, end, dp.start, dp.end)).map(dp => dp.key);
+    if (!keys.length) keys = [periodBucketKey(start, end)];
+  }
+  return SHIFT_BUCKET_ORDER.filter(k => keys.includes(k));
+}
+
+function shiftBand(start, end) {
+  const buckets = shiftBuckets(start, end);
+  const key = buckets[0] || 'lunch';
+  const meta = SHIFT_BUCKET_META[key];
+  return { key, label: meta.label, className: meta.className };
+}
+
 function shiftTone(start, end) {
   const b = shiftBand(start, end);
-  return b.key === 'morning' ? 'early' : b.key === 'evening' ? 'late' : 'mid';
+  if (b.key === 'breakfast') return 'early';
+  if (b.key === 'late') return 'late';
+  return 'mid';
 }
 
+/**
+ * Colors:
+ *   Yellow  = Breakfast only
+ *   Blue    = Lunch only
+ *   Pink    = Afternoon only
+ *   Purple  = Late / close only
+ *   Yellow→Blue           = Breakfast + Lunch half
+ *   Yellow→Pink→Purple    = any other mix (esp. with afternoon)
+ */
 function shiftStyleFromPeriods(start, end) {
-  const band = shiftBand(start, end);
+  const buckets = shiftBuckets(start, end);
   const periods = periodsForTimes(start, end);
   const periodLabel = periods.length
     ? periods.map(p => p.name).join(' · ')
-    : band.label;
+    : buckets.map(k => SHIFT_BUCKET_META[k].label).join(' · ');
+
+  // Single daypart
+  if (buckets.length <= 1) {
+    const key = buckets[0] || 'lunch';
+    const meta = SHIFT_BUCKET_META[key];
+    return {
+      className: meta.className,
+      bgStyle: '',
+      label: periodLabel,
+      bandLabel: meta.label,
+      multi: false,
+      period: primaryPeriodForTimes(start, end)
+    };
+  }
+
+  // Breakfast + Lunch only → yellow / blue
+  const onlyBfLunch =
+    buckets.length === 2 &&
+    buckets[0] === 'breakfast' &&
+    buckets[1] === 'lunch';
+  if (onlyBfLunch) {
+    return {
+      className: 'tone-bf-lunch',
+      bgStyle: '',
+      label: periodLabel,
+      bandLabel: 'BF / Lunch',
+      multi: true,
+      period: primaryPeriodForTimes(start, end)
+    };
+  }
+
+  // Everything else multi (incl. afternoon mixes) → yellow / pink / purple
   return {
-    className: band.className,
-    bgStyle: '', // CSS classes only — no rainbows
+    className: 'tone-mix',
+    bgStyle: '',
     label: periodLabel,
-    bandLabel: band.label,
-    multi: periods.length > 1,
+    bandLabel: 'Mix',
+    multi: true,
     period: primaryPeriodForTimes(start, end)
   };
 }
 
 function periodLegendHtml() {
   return `<div class="period-legend">
-    <span class="period-legend-label">Colors (by start time)</span>
-    <span class="period-legend-chip" style="background:#0EA5E9" title="Clock in before 10:30">Morning</span>
-    <span class="period-legend-chip" style="background:#F59E0B" title="Clock in 10:30–3:59">Mid</span>
-    <span class="period-legend-chip" style="background:#8B5CF6" title="Clock in 4:00 or later">Late</span>
+    <span class="period-legend-label">Colors</span>
+    <span class="period-legend-chip" style="background:#FACC15;color:#1C1917" title="Breakfast only">Breakfast</span>
+    <span class="period-legend-chip" style="background:#38BDF8" title="Lunch only">Lunch</span>
+    <span class="period-legend-chip" style="background:#F472B6" title="Afternoon only">Afternoon</span>
+    <span class="period-legend-chip" style="background:#A78BFA" title="Dinner / close only">Late</span>
+    <span class="period-legend-chip" style="background:linear-gradient(90deg,#FACC15,#38BDF8)" title="Covers breakfast + lunch">BF+Lunch</span>
+    <span class="period-legend-chip" style="background:linear-gradient(90deg,#FACC15,#F472B6,#8B5CF6)" title="Other multi-period mixes">Mix</span>
   </div>`;
 }
 
@@ -3180,11 +3291,13 @@ function applyPeriodToneToBar(barEl, start, end) {
   if (!barEl) return;
   barEl.classList.remove(
     'tone-early', 'tone-mid', 'tone-late', 'tone-custom',
-    'tone-morning', 'tone-midday', 'tone-evening', 'tone-period', 'multi'
+    'tone-morning', 'tone-midday', 'tone-evening',
+    'tone-breakfast', 'tone-lunch', 'tone-afternoon',
+    'tone-bf-lunch', 'tone-mix', 'tone-period', 'multi'
   );
   const info = shiftStyleFromPeriods(start, end);
   info.className.split(/\s+/).filter(Boolean).forEach(c => barEl.classList.add(c));
-  barEl.style.background = ''; // let CSS class drive color
+  barEl.style.background = '';
 }
 
 function compactTime12(time24) {
