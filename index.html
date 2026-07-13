@@ -1034,8 +1034,11 @@
     .hs-status.draft { background: var(--amber-light); color: var(--amber); }
     .hs-status.published { background: var(--green-light); color: var(--green); }
     .hs-filter {
-      padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px;
-      font-family: inherit; font-size: 12px; font-weight: 600; background: var(--input-bg); color: var(--text);
+      padding: 8px 12px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px;
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      background: rgba(255,255,255,.06); color: var(--text);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.1) inset;
     }
     .hs-clip-hint {
       font-size: 11px; font-weight: 600; color: #FDA4AF; padding: 6px 12px;
@@ -1883,12 +1886,401 @@
 
     /* Scrollbars */
     ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: #3D465C; border-radius: 999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #525C73; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,.16); border-radius: 999px;
+      border: 2px solid transparent; background-clip: padding-box;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.28); background-clip: padding-box; }
+
+    /* ═══════════════════════════════════════════
+       FULL SITE — Liquid Glass + soft 3D redesign
+       ═══════════════════════════════════════════ */
+    body {
+      perspective: 1400px;
+      overflow-x: hidden;
+    }
+    .bg-orbs {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+    }
+    .bg-orbs span {
+      position: absolute; border-radius: 50%;
+      filter: blur(60px); opacity: .55;
+      animation: orbFloat 18s ease-in-out infinite;
+      will-change: transform;
+    }
+    .bg-orbs span:nth-child(1) {
+      width: 420px; height: 420px; left: -80px; top: -60px;
+      background: radial-gradient(circle, rgba(250,204,21,.45), transparent 70%);
+    }
+    .bg-orbs span:nth-child(2) {
+      width: 480px; height: 480px; right: -100px; top: 10%;
+      background: radial-gradient(circle, rgba(56,189,248,.4), transparent 70%);
+      animation-delay: -4s; animation-duration: 22s;
+    }
+    .bg-orbs span:nth-child(3) {
+      width: 380px; height: 380px; left: 30%; bottom: -80px;
+      background: radial-gradient(circle, rgba(244,114,182,.38), transparent 70%);
+      animation-delay: -8s; animation-duration: 20s;
+    }
+    .bg-orbs span:nth-child(4) {
+      width: 320px; height: 320px; right: 18%; bottom: 12%;
+      background: radial-gradient(circle, rgba(139,92,246,.35), transparent 70%);
+      animation-delay: -12s; animation-duration: 24s;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate3d(0,0,0) scale(1); }
+      33% { transform: translate3d(30px,-40px,0) scale(1.08); }
+      66% { transform: translate3d(-25px,25px,0) scale(.94); }
+    }
+
+    .main {
+      transform-style: preserve-3d;
+    }
+
+    /* Shared glass surface + 3D depth */
+    .glass-3d {
+      transform-style: preserve-3d;
+      transform: perspective(1000px) rotateX(0) rotateY(0) translateZ(0);
+      transition: transform .18s ease-out, box-shadow .22s ease, border-color .2s ease;
+      will-change: transform;
+    }
+    .glass-3d.is-tilting {
+      transition: transform .06s ease-out, box-shadow .22s ease, border-color .2s ease;
+    }
+    /* Light spot — skip .cv-card (it already uses ::after for accent bar) */
+    .glass-3d:not(.cv-card)::after {
+      content: '';
+      position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 4;
+      background: radial-gradient(
+        420px circle at var(--mx, 50%) var(--my, 20%),
+        rgba(255,255,255,.16),
+        transparent 55%
+      );
+      opacity: 0;
+      transition: opacity .2s;
+      mix-blend-mode: soft-light;
+    }
+    .glass-3d.is-tilting:not(.cv-card)::after { opacity: 1; }
+    .cv-card.is-tilting::before {
+      background:
+        radial-gradient(
+          380px circle at var(--mx, 50%) var(--my, 20%),
+          rgba(255,255,255,.35),
+          transparent 50%
+        ),
+        linear-gradient(155deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.12) 28%, transparent 48%),
+        linear-gradient(180deg, transparent 60%, rgba(0,0,0,.12) 100%);
+    }
+
+    .panel,
+    .stat,
+    .classic-hero,
+    .ss-hero,
+    #schedulePanel,
+    .ss-card,
+    .labor-day-card,
+    .cloud-badge {
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .panel {
+      transition: transform .2s ease, box-shadow .25s ease, border-color .2s;
+    }
+    .panel:hover {
+      border-color: rgba(255,255,255,.22);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.18) inset,
+        0 18px 48px rgba(0,0,0,.38),
+        0 6px 16px rgba(0,0,0,.2);
+    }
+
+    .brand-mark {
+      transform: translateZ(12px);
+      transition: transform .2s ease, box-shadow .2s;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.35) inset,
+        0 8px 20px rgba(240,58,95,.4),
+        0 2px 6px rgba(0,0,0,.25);
+    }
+    .brand:hover .brand-mark {
+      transform: translateZ(18px) rotateY(-12deg) rotateX(8deg) scale(1.06);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.45) inset,
+        0 14px 28px rgba(240,58,95,.45);
+    }
+    .brand { transform-style: preserve-3d; }
+
+    .btn {
+      transform: translateZ(0);
+      transition: transform .16s ease, box-shadow .18s ease, background .15s, border-color .15s;
+    }
+    .btn:hover {
+      transform: translateY(-2px) translateZ(6px) scale(1.02);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.28) inset,
+        0 10px 22px rgba(0,0,0,.28);
+    }
+    .btn:active { transform: translateY(0) scale(.98); }
+    .btn-primary:hover {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.4) inset,
+        0 12px 28px rgba(240,58,95,.4);
+    }
+
+    .stat {
+      background: rgba(255,255,255,.06) !important;
+      border: 1px solid rgba(255,255,255,.14) !important;
+      backdrop-filter: blur(18px) saturate(1.5);
+      -webkit-backdrop-filter: blur(18px) saturate(1.5);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.16) inset,
+        0 12px 32px rgba(0,0,0,.28) !important;
+      overflow: hidden;
+    }
+    .stat::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,.14), transparent 45%);
+      pointer-events: none;
+    }
+    .stat:hover {
+      border-color: rgba(255,255,255,.28) !important;
+    }
+    .stat-val {
+      background: linear-gradient(180deg, #fff 20%, #C7D2FE 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,.25));
+    }
+
+    .list-item {
+      background: rgba(255,255,255,.04) !important;
+      border: 1px solid rgba(255,255,255,.08) !important;
+      border-radius: 14px !important;
+      backdrop-filter: blur(10px);
+      transition: transform .16s ease, box-shadow .16s, background .15s, border-color .15s !important;
+    }
+    .list-item:hover {
+      transform: translateY(-2px) translateZ(4px);
+      background: rgba(255,255,255,.09) !important;
+      border-color: rgba(255,255,255,.18) !important;
+      box-shadow: 0 8px 20px rgba(0,0,0,.22), 0 1px 0 rgba(255,255,255,.12) inset;
+    }
+
+    input, select, textarea {
+      background: rgba(255,255,255,.06) !important;
+      border: 1px solid rgba(255,255,255,.14) !important;
+      border-radius: 12px !important;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.08) inset;
+      transition: border-color .15s, box-shadow .15s, transform .15s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(240,58,95,.55) !important;
+      box-shadow: 0 0 0 3px rgba(240,58,95,.18), 0 1px 0 rgba(255,255,255,.1) inset !important;
+      transform: translateY(-1px);
+    }
+
+    table.roster thead th {
+      background: rgba(255,255,255,.04) !important;
+      backdrop-filter: blur(12px);
+    }
+    table.roster td.name-cell,
+    table.roster th:first-child,
+    table.roster tfoot td:first-child {
+      background: rgba(16, 19, 28, .82) !important;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    table.roster td.hours-cell,
+    table.roster th:last-child,
+    table.roster tfoot td:last-child {
+      background: rgba(16, 19, 28, .82) !important;
+      backdrop-filter: blur(14px);
+    }
+    table.roster tbody tr {
+      transform-style: preserve-3d;
+    }
+    table.roster tbody tr:hover td {
+      background: rgba(240,58,95,.06) !important;
+    }
+
+    .day-head-inner {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px !important;
+      backdrop-filter: blur(10px);
+      transition: transform .18s ease, box-shadow .18s, border-color .18s !important;
+    }
+    .day-head-inner:hover {
+      transform: translateY(-3px) scale(1.02);
+      border-color: rgba(255,255,255,.2);
+      box-shadow: 0 10px 22px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.12) inset;
+    }
+    .day-head.today .day-head-inner {
+      background: rgba(240,58,95,.14) !important;
+      border-color: rgba(240,58,95,.4) !important;
+      box-shadow: 0 0 24px rgba(240,58,95,.15);
+    }
+
+    /* Shift cards — stronger 3D liquid glass */
+    .cv-card {
+      transform-style: preserve-3d;
+      transition: transform .14s ease-out, box-shadow .2s, border-color .2s, opacity .15s !important;
+    }
+    .cv-card:hover {
+      z-index: 5;
+    }
+    .cv-card.is-tilting {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.55) inset,
+        0 -10px 24px rgba(0,0,0,.14) inset,
+        0 22px 44px rgba(0,0,0,.4),
+        0 8px 16px rgba(0,0,0,.2) !important;
+    }
+
+    .cv-empty {
+      transform-style: preserve-3d;
+      transition: transform .18s ease, border-color .18s, background .18s, box-shadow .18s !important;
+    }
+    .cell:hover .cv-empty {
+      transform: translateY(-2px) translateZ(4px);
+    }
+
+    .ss-hero {
+      background:
+        radial-gradient(500px 220px at 100% 0%, rgba(240,58,95,.22), transparent 55%),
+        radial-gradient(400px 200px at 0% 100%, rgba(56,189,248,.14), transparent 55%),
+        rgba(16, 20, 32, .55) !important;
+      border: 1px solid rgba(255,255,255,.14) !important;
+      backdrop-filter: blur(24px) saturate(1.5);
+      -webkit-backdrop-filter: blur(24px) saturate(1.5);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.14) inset,
+        0 20px 50px rgba(0,0,0,.35) !important;
+    }
+    .ss-metric {
+      background: rgba(255,255,255,.1) !important;
+      border: 1px solid rgba(255,255,255,.16) !important;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.16) inset, 0 8px 18px rgba(0,0,0,.2);
+      transition: transform .16s ease, box-shadow .16s;
+    }
+    .ss-metric:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 1px 0 rgba(255,255,255,.22) inset, 0 14px 28px rgba(0,0,0,.28);
+    }
+    .ss-card {
+      background: rgba(22, 26, 38, .5) !important;
+      border: 1px solid rgba(255,255,255,.12) !important;
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      box-shadow: 0 1px 0 rgba(255,255,255,.1) inset, 0 14px 36px rgba(0,0,0,.28) !important;
+    }
+    .ss-card-head {
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)) !important;
+      border-bottom-color: rgba(255,255,255,.08) !important;
+    }
+    .ss-chip {
+      background: rgba(255,255,255,.07) !important;
+      border: 1px solid rgba(255,255,255,.14) !important;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.12) inset, 0 6px 14px rgba(0,0,0,.18) !important;
+      transition: transform .15s ease, box-shadow .15s !important;
+    }
+    .ss-chip:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 1px 0 rgba(255,255,255,.2) inset, 0 12px 24px rgba(0,0,0,.25) !important;
+    }
+    .ss-slot {
+      transition: transform .15s ease, box-shadow .15s, border-color .15s !important;
+    }
+    .ss-slot:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(0,0,0,.22);
+    }
+    .ss-avatar {
+      box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 6px 14px rgba(240,58,95,.35);
+      transition: transform .15s ease;
+    }
+    .ss-chip:hover .ss-avatar { transform: rotateY(-18deg) scale(1.05); }
+
+    .labor-day-card {
+      background: rgba(255,255,255,.05) !important;
+      border: 1px solid rgba(255,255,255,.12) !important;
+      border-radius: 16px !important;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.1) inset, 0 10px 24px rgba(0,0,0,.2);
+      transition: transform .18s ease, box-shadow .18s, border-color .18s;
+    }
+    .labor-day-card:hover {
+      transform: translateY(-3px) rotateX(2deg);
+      border-color: rgba(255,255,255,.22) !important;
+      box-shadow: 0 1px 0 rgba(255,255,255,.16) inset, 0 16px 32px rgba(0,0,0,.28);
+    }
+
+    .modal {
+      transform-style: preserve-3d;
+      animation: glassPop .28s cubic-bezier(.2,.8,.2,1) !important;
+    }
+    @keyframes glassPop {
+      from { opacity: 0; transform: perspective(900px) rotateX(8deg) translateY(24px) scale(.94); }
+      to { opacity: 1; transform: perspective(900px) rotateX(0) translateY(0) scale(1); }
+    }
+
+    .cloud-badge {
+      background: rgba(255,255,255,.08) !important;
+      border: 1px solid rgba(255,255,255,.14) !important;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.12) inset, 0 6px 16px rgba(0,0,0,.18);
+      transition: transform .16s ease, box-shadow .16s;
+    }
+    .cloud-badge:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 1px 0 rgba(255,255,255,.2) inset, 0 12px 24px rgba(0,0,0,.24);
+    }
+
+    .period-legend-chip {
+      transition: transform .15s ease, box-shadow .15s;
+    }
+    .period-legend-chip:hover {
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .hs-ctx-menu {
+      background: rgba(22, 26, 38, .72) !important;
+      border: 1px solid rgba(255,255,255,.16) !important;
+      backdrop-filter: blur(22px) saturate(1.5);
+      -webkit-backdrop-filter: blur(22px) saturate(1.5);
+      box-shadow: 0 1px 0 rgba(255,255,255,.14) inset, 0 18px 40px rgba(0,0,0,.4) !important;
+      border-radius: 14px !important;
+    }
+
+    .badge {
+      background: rgba(255,255,255,.08) !important;
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Soft float for schedule panel */
+    #schedulePanel {
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bg-orbs span { animation: none !important; }
+      .glass-3d, .cv-card, .panel, .stat, .btn, .list-item, .ss-chip, .labor-day-card {
+        transition: none !important; transform: none !important;
+      }
+    }
   </style>
 </head>
 <body>
+<div class="bg-orbs" aria-hidden="true">
+  <span></span><span></span><span></span><span></span>
+</div>
 
 <header class="header">
   <div class="header-inner">
@@ -8330,11 +8722,65 @@ function renderAll() {
   if (document.getElementById('view-setup').classList.contains('active')) renderSetup();
 }
 
+// ── Liquid glass 3D tilt (pointer-driven) ──
+const GLASS_TILT_SEL = [
+  '.panel', '.stat', '.classic-hero', '.ss-hero', '#schedulePanel',
+  '.ss-card', '.labor-day-card', '.cv-card', '.modal'
+].join(',');
+
+function glassTiltEnabled() {
+  return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !window.matchMedia('(pointer: coarse)').matches;
+}
+
+function onGlassTiltMove(e) {
+  if (!glassTiltEnabled()) return;
+  const el = e.target.closest?.(GLASS_TILT_SEL);
+  if (!el || el.classList.contains('cv-dragging') || el.classList.contains('cell-off')) return;
+  // Don't fight drag-drop / painting
+  if (typeof classicDragActive !== 'undefined' && classicDragActive) return;
+  if (typeof shiftDrag !== 'undefined' && shiftDrag) return;
+
+  const r = el.getBoundingClientRect();
+  if (r.width < 8 || r.height < 8) return;
+  const x = (e.clientX - r.left) / r.width;
+  const y = (e.clientY - r.top) / r.height;
+  const isCard = el.classList.contains('cv-card');
+  const max = isCard ? 10 : 6;
+  const rx = (0.5 - y) * max;
+  const ry = (x - 0.5) * (max + 2);
+  const lift = isCard ? 10 : 6;
+  el.classList.add('glass-3d', 'is-tilting');
+  el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`);
+  el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`);
+  el.style.transform =
+    `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateZ(${lift}px)`;
+}
+
+function onGlassTiltLeave(e) {
+  const el = e.target.closest?.(GLASS_TILT_SEL);
+  if (!el) return;
+  // only clear if pointer truly left this element
+  if (el.contains(e.relatedTarget)) return;
+  el.classList.remove('is-tilting');
+  el.style.transform = '';
+}
+
+function initGlass3d() {
+  if (!glassTiltEnabled()) return;
+  document.addEventListener('pointermove', onGlassTiltMove, { passive: true });
+  document.addEventListener('pointerout', onGlassTiltLeave, { passive: true });
+  // Mark static surfaces for CSS light spot
+  document.querySelectorAll('.panel, .stat, .classic-hero, .ss-hero, #schedulePanel, .ss-card')
+    .forEach(el => el.classList.add('glass-3d'));
+}
+
 // ── Boot ──
 if (!load()) initShiftsOnly();
 if (!weekStart) setWeekStart(new Date());
 initTimeSelects();
 initSetupDragDrop();
+initGlass3d();
 document.addEventListener('keydown', onScheduleKeydown);
 document.addEventListener('click', (e) => {
   if (!e.target.closest('#hsCtxMenu')) closeCtxMenu();
