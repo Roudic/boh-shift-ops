@@ -2580,10 +2580,10 @@
       box-shadow: 0 0 16px rgba(240,58,95,.45);
     }
 
-    /* Board groups as floating shelves */
+    /* Board groups — flat shelves (no 3D transform: it breaks click hit-testing) */
     #view-setup .ss-board {
       gap: 1.35rem;
-      perspective: var(--ss-stage);
+      perspective: none;
     }
     #view-setup .ss-group {
       background: rgba(16, 20, 32, .92) !important;
@@ -2593,12 +2593,11 @@
       box-shadow:
         0 1px 0 rgba(255,255,255,.1) inset,
         0 18px 40px rgba(0,0,0,.35) !important;
-      transform: rotateX(2deg);
-      transform-origin: 50% 0;
-      transition: transform .2s ease, box-shadow .2s ease;
+      transform: none !important;
+      transition: box-shadow .2s ease, border-color .2s ease;
     }
     #view-setup .ss-group:hover {
-      transform: rotateX(0deg) translateY(-2px);
+      transform: none !important;
       box-shadow:
         0 1px 0 rgba(255,255,255,.14) inset,
         0 24px 48px rgba(0,0,0,.4) !important;
@@ -2634,50 +2633,39 @@
     #view-setup .ss-slots {
       gap: 14px !important;
       padding: 18px !important;
-      perspective: 900px;
+      perspective: none;
     }
 
-    /* Station pads — floating 3D tiles */
+    /* Station pads — glass look WITHOUT floating transforms (click-stable) */
     #view-setup .ss-slot {
-      --ss-rx: 8deg;
-      --ss-ry: -5deg;
-      --ss-lift: 10px;
       position: relative;
       border-radius: 18px !important;
       border: 1px solid rgba(255,255,255,.16) !important;
       border-style: solid !important;
       background:
-        linear-gradient(155deg, rgba(255,255,255,.1), rgba(255,255,255,.02)),
+        linear-gradient(155deg, rgba(255,255,255,.12), rgba(255,255,255,.03)),
         #151a28 !important;
       min-height: 120px !important;
       padding: 14px !important;
-      transform:
-        translate3d(0, calc(var(--ss-lift) * -1), 18px)
-        rotateX(var(--ss-rx)) rotateY(var(--ss-ry));
-      transform-style: preserve-3d;
-      transform-origin: 50% 90%;
+      /* Critical: no transform/animation on pads — was causing click miss/stutter */
+      transform: none !important;
+      animation: none !important;
+      will-change: auto;
       box-shadow:
         0 1px 0 rgba(255,255,255,.28) inset,
-        0 -10px 22px rgba(0,0,0,.18) inset,
-        8px 18px 28px rgba(0,0,0,.42),
-        0 28px 16px -12px rgba(0,0,0,.4) !important;
-      animation: ssSlotFloat 4.5s ease-in-out infinite;
-      animation-delay: var(--ss-delay, 0s);
-      transition: border-color .15s, box-shadow .18s;
-      will-change: transform;
+        0 10px 24px rgba(0,0,0,.35),
+        0 18px 12px -10px rgba(0,0,0,.3) !important;
+      transition: border-color .15s, box-shadow .15s, background .15s;
       overflow: visible !important;
+      touch-action: manipulation;
     }
-    @keyframes ssSlotFloat {
-      0%, 100% {
-        transform:
-          translate3d(0, calc(var(--ss-lift) * -1), 18px)
-          rotateX(var(--ss-rx)) rotateY(var(--ss-ry));
-      }
-      50% {
-        transform:
-          translate3d(0, calc(var(--ss-lift) * -1 - 6px), 26px)
-          rotateX(calc(var(--ss-rx) + 1deg)) rotateY(calc(var(--ss-ry) - 1deg));
-      }
+    #view-setup .ss-slot:hover {
+      transform: none !important;
+      animation: none !important;
+      border-color: rgba(255,255,255,.28) !important;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.35) inset,
+        0 12px 28px rgba(0,0,0,.38) !important;
     }
     #view-setup .ss-slot::after {
       content: '';
@@ -2688,25 +2676,11 @@
       z-index: 0;
     }
     #view-setup .ss-slot > * { position: relative; z-index: 1; }
-    #view-setup .ss-slot:hover,
     #view-setup .ss-slot.is-tilting {
-      animation: none;
-      z-index: 5;
+      transform: none !important;
+      animation: none !important;
     }
-    #view-setup .ss-slot:hover:not(.is-tilting):not(.drop-over) {
-      --ss-lift: 18px;
-      --ss-rx: 12deg;
-      --ss-ry: -9deg;
-      transform:
-        translate3d(0, calc(var(--ss-lift) * -1), 32px)
-        rotateX(var(--ss-rx)) rotateY(var(--ss-ry)) scale(1.03);
-      border-color: rgba(255,255,255,.32) !important;
-      box-shadow:
-        0 1px 0 rgba(255,255,255,.4) inset,
-        12px 28px 36px rgba(0,0,0,.48),
-        0 40px 22px -14px rgba(0,0,0,.4) !important;
-    }
-    /* Empty = needs attention (amber pulse) */
+    /* Empty = needs attention (amber glow pulse — no transform) */
     #view-setup .ss-slot.empty-required {
       border-color: rgba(251,191,36,.65) !important;
       background:
@@ -2715,8 +2689,8 @@
       box-shadow:
         0 1px 0 rgba(253,230,138,.2) inset,
         0 0 0 1px rgba(251,191,36,.15),
-        8px 18px 28px rgba(0,0,0,.4) !important;
-      animation: ssSlotFloat 4.5s ease-in-out infinite, ssEmptyPulse 2.2s ease-in-out infinite;
+        0 10px 24px rgba(0,0,0,.35) !important;
+      animation: ssEmptyPulse 2.2s ease-in-out infinite !important;
     }
     @keyframes ssEmptyPulse {
       0%, 100% { box-shadow: 0 1px 0 rgba(253,230,138,.2) inset, 0 0 0 1px rgba(251,191,36,.15), 8px 18px 28px rgba(0,0,0,.4); }
@@ -2778,31 +2752,29 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: .85; transform: scale(1.05); }
     }
-    /* Burst when a position is just filled */
+    /* Burst when a position is just filled — glow only, no move (click-safe) */
     #view-setup .ss-slot.just-filled {
-      animation: ssJustFilled 0.85s cubic-bezier(.2,1.2,.3,1) both !important;
+      animation: ssJustFilled 0.75s ease-out both !important;
       z-index: 8;
+      transform: none !important;
     }
     @keyframes ssJustFilled {
       0% {
-        transform: translate3d(0, -8px, 18px) rotateX(8deg) scale(.88);
-        filter: brightness(1.6);
+        filter: brightness(1.55);
         box-shadow:
-          0 0 0 0 rgba(52,211,153,.7),
+          0 0 0 0 rgba(52,211,153,.75),
           0 1px 0 rgba(167,243,208,.6) inset,
-          8px 18px 28px rgba(0,0,0,.4);
+          0 10px 24px rgba(0,0,0,.35);
       }
-      40% {
-        transform: translate3d(0, -28px, 48px) rotateX(12deg) scale(1.1);
-        filter: brightness(1.25);
+      45% {
+        filter: brightness(1.2);
         box-shadow:
-          0 0 0 12px rgba(52,211,153,0),
-          0 0 48px rgba(52,211,153,.55),
+          0 0 0 10px rgba(52,211,153,0),
+          0 0 40px rgba(52,211,153,.5),
           0 1px 0 rgba(167,243,208,.7) inset,
-          12px 32px 40px rgba(0,0,0,.45);
+          0 12px 28px rgba(0,0,0,.4);
       }
       100% {
-        transform: translate3d(0, -10px, 18px) rotateX(8deg) scale(1);
         filter: brightness(1);
       }
     }
@@ -2922,16 +2894,15 @@
     #view-setup .ss-slot.drop-over,
     #view-setup .ss-slot.click-target {
       animation: none !important;
-      --ss-lift: 22px;
+      transform: none !important;
       border-color: rgba(240,58,95,.75) !important;
       background:
         linear-gradient(155deg, rgba(240,58,95,.28), rgba(240,58,95,.08)),
         #2a1218 !important;
-      transform: translate3d(0, -22px, 40px) rotateX(10deg) scale(1.05) !important;
       box-shadow:
         0 0 0 3px rgba(240,58,95,.3),
-        0 0 30px rgba(240,58,95,.25),
-        0 28px 36px rgba(0,0,0,.45) !important;
+        0 0 24px rgba(240,58,95,.22),
+        0 12px 28px rgba(0,0,0,.4) !important;
     }
     #view-setup .ss-slot-title { color: #F8FAFC !important; }
     #view-setup .ss-slot-sub { color: #94A3B8 !important; }
@@ -2946,27 +2917,22 @@
       border-color: rgba(255,255,255,.12) !important;
     }
 
-    /* Spinning station icons */
+    /* Station icons — static (spin was stealing smoothness near handoff clicks) */
     #view-setup .ss-slot-icon {
       width: 36px !important; height: 36px !important;
       border-radius: 12px !important;
       box-shadow:
         0 1px 0 rgba(255,255,255,.35) inset,
         0 8px 16px rgba(0,0,0,.35);
-      animation: ssIconSpin 8s linear infinite;
-      transform-style: preserve-3d;
+      animation: none !important;
+      pointer-events: none;
     }
     #view-setup .ss-slot:hover .ss-slot-icon {
-      animation-duration: 2.2s;
+      animation: none !important;
       box-shadow:
         0 1px 0 rgba(255,255,255,.5) inset,
-        0 0 18px rgba(255,255,255,.2),
-        0 10px 20px rgba(0,0,0,.4);
-    }
-    @keyframes ssIconSpin {
-      0% { transform: rotateY(0deg) rotateX(8deg); }
-      50% { transform: rotateY(180deg) rotateX(8deg); }
-      100% { transform: rotateY(360deg) rotateX(8deg); }
+        0 0 14px rgba(255,255,255,.15),
+        0 8px 16px rgba(0,0,0,.35);
     }
 
     /* Person segments — flat/stable for reliable handoff edit clicks */
@@ -2987,49 +2953,43 @@
     #view-setup .ss-seg-time { color: #FDA4AF !important; }
     #view-setup .ss-seg-x { color: #94A3B8 !important; }
     #view-setup .ss-seg-x:hover { background: rgba(240,58,95,.2) !important; color: #FDA4AF !important; }
-    /* Handoff control — stable hit target (no parent float / tilt fighting the click) */
-    #view-setup .ss-slot:has(.ss-add-seg:hover),
-    #view-setup .ss-slot:has(.ss-add-seg:active),
-    #view-setup .ss-slot:has(.ss-seg:hover),
-    #view-setup .ss-slot:has(.ss-seg:active),
-    #view-setup .ss-slot:has(.ss-seg-x:hover) {
-      animation: none !important;
-      transform: translate3d(0, -10px, 18px) rotateX(var(--ss-rx, 8deg)) rotateY(var(--ss-ry, -5deg)) !important;
-      transition: none !important;
-    }
     #view-setup .ss-add-seg {
       color: #7DD3FC !important;
-      border: 1px dashed rgba(56,189,248,.45) !important;
-      background: rgba(56,189,248,.12) !important;
+      border: 1px solid rgba(56,189,248,.5) !important;
+      background: rgba(56,189,248,.14) !important;
       border-radius: 10px !important;
-      transition: background .12s, border-color .12s, box-shadow .12s;
+      transition: background .1s, border-color .1s, box-shadow .1s;
       transform: none !important;
       position: relative;
-      z-index: 6;
+      z-index: 8;
       cursor: pointer;
       user-select: none;
       touch-action: manipulation;
-      padding: 10px 8px !important;
-      min-height: 38px;
+      padding: 11px 10px !important;
+      min-height: 42px;
+      width: 100%;
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-family: inherit;
+      font-size: 12px;
       font-weight: 800;
       letter-spacing: .01em;
     }
     #view-setup .ss-add-seg:hover {
       transform: none !important;
-      background: rgba(56,189,248,.22) !important;
-      border-color: rgba(125,211,252,.7) !important;
-      box-shadow: 0 0 0 2px rgba(56,189,248,.2);
+      background: rgba(56,189,248,.26) !important;
+      border-color: rgba(125,211,252,.8) !important;
+      box-shadow: 0 0 0 2px rgba(56,189,248,.25);
     }
     #view-setup .ss-add-seg:active {
-      background: rgba(56,189,248,.3) !important;
+      background: rgba(56,189,248,.35) !important;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
     }
     #view-setup .ss-seg {
       position: relative;
-      z-index: 6;
+      z-index: 8;
       transform: none !important;
       cursor: pointer;
       touch-action: manipulation;
@@ -3037,6 +2997,18 @@
     #view-setup .ss-seg:hover {
       transform: none !important;
       border-color: rgba(240,58,95,.5) !important;
+    }
+    #view-setup .ss-slot-drop {
+      position: relative;
+      z-index: 7;
+      pointer-events: auto;
+    }
+    #view-setup .ss-slot-icon {
+      pointer-events: none; /* don't steal clicks */
+      animation: none !important; /* spinning icon caused jank near buttons */
+    }
+    #view-setup .ss-slot:hover .ss-slot-icon {
+      animation: none !important;
     }
     #view-setup .ss-handover-note {
       color: #FBBF24 !important;
@@ -3131,10 +3103,8 @@
     }
     #view-setup .ss-pool-hint { color: #94A3B8 !important; }
 
-    /* Floating draggable people chips */
+    /* Pool chips — glass look, flat (stable drag/click) */
     #view-setup .ss-chip {
-      --chip-rx: 6deg;
-      --chip-ry: -8deg;
       position: relative;
       background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.04)) !important;
       border: 1px solid rgba(255,255,255,.18) !important;
@@ -3142,37 +3112,29 @@
       color: #F8FAFC !important;
       box-shadow:
         0 1px 0 rgba(255,255,255,.25) inset,
-        6px 12px 20px rgba(0,0,0,.35) !important;
-      transform:
-        translate3d(0, -4px, 12px)
-        rotateX(var(--chip-rx)) rotateY(var(--chip-ry));
-      animation: ssChipFloat 3.8s ease-in-out infinite;
-      animation-delay: var(--ss-delay, 0s);
-      transition: border-color .15s, box-shadow .15s;
-      will-change: transform;
-    }
-    @keyframes ssChipFloat {
-      0%, 100% { transform: translate3d(0, -4px, 12px) rotateX(var(--chip-rx)) rotateY(var(--chip-ry)); }
-      50% { transform: translate3d(0, -10px, 18px) rotateX(calc(var(--chip-rx) + 2deg)) rotateY(calc(var(--chip-ry) - 2deg)); }
+        0 8px 18px rgba(0,0,0,.3) !important;
+      transform: none !important;
+      animation: none !important;
+      will-change: auto;
+      transition: border-color .12s, box-shadow .12s, background .12s;
+      touch-action: manipulation;
     }
     #view-setup .ss-chip:hover,
     #view-setup .ss-chip.is-tilting {
-      animation: none;
+      animation: none !important;
+      transform: none !important;
       z-index: 6;
-    }
-    #view-setup .ss-chip:hover:not(.dragging):not(.is-tilting) {
-      transform: translate3d(0, -12px, 24px) rotateX(10deg) rotateY(-12deg) scale(1.05);
-      border-color: rgba(253,164,175,.55) !important;
+      border-color: rgba(253,164,175,.5) !important;
       box-shadow:
-        0 1px 0 rgba(255,255,255,.35) inset,
-        0 0 20px rgba(240,58,95,.2),
-        10px 22px 28px rgba(0,0,0,.4) !important;
+        0 1px 0 rgba(255,255,255,.3) inset,
+        0 0 16px rgba(240,58,95,.15),
+        0 10px 20px rgba(0,0,0,.32) !important;
     }
     #view-setup .ss-chip.dragging {
       animation: none !important;
-      opacity: .7;
-      transform: scale(.94) rotate(-2deg) !important;
-      box-shadow: 0 8px 20px rgba(0,0,0,.35) !important;
+      opacity: .75;
+      transform: scale(.97) !important;
+      box-shadow: 0 6px 16px rgba(0,0,0,.35) !important;
     }
     #view-setup .ss-chip.selected {
       border-color: rgba(240,58,95,.7) !important;
@@ -3205,14 +3167,11 @@
       box-shadow:
         0 1px 0 rgba(255,255,255,.35) inset,
         0 6px 14px rgba(240,58,95,.4);
-      animation: ssAvatarSpin 6s linear infinite;
+      animation: none !important;
+      pointer-events: none;
     }
     #view-setup .ss-chip:hover .ss-avatar {
-      animation-duration: 1.6s;
-    }
-    @keyframes ssAvatarSpin {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
+      animation: none !important;
     }
     #view-setup .ss-chip-skill {
       background: rgba(0,0,0,.35) !important;
@@ -8701,9 +8660,12 @@ function countStationFits(person, template) {
 }
 
 function openHandoffAssign(slotId, segmentId, personId) {
-  // Freeze 3D tilt before modal so nothing jumps under the cursor
+  // Freeze effects so nothing jumps under the cursor
   if (typeof clearAllGlassTilt === 'function') clearAllGlassTilt();
+  if (typeof clearFxParticles === 'function') clearFxParticles();
+  setupScrollPaused = true; // pause sparkles briefly while opening
   openSlotAssignModal(slotId, segmentId || null, personId || null);
+  setTimeout(() => { setupScrollPaused = false; }, 400);
 }
 
 function initSetupDragDrop() {
@@ -9998,9 +9960,9 @@ function renderAll() {
 }
 
 // ── Floating 3D (UE-style) — schedule cards + setup stations/chips ──
-// Don't tilt interactive controls; also never tilt whole .ss-slot (makes handoff clicks miss)
-const GLASS_TILT_BLOCK = 'button, input, select, textarea, a, label, .cv-act, .ss-seg-x, .ss-add-seg, .ss-seg, .ss-slot-drop, .ss-chip-remove';
-const GLASS_TILT_SEL = '.cv-card, #view-setup .ss-chip, #view-setup .ss-metric';
+// Setup board: no 3D tilt (caused click stutter on handoff / segments)
+const GLASS_TILT_BLOCK = 'button, input, select, textarea, a, label, .cv-act, .ss-seg-x, .ss-add-seg, .ss-seg, .ss-slot-drop, .ss-chip-remove, #view-setup';
+const GLASS_TILT_SEL = '.cv-card';
 let glassTiltEl = null;
 let glassTiltRaf = 0;
 let glassTiltPending = null;
