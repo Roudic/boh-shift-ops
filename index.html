@@ -306,10 +306,10 @@
     .cell {
       min-height: 96px; border-radius: 12px; cursor: pointer;
       display: flex; flex-direction: column; justify-content: stretch; padding: 4px;
-      margin: 2px; border: 1px solid transparent; transition: all .15s ease;
-      background: transparent; overflow: hidden; min-width: 0;
+      margin: 2px; border: 1px solid transparent; transition: border-color .15s ease, box-shadow .15s ease;
+      background: transparent; overflow: visible; min-width: 0;
     }
-    .cell:hover { transform: translateY(-1px); }
+    .cell:hover { transform: none; }
     .cell.assigned { background: transparent; border-color: transparent; }
     .cell.selected .cv-card,
     .cell.selected .cv-empty {
@@ -1049,20 +1049,20 @@
     table.roster td.name-cell,
     table.roster tfoot td:first-child {
       position: sticky; left: 0; z-index: 2;
-      background: var(--surface);
+      background: #141824;
       box-shadow: 4px 0 16px rgba(0,0,0,.2);
     }
-    table.roster thead th:first-child { z-index: 3; background: var(--surface-2); }
+    table.roster thead th:first-child { z-index: 3; background: #161b28; }
     /* Keep Hrs column reachable when scrolling */
     table.roster th:last-child,
     table.roster td.hours-cell,
     table.roster tfoot td:last-child {
       position: sticky; right: 0; z-index: 2;
-      background: var(--surface);
+      background: #141824;
       box-shadow: -4px 0 16px rgba(0,0,0,.18);
     }
-    table.roster thead th:last-child { z-index: 3; background: var(--surface-2); }
-    table.roster tfoot td:last-child { background: var(--surface-2); }
+    table.roster thead th:last-child { z-index: 3; background: #161b28; }
+    table.roster tfoot td:last-child { background: #161b28; }
     table.roster tfoot td {
       padding: 16px 12px; font-size: 13px; font-weight: 700;
       background: var(--surface-2); border-top: 2px solid var(--border);
@@ -1788,16 +1788,20 @@
     .hs-toolbar, .labor-day-card, .copy-to-summary {
       background: var(--surface-2) !important; border-color: var(--border) !important; color: var(--text);
     }
+    /* Opaque sticky columns (transparent glass bg makes scroll text bleed through) */
     .import-preview th, table.roster thead th:first-child,
     table.roster td.name-cell, table.roster tfoot td {
-      background: var(--surface-2) !important; color: var(--text);
+      background: #161b28 !important; color: var(--text);
     }
     table.roster thead th:last-child,
     table.roster td.hours-cell {
-      background: var(--surface) !important; color: var(--text);
+      background: #141824 !important; color: var(--text);
     }
     table.roster tfoot td:last-child {
-      background: var(--surface-2) !important;
+      background: #161b28 !important;
+    }
+    table.roster tbody tr:hover td.name-cell {
+      background: #1c1522 !important;
     }
     table.roster tfoot td { border-top-color: var(--border) !important; }
     .hs-status.draft { background: var(--amber-light); color: var(--amber); }
@@ -1895,19 +1899,20 @@
 
     /* ═══════════════════════════════════════════
        FULL SITE — Liquid Glass + soft 3D redesign
+       (debug-hardened: no body perspective, no tilting
+        containers that own sticky/scroll)
        ═══════════════════════════════════════════ */
     body {
-      perspective: 1400px;
       overflow-x: hidden;
     }
     .bg-orbs {
       position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
+      contain: strict;
     }
     .bg-orbs span {
       position: absolute; border-radius: 50%;
-      filter: blur(60px); opacity: .55;
-      animation: orbFloat 18s ease-in-out infinite;
-      will-change: transform;
+      filter: blur(60px); opacity: .42;
+      animation: orbFloat 22s ease-in-out infinite;
     }
     .bg-orbs span:nth-child(1) {
       width: 420px; height: 420px; left: -80px; top: -60px;
@@ -1934,34 +1939,25 @@
       66% { transform: translate3d(-25px,25px,0) scale(.94); }
     }
 
-    .main {
-      transform-style: preserve-3d;
+    /* Tilt only on leaf surfaces — never on #schedulePanel / sticky parents */
+    .glass-tilt {
+      position: relative;
+      transition: transform .16s ease-out, box-shadow .2s ease, border-color .2s ease;
     }
-
-    /* Shared glass surface + 3D depth */
-    .glass-3d {
-      transform-style: preserve-3d;
-      transform: perspective(1000px) rotateX(0) rotateY(0) translateZ(0);
-      transition: transform .18s ease-out, box-shadow .22s ease, border-color .2s ease;
-      will-change: transform;
+    .glass-tilt.is-tilting {
+      transition: transform .05s linear, box-shadow .2s ease;
+      z-index: 6;
     }
-    .glass-3d.is-tilting {
-      transition: transform .06s ease-out, box-shadow .22s ease, border-color .2s ease;
-    }
-    /* Light spot — skip .cv-card (it already uses ::after for accent bar) */
-    .glass-3d:not(.cv-card)::after {
+    .glass-tilt.is-tilting:not(.cv-card)::after {
       content: '';
       position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 4;
       background: radial-gradient(
         420px circle at var(--mx, 50%) var(--my, 20%),
-        rgba(255,255,255,.16),
+        rgba(255,255,255,.18),
         transparent 55%
       );
-      opacity: 0;
-      transition: opacity .2s;
       mix-blend-mode: soft-light;
     }
-    .glass-3d.is-tilting:not(.cv-card)::after { opacity: 1; }
     .cv-card.is-tilting::before {
       background:
         radial-gradient(
@@ -1977,16 +1973,19 @@
     .stat,
     .classic-hero,
     .ss-hero,
-    #schedulePanel,
     .ss-card,
     .labor-day-card,
     .cloud-badge {
       position: relative;
-      transform-style: preserve-3d;
+    }
+
+    /* NEVER put transform on schedule panel — sticky columns / scroll break */
+    #schedulePanel {
+      transform: none !important;
     }
 
     .panel {
-      transition: transform .2s ease, box-shadow .25s ease, border-color .2s;
+      transition: box-shadow .25s ease, border-color .2s;
     }
     .panel:hover {
       border-color: rgba(255,255,255,.22);
@@ -1997,7 +1996,6 @@
     }
 
     .brand-mark {
-      transform: translateZ(12px);
       transition: transform .2s ease, box-shadow .2s;
       box-shadow:
         0 1px 0 rgba(255,255,255,.35) inset,
@@ -2005,19 +2003,17 @@
         0 2px 6px rgba(0,0,0,.25);
     }
     .brand:hover .brand-mark {
-      transform: translateZ(18px) rotateY(-12deg) rotateX(8deg) scale(1.06);
+      transform: translateY(-2px) scale(1.05);
       box-shadow:
         0 1px 0 rgba(255,255,255,.45) inset,
         0 14px 28px rgba(240,58,95,.45);
     }
-    .brand { transform-style: preserve-3d; }
 
     .btn {
-      transform: translateZ(0);
       transition: transform .16s ease, box-shadow .18s ease, background .15s, border-color .15s;
     }
     .btn:hover {
-      transform: translateY(-2px) translateZ(6px) scale(1.02);
+      transform: translateY(-2px);
       box-shadow:
         0 1px 0 rgba(255,255,255,.28) inset,
         0 10px 22px rgba(0,0,0,.28);
@@ -2049,10 +2045,8 @@
       border-color: rgba(255,255,255,.28) !important;
     }
     .stat-val {
-      background: linear-gradient(180deg, #fff 20%, #C7D2FE 100%);
-      -webkit-background-clip: text; background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,.25));
+      color: #F8FAFC;
+      text-shadow: 0 2px 12px rgba(0,0,0,.35);
     }
 
     .list-item {
@@ -2063,7 +2057,7 @@
       transition: transform .16s ease, box-shadow .16s, background .15s, border-color .15s !important;
     }
     .list-item:hover {
-      transform: translateY(-2px) translateZ(4px);
+      transform: translateY(-2px);
       background: rgba(255,255,255,.09) !important;
       border-color: rgba(255,255,255,.18) !important;
       box-shadow: 0 8px 20px rgba(0,0,0,.22), 0 1px 0 rgba(255,255,255,.12) inset;
@@ -2075,47 +2069,42 @@
       border-radius: 12px !important;
       backdrop-filter: blur(10px);
       box-shadow: 0 1px 0 rgba(255,255,255,.08) inset;
-      transition: border-color .15s, box-shadow .15s, transform .15s;
+      transition: border-color .15s, box-shadow .15s;
     }
     input:focus, select:focus, textarea:focus {
       border-color: rgba(240,58,95,.55) !important;
       box-shadow: 0 0 0 3px rgba(240,58,95,.18), 0 1px 0 rgba(255,255,255,.1) inset !important;
-      transform: translateY(-1px);
     }
 
     table.roster thead th {
-      background: rgba(255,255,255,.04) !important;
-      backdrop-filter: blur(12px);
+      background: rgba(22, 26, 38, .92) !important;
     }
+    /* Solid sticky bg (no backdrop-filter — filter + sticky is buggy in Chromium) */
     table.roster td.name-cell,
     table.roster th:first-child,
     table.roster tfoot td:first-child {
-      background: rgba(16, 19, 28, .82) !important;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: #141824 !important;
     }
     table.roster td.hours-cell,
     table.roster th:last-child,
     table.roster tfoot td:last-child {
-      background: rgba(16, 19, 28, .82) !important;
-      backdrop-filter: blur(14px);
-    }
-    table.roster tbody tr {
-      transform-style: preserve-3d;
+      background: #141824 !important;
     }
     table.roster tbody tr:hover td {
       background: rgba(240,58,95,.06) !important;
+    }
+    table.roster tbody tr:hover td.name-cell {
+      background: #1a1520 !important;
     }
 
     .day-head-inner {
       background: rgba(255,255,255,.04);
       border: 1px solid rgba(255,255,255,.08);
       border-radius: 14px !important;
-      backdrop-filter: blur(10px);
       transition: transform .18s ease, box-shadow .18s, border-color .18s !important;
     }
     .day-head-inner:hover {
-      transform: translateY(-3px) scale(1.02);
+      transform: translateY(-2px);
       border-color: rgba(255,255,255,.2);
       box-shadow: 0 10px 22px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.12) inset;
     }
@@ -2125,28 +2114,36 @@
       box-shadow: 0 0 24px rgba(240,58,95,.15);
     }
 
-    /* Shift cards — stronger 3D liquid glass */
+    /* Cards: allow slight lift without clipping so badly */
+    .cell {
+      overflow: visible !important;
+    }
     .cv-card {
-      transform-style: preserve-3d;
       transition: transform .14s ease-out, box-shadow .2s, border-color .2s, opacity .15s !important;
     }
     .cv-card:hover {
       z-index: 5;
+      /* hover lift only when NOT pointer-tilting (inline transform wins while tilting) */
+      transform: translateY(-2px);
     }
     .cv-card.is-tilting {
       box-shadow:
         0 1px 0 rgba(255,255,255,.55) inset,
         0 -10px 24px rgba(0,0,0,.14) inset,
-        0 22px 44px rgba(0,0,0,.4),
-        0 8px 16px rgba(0,0,0,.2) !important;
+        0 18px 36px rgba(0,0,0,.38),
+        0 6px 14px rgba(0,0,0,.18) !important;
+    }
+    .cv-card.cv-dragging,
+    .cv-card.cv-dragging:hover {
+      transform: scale(.97) !important;
+      opacity: .5;
     }
 
     .cv-empty {
-      transform-style: preserve-3d;
       transition: transform .18s ease, border-color .18s, background .18s, box-shadow .18s !important;
     }
     .cell:hover .cv-empty {
-      transform: translateY(-2px) translateZ(4px);
+      transform: translateY(-2px);
     }
 
     .ss-hero {
@@ -2271,7 +2268,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .bg-orbs span { animation: none !important; }
-      .glass-3d, .cv-card, .panel, .stat, .btn, .list-item, .ss-chip, .labor-day-card {
+      .glass-tilt, .cv-card, .panel, .stat, .btn, .list-item, .ss-chip, .labor-day-card {
         transition: none !important; transform: none !important;
       }
     }
@@ -4207,12 +4204,15 @@ function classicDragStart(e, staffId, dateKey, dayIndex) {
     e.preventDefault();
     return;
   }
+  if (typeof clearAllGlassTilt === 'function') clearAllGlassTilt();
   classicDrag = { staffId, dateKey, dayIndex };
   classicDragActive = true;
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('text/boh-shift', JSON.stringify(classicDrag));
   e.dataTransfer.setData('text/plain', `${staffId}|${dateKey}`);
   const card = e.currentTarget;
+  card.style.transform = '';
+  card.classList.remove('is-tilting', 'glass-tilt');
   requestAnimationFrame(() => card.classList.add('cv-dragging'));
   e.stopPropagation();
 }
@@ -4221,7 +4221,9 @@ function classicDragEnd(e) {
   classicDragActive = false;
   classicDrag = null;
   e.currentTarget?.classList?.remove('cv-dragging');
+  e.currentTarget && (e.currentTarget.style.transform = '');
   document.querySelectorAll('.cell.cv-drop-target').forEach(el => el.classList.remove('cv-drop-target'));
+  if (typeof clearAllGlassTilt === 'function') clearAllGlassTilt();
 }
 
 function classicDragOver(e) {
@@ -4482,6 +4484,7 @@ function onShiftPointerDown(e, mode, staffId, dateKey, dayIndex) {
   e.preventDefault();
   e.stopPropagation();
   closeCtxMenu();
+  if (typeof clearAllGlassTilt === 'function') clearAllGlassTilt();
   if (schedulePublished) {
     openAssign(staffId, dateKey, dayIndex);
     return;
@@ -8722,57 +8725,117 @@ function renderAll() {
   if (document.getElementById('view-setup').classList.contains('active')) renderSetup();
 }
 
-// ── Liquid glass 3D tilt (pointer-driven) ──
-const GLASS_TILT_SEL = [
-  '.panel', '.stat', '.classic-hero', '.ss-hero', '#schedulePanel',
-  '.ss-card', '.labor-day-card', '.cv-card', '.modal'
-].join(',');
+// ── Liquid glass 3D tilt (debug-hardened) ──
+// Only leaf UI surfaces. NEVER #schedulePanel / table parents / modals
+// (CSS transform on ancestors kills position:sticky and breaks scroll).
+const GLASS_TILT_SEL = '.stat, .classic-hero, .ss-hero, .ss-card, .labor-day-card, .cv-card';
+const GLASS_TILT_BLOCK = 'button, input, select, textarea, a, label, .cv-act, .hs-handle, .hs-copy-btn, .hs-copy-to-btn, .day-sort-btn';
+let glassTiltEl = null;
+let glassTiltRaf = 0;
+let glassTiltPending = null;
 
 function glassTiltEnabled() {
-  return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    && !window.matchMedia('(pointer: coarse)').matches;
+  try {
+    return !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      && !window.matchMedia('(pointer: coarse)').matches;
+  } catch (_) {
+    return true;
+  }
+}
+
+function clearGlassTilt(el) {
+  if (!el) return;
+  el.classList.remove('is-tilting', 'glass-tilt', 'glass-3d');
+  el.style.transform = '';
+  el.style.removeProperty('--mx');
+  el.style.removeProperty('--my');
+}
+
+function clearAllGlassTilt() {
+  if (glassTiltEl) {
+    clearGlassTilt(glassTiltEl);
+    glassTiltEl = null;
+  }
+  document.querySelectorAll('.is-tilting').forEach(clearGlassTilt);
+}
+
+function applyGlassTilt(el, clientX, clientY) {
+  if (!el || !el.isConnected) {
+    clearAllGlassTilt();
+    return;
+  }
+  const r = el.getBoundingClientRect();
+  if (r.width < 12 || r.height < 12) return;
+  const x = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
+  const y = Math.min(1, Math.max(0, (clientY - r.top) / r.height));
+  const isCard = el.classList.contains('cv-card');
+  // Keep tilt subtle so text stays readable and drag still works
+  const max = isCard ? 7 : 5;
+  const rx = (0.5 - y) * max;
+  const ry = (x - 0.5) * (max + 1);
+  const lift = isCard ? 6 : 4;
+  if (glassTiltEl && glassTiltEl !== el) clearGlassTilt(glassTiltEl);
+  glassTiltEl = el;
+  el.classList.add('glass-tilt', 'is-tilting');
+  el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`);
+  el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`);
+  el.style.transform =
+    `perspective(800px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(${(-lift * 0.35).toFixed(2)}px)`;
 }
 
 function onGlassTiltMove(e) {
   if (!glassTiltEnabled()) return;
+  // Pause during any drag / paint / modal interaction
+  if (classicDragActive || shiftDrag) {
+    clearAllGlassTilt();
+    return;
+  }
+  if (e.buttons === 1) {
+    // user is pressing — don't fight click/drag
+    clearAllGlassTilt();
+    return;
+  }
+  if (e.target.closest?.(GLASS_TILT_BLOCK)) {
+    clearAllGlassTilt();
+    return;
+  }
   const el = e.target.closest?.(GLASS_TILT_SEL);
-  if (!el || el.classList.contains('cv-dragging') || el.classList.contains('cell-off')) return;
-  // Don't fight drag-drop / painting
-  if (typeof classicDragActive !== 'undefined' && classicDragActive) return;
-  if (typeof shiftDrag !== 'undefined' && shiftDrag) return;
+  if (!el || el.classList.contains('cv-dragging')) {
+    clearAllGlassTilt();
+    return;
+  }
+  // Never tilt a surface that owns a scrolling grid (sticky/scroll break)
+  if (el.querySelector?.('table.roster, .table-wrap, .ssched-scroll, #smartScroll, .smart-schedule')) {
+    clearAllGlassTilt();
+    return;
+  }
 
-  const r = el.getBoundingClientRect();
-  if (r.width < 8 || r.height < 8) return;
-  const x = (e.clientX - r.left) / r.width;
-  const y = (e.clientY - r.top) / r.height;
-  const isCard = el.classList.contains('cv-card');
-  const max = isCard ? 10 : 6;
-  const rx = (0.5 - y) * max;
-  const ry = (x - 0.5) * (max + 2);
-  const lift = isCard ? 10 : 6;
-  el.classList.add('glass-3d', 'is-tilting');
-  el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`);
-  el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`);
-  el.style.transform =
-    `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateZ(${lift}px)`;
+  glassTiltPending = { el, x: e.clientX, y: e.clientY };
+  if (glassTiltRaf) return;
+  glassTiltRaf = requestAnimationFrame(() => {
+    glassTiltRaf = 0;
+    const p = glassTiltPending;
+    glassTiltPending = null;
+    if (!p) return;
+    applyGlassTilt(p.el, p.x, p.y);
+  });
 }
 
-function onGlassTiltLeave(e) {
-  const el = e.target.closest?.(GLASS_TILT_SEL);
-  if (!el) return;
-  // only clear if pointer truly left this element
-  if (el.contains(e.relatedTarget)) return;
-  el.classList.remove('is-tilting');
-  el.style.transform = '';
+function onGlassTiltLeaveDoc(e) {
+  // left the window
+  if (!e.relatedTarget) clearAllGlassTilt();
 }
 
 function initGlass3d() {
   if (!glassTiltEnabled()) return;
   document.addEventListener('pointermove', onGlassTiltMove, { passive: true });
-  document.addEventListener('pointerout', onGlassTiltLeave, { passive: true });
-  // Mark static surfaces for CSS light spot
-  document.querySelectorAll('.panel, .stat, .classic-hero, .ss-hero, #schedulePanel, .ss-card')
-    .forEach(el => el.classList.add('glass-3d'));
+  document.addEventListener('pointerleave', onGlassTiltLeaveDoc, { passive: true });
+  document.addEventListener('dragstart', clearAllGlassTilt, true);
+  document.addEventListener('pointerdown', (e) => {
+    // clear tilt on press so click/drag geometry is stable
+    if (e.target.closest?.(GLASS_TILT_SEL)) clearAllGlassTilt();
+  }, true);
+  window.addEventListener('blur', clearAllGlassTilt);
 }
 
 // ── Boot ──
