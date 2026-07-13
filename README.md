@@ -2,6 +2,8 @@
 
 Chick-fil-A Vestavia Hills BOH scheduling + shift setup app.
 
+**iPhone & iPad app** — native iOS shell via [Capacitor](https://capacitorjs.com/) (see [iOS build](#ios-app-iphone--ipad) below).
+
 ## Share this (always handy)
 
 **Team hub (bookmark & send):**  
@@ -49,6 +51,39 @@ git push origin master
 ```
 
 GitHub Pages serves from the `master` branch root.
+
+## iOS app (iPhone & iPad)
+
+The same web app runs inside a native iOS shell. Layout adapts for **phone** (bottom tab bar, action sheet) and **tablet** (split layouts, sticky pool).
+
+### Requirements
+
+- Mac with **Xcode 15+**
+- **Node.js 18+**
+- **CocoaPods** (`sudo gem install cocoapods`)
+
+### Build & run on device / simulator
+
+```bash
+npm install
+npm run cap:sync          # copy index.html → www/ and sync to ios/
+cd ios/App && pod install && cd ../..
+npx cap open ios          # opens Xcode
+```
+
+In Xcode: select a simulator or your iPhone/iPad → **Run** (▶).
+
+### After web changes
+
+```bash
+npm run cap:sync
+```
+
+Then rebuild in Xcode. The live GitHub Pages site (`index.html` at repo root) and the iOS app share the same source file.
+
+### App id
+
+Bundle id: `com.vestavia.bohshiftops` — change in `capacitor.config.json` before App Store submission if needed.
 
 ## Seed / backup data
 

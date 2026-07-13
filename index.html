@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BOH Shift Ops">
+  <meta name="theme-color" content="#0B0E16">
+  <meta name="format-detection" content="telephone=no">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>BOH Shift Ops — Schedule &amp; Setup</title>
@@ -17,6 +22,12 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
+      /* iOS safe areas (notch, home indicator) */
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+      --sal: env(safe-area-inset-left, 0px);
+      --sar: env(safe-area-inset-right, 0px);
+      --mobile-tab-h: 0px;
       /* Soft dark + liquid glass */
       --red: #F03A5F; --red-dark: #D92A4D; --red-light: rgba(240,58,95,.14);
       --gold: #E0B34E; --gold-light: rgba(224,179,78,.14);
@@ -53,6 +64,7 @@
       background: rgba(16, 19, 28, .45);
       border-bottom: 1px solid rgba(255,255,255,.08);
       position: sticky; top: 0; z-index: 100;
+      padding-top: var(--sat);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
       box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 8px 28px rgba(0,0,0,.2);
@@ -4414,6 +4426,288 @@
         transform: none !important;
       }
     }
+
+    /* ── iOS / phone / tablet responsive shell ── */
+    html {
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      padding-left: var(--sal);
+      padding-right: var(--sar);
+      padding-bottom: calc(var(--sab) + var(--mobile-tab-h));
+      overscroll-behavior-y: contain;
+    }
+    body.is-native-ios {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    body.is-native-ios input,
+    body.is-native-ios textarea,
+    body.is-native-ios select,
+    body.is-native-ios [contenteditable="true"] {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    /* Bottom tab bar — phones */
+    .mobile-tab-bar {
+      display: none;
+      position: fixed;
+      left: var(--sal);
+      right: var(--sar);
+      bottom: 0;
+      z-index: 190;
+      padding: 6px 8px calc(6px + var(--sab));
+      background: rgba(10, 12, 18, .92);
+      border-top: 1px solid rgba(255,255,255,.1);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      box-shadow: 0 -8px 28px rgba(0,0,0,.35);
+    }
+    .mobile-tab-bar-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .mobile-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      min-height: 48px;
+      padding: 6px 4px;
+      border: none;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-tab svg { flex-shrink: 0; }
+    .mobile-tab.active {
+      color: #fff;
+      background: rgba(255,255,255,.1);
+      box-shadow: 0 0 0 1px rgba(240,58,95,.35) inset;
+    }
+
+    /* Header overflow menu — phones */
+    .mobile-more-btn { display: none; }
+    .mobile-actions-overlay {
+      position: fixed; inset: 0; z-index: 180;
+      background: rgba(0,0,0,.45);
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s ease;
+      backdrop-filter: blur(2px);
+    }
+    .mobile-actions-overlay.open { opacity: 1; pointer-events: auto; }
+    .mobile-actions-sheet {
+      position: fixed;
+      left: var(--sal); right: var(--sar);
+      bottom: 0;
+      z-index: 185;
+      max-height: min(78vh, 560px);
+      background: rgba(18, 22, 32, .98);
+      border: 1px solid rgba(255,255,255,.12);
+      border-bottom: none;
+      border-radius: 20px 20px 0 0;
+      transform: translateY(105%);
+      transition: transform .24s cubic-bezier(.2,.8,.2,1);
+      display: flex; flex-direction: column;
+      padding-bottom: calc(8px + var(--sab));
+      box-shadow: 0 -20px 60px rgba(0,0,0,.45);
+    }
+    .mobile-actions-sheet.open { transform: translateY(0); }
+    .mobile-actions-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      flex-shrink: 0;
+    }
+    .mobile-actions-head h3 { font-size: 15px; font-weight: 800; margin: 0; }
+    .mobile-actions-body {
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding: 12px 16px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .mobile-actions-body .btn,
+    .mobile-actions-body label.btn {
+      width: 100%;
+      justify-content: center;
+      min-height: 44px;
+      font-size: 14px;
+    }
+    .mobile-actions-body .week-nav { width: 100%; justify-content: center; }
+    .mobile-actions-body .week-label { flex: 1; min-width: 0; }
+
+    @media (max-width: 767px) {
+      :root { --mobile-tab-h: 62px; }
+      .mobile-tab-bar { display: block; }
+      .mobile-more-btn { display: inline-flex; }
+
+      .header { padding-top: var(--sat); }
+      .header-inner {
+        padding: 8px 12px;
+        gap: 8px;
+        flex-wrap: nowrap;
+      }
+      .brand-sub { display: none; }
+      .brand-title { font-size: 14px; }
+      .brand-mark { width: 36px; height: 36px; font-size: 10px; }
+      .header .tabs { display: none; }
+      .header-actions {
+        flex: 1;
+        justify-content: flex-end;
+        gap: 6px;
+        flex-wrap: nowrap;
+        min-width: 0;
+      }
+      .header-actions > .week-nav,
+      .header-actions > .week-label,
+      .header-actions > a.btn,
+      .header-actions > label.btn,
+      .header-actions > #exportBtn,
+      .header-actions > .btn-danger {
+        display: none !important;
+      }
+      .cloud-badge { padding: 6px 10px; font-size: 11px; }
+      .main { padding: 1rem 12px 1.25rem; }
+
+      .classic-hero {
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px;
+      }
+      .classic-hero h2 { font-size: 18px; }
+      .classic-hero p { font-size: 12px; }
+      .classic-hint-pills { display: none; }
+      .classic-hero-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .classic-hero-actions .btn { justify-content: center; min-height: 44px; }
+
+      .hs-toolbar {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 8px;
+      }
+      .hs-toolbar .btn,
+      .hs-toolbar select { min-height: 40px; }
+      .paint-mode-hint { display: none; }
+
+      .table-wrap {
+        margin: 0 -12px;
+        padding: 0 12px;
+        -webkit-overflow-scrolling: touch;
+      }
+      table.roster { min-width: 680px; font-size: 11px; }
+
+      .labor-day-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .labor-settings { flex-direction: column; }
+      .import-summary { grid-template-columns: 1fr; }
+
+      .ss-hero-top { flex-direction: column; gap: 12px; }
+      .ss-hero-metrics { width: 100%; justify-content: space-between; }
+      .ss-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .ss-controls .field { min-width: 0; }
+      .ss-progress-wrap { grid-column: 1 / -1; }
+      .ss-controls > .btn { min-height: 44px; justify-content: center; }
+      #view-setup .ss-gp-grid { grid-template-columns: 1fr !important; }
+      #view-setup .ss-gp-center { display: none; }
+      .ss-slots { grid-template-columns: 1fr !important; }
+      .ss-pool-body .ss-chip { min-width: 0; width: 100%; }
+      .ss-pool-expand-fab { width: 100%; justify-content: center; min-height: 44px; }
+
+      .modal {
+        max-width: none;
+        margin: auto 0 0;
+        border-radius: 20px 20px 0 0;
+        max-height: min(88vh, 720px);
+      }
+      .modal-bg { align-items: flex-end; padding: 0; }
+      .modal.wide { max-width: none; }
+
+      .skills-matrix-wrap,
+      .lead-board-wrap,
+      .lead-sched-wrap { max-height: none; }
+      .skills-matrix { min-width: 640px; }
+      .lead-table { min-width: 720px; }
+
+      .sv-topbar { flex-wrap: wrap; gap: 8px; }
+      .sv-search { width: 100%; min-width: 0; }
+      .smart-schedule .ssched-scroll { max-height: calc(100vh - 220px - var(--mobile-tab-h) - var(--sat)); }
+
+      .btn, .tab, .icon-btn, .assign-opt, .checklist li {
+        touch-action: manipulation;
+      }
+      .btn { min-height: 40px; }
+      .icon-btn { min-width: 44px; min-height: 44px; }
+    }
+
+    /* Tablet portrait + small iPad */
+    @media (min-width: 768px) and (max-width: 1100px) {
+      .header-inner { padding: 8px 16px; }
+      .tabs .tab { padding: 8px 12px; font-size: 12px; }
+      .tabs .tab svg { display: none; }
+      .header-actions .btn-sm { padding: 6px 10px; font-size: 11px; }
+      .header-actions > a.btn[href*="guide"] { display: none; }
+      .week-label { min-width: 140px; font-size: 12px; }
+
+      .main { padding: 1.25rem 16px 2rem; }
+      .grid-2 { gap: 1rem; }
+      .classic-hero { padding: 16px; }
+      .classic-hint-pills span { font-size: 10px; }
+
+      .ss-layout {
+        grid-template-columns: 1fr 280px !important;
+        gap: 1rem;
+      }
+      .ss-pool-card .ss-pool-body { max-height: min(40vh, 360px); }
+      #view-setup .ss-gp-grid {
+        grid-template-columns: 1fr 1fr !important;
+      }
+      #view-setup .ss-gp-center { display: none; }
+      .ss-slots { grid-template-columns: repeat(2, 1fr) !important; }
+
+      .labor-day-grid { grid-template-columns: repeat(3, 1fr); }
+      table.roster { font-size: 11px; }
+      .skills-matrix { min-width: 680px; }
+    }
+
+    /* iPad landscape / large tablet */
+    @media (min-width: 1101px) and (max-width: 1366px) {
+      .header-inner { max-width: 100%; padding: 0 20px; }
+      .main { max-width: 100%; padding: 1.5rem 20px 2rem; }
+      .ss-layout { grid-template-columns: 1fr 300px; }
+      #view-setup .ss-gp-grid {
+        grid-template-columns: 1fr 1fr minmax(40px, 0.4fr) 1fr 1fr;
+      }
+    }
+
+    /* Capacitor / standalone: extra bottom padding when tab bar hidden on tablet */
+    @media (min-width: 768px) {
+      :root { --mobile-tab-h: 0px; }
+    }
+    body.mobile-actions-open .mobile-tab-bar,
+    body.keyboard-open .mobile-tab-bar {
+      display: none !important;
+    }
+    body.keyboard-open {
+      --mobile-tab-h: 0px;
+    }
   </style>
 </head>
 <body>
@@ -4466,9 +4760,52 @@
       <label class="btn btn-sm btn-primary" style="cursor:pointer">Import Roster &amp; Availabilities<input type="file" accept="*/*" hidden onchange="openUnifiedImport(event)"></label>
       <label class="btn btn-sm" style="cursor:pointer">Backup JSON<input type="file" accept=".json" hidden onchange="importData(event)"></label>
       <button class="btn btn-sm btn-danger" onclick="resetAll()" title="Reset all data">Reset</button>
+      <button type="button" class="btn btn-sm mobile-more-btn" id="mobileMoreBtn" onclick="toggleMobileActions()" title="More actions" aria-label="More actions">&#8942;</button>
     </div>
   </div>
 </header>
+
+<div class="mobile-actions-overlay" id="mobileActionsOverlay" onclick="closeMobileActions()"></div>
+<div class="mobile-actions-sheet" id="mobileActionsSheet" aria-hidden="true">
+  <div class="mobile-actions-head">
+    <h3>Actions</h3>
+    <button type="button" class="icon-btn" onclick="closeMobileActions()" aria-label="Close">&#10005;</button>
+  </div>
+  <div class="mobile-actions-body" id="mobileActionsBody">
+    <div class="week-label" id="mobileWeekLabel" style="text-align:center;margin-bottom:4px"></div>
+    <div class="week-nav" style="display:flex;width:100%;justify-content:center">
+      <button type="button" onclick="prevWeek(); updateMobileWeekLabel()" title="Previous week">&#8249;</button>
+      <button type="button" onclick="goToday(); updateMobileWeekLabel()">Today</button>
+      <button type="button" onclick="nextWeek(); updateMobileWeekLabel()" title="Next week">&#8250;</button>
+    </div>
+    <a class="btn btn-sm" href="./guide/" target="_blank" rel="noopener">Help · Leaders</a>
+    <button type="button" class="btn btn-sm" onclick="exportWeekZip(); closeMobileActions()">Export ZIP</button>
+    <label class="btn btn-sm btn-primary" style="cursor:pointer">Import Roster &amp; Availabilities<input type="file" accept="*/*" hidden onchange="openUnifiedImport(event); closeMobileActions()"></label>
+    <label class="btn btn-sm" style="cursor:pointer">Backup JSON<input type="file" accept=".json" hidden onchange="importData(event); closeMobileActions()"></label>
+    <button type="button" class="btn btn-sm btn-danger" onclick="resetAll(); closeMobileActions()">Reset all data</button>
+  </div>
+</div>
+
+<nav class="mobile-tab-bar" id="mobileTabBar" aria-label="Main navigation">
+  <div class="mobile-tab-bar-inner">
+    <button type="button" class="mobile-tab active" data-view="schedule" onclick="switchView('schedule')" aria-label="Schedule">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Schedule
+    </button>
+    <button type="button" class="mobile-tab" data-view="setup" onclick="switchView('setup')" aria-label="Shift Setup">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      Setup
+    </button>
+    <button type="button" class="mobile-tab" data-view="skills" onclick="switchView('skills')" aria-label="Skills">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6L12 2z"/></svg>
+      Skills
+    </button>
+    <button type="button" class="mobile-tab" data-view="leaders" onclick="switchView('leaders')" aria-label="Leaders">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a4 4 0 100-8 4 4 0 000 8z"/><path d="M4 20c1.5-3 4.5-5 8-5s6.5 2 8 5"/></svg>
+      Leaders
+    </button>
+  </div>
+</nav>
 
 <!-- Cloud / Database settings -->
 <div class="modal-bg" id="cloudModal" onclick="if(event.target===this)closeCloudModal()">
@@ -10363,8 +10700,10 @@ async function readFileToRowsGeneric(file) {
 function switchView(v) {
   document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.view === v));
+  document.querySelectorAll('.mobile-tab').forEach(el => el.classList.toggle('active', el.dataset.view === v));
   const target = document.getElementById('view-' + v);
   if (target) target.classList.add('active');
+  closeMobileActions();
   // Leave SmartView state as-is, but never leave Schedule painted under Setup
   if (v !== 'schedule') {
     closeSchedTools();
@@ -10386,6 +10725,34 @@ function switchView(v) {
   } else {
     stopFilledSlotSparkles();
   }
+}
+
+function toggleMobileActions() {
+  const sheet = document.getElementById('mobileActionsSheet');
+  const overlay = document.getElementById('mobileActionsOverlay');
+  if (!sheet || !overlay) return;
+  const open = !sheet.classList.contains('open');
+  sheet.classList.toggle('open', open);
+  overlay.classList.toggle('open', open);
+  document.body.classList.toggle('mobile-actions-open', open);
+  sheet.setAttribute('aria-hidden', open ? 'false' : 'true');
+  if (open) updateMobileWeekLabel();
+}
+
+function closeMobileActions() {
+  const sheet = document.getElementById('mobileActionsSheet');
+  const overlay = document.getElementById('mobileActionsOverlay');
+  if (!sheet || !overlay) return;
+  sheet.classList.remove('open');
+  overlay.classList.remove('open');
+  document.body.classList.remove('mobile-actions-open');
+  sheet.setAttribute('aria-hidden', 'true');
+}
+
+function updateMobileWeekLabel() {
+  const src = document.getElementById('weekLabel');
+  const dst = document.getElementById('mobileWeekLabel');
+  if (src && dst) dst.textContent = src.textContent || '';
 }
 
 // ── BOH Leadership schedule (connected to week roster) ──
@@ -11317,6 +11684,7 @@ function updateWeekLabel() {
   const a = dates[0].toLocaleDateString('en-US',{month:'short',day:'numeric'});
   const b = dates[dates.length - 1].toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   document.getElementById('weekLabel').textContent = `Mon–Sat · ${a} — ${b}`;
+  updateMobileWeekLabel();
 }
 
 // ── Schedule rendering ──
@@ -14754,7 +15122,28 @@ function initGlass3d() {
 }
 
 // ── Boot ──
+async function initNativeShell() {
+  const cap = window.Capacitor;
+  if (!cap?.isNativePlatform?.()) return;
+  document.body.classList.add('is-native-ios');
+  try {
+    const StatusBar = cap.Plugins?.StatusBar;
+    const Keyboard = cap.Plugins?.Keyboard;
+    if (StatusBar?.setStyle) {
+      await StatusBar.setStyle({ style: 'DARK' });
+      if (cap.getPlatform() === 'ios' && StatusBar.setOverlaysWebView) {
+        await StatusBar.setOverlaysWebView({ overlay: true });
+      }
+    }
+    if (Keyboard?.addListener) {
+      Keyboard.addListener('keyboardWillShow', () => document.body.classList.add('keyboard-open'));
+      Keyboard.addListener('keyboardWillHide', () => document.body.classList.remove('keyboard-open'));
+    }
+  } catch (_) { /* plugin optional */ }
+}
+
 async function bootApp() {
+  await initNativeShell();
   let loaded = load();
   if (!loaded) {
     initShiftsOnly();
