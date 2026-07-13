@@ -49,3 +49,18 @@ git push origin master
 ```
 
 GitHub Pages serves from the `master` branch root.
+
+## Seed / backup data
+
+Latest browser export lives in [`data/boh-app-state.json`](./data/boh-app-state.json) (schedule, staff, setups).
+
+### Push that file to Supabase (cloud)
+
+```bash
+# Windows PowerShell
+$env:SUPABASE_URL="https://oikrcoccaepgtvdswuuo.supabase.co"
+$env:SUPABASE_ANON_KEY="paste-anon-public-key-here"
+node scripts/push-cloud.mjs
+```
+
+Or in the live app: open Cloud badge → **Push to DB** (uses the same store id `default`).

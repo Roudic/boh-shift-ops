@@ -4,3 +4,7 @@ Thumbs.db
 .env
 .env.*
 ref/
+_tmp_extract/
+**/anon_key.txt
+**/*secret*
+

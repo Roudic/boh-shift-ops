@@ -1,145 +1,159 @@
-# BOH Shift Ops — How to use (with photo demos)
+# BOH Shift Leader Guide — Schedule & Setup
 
 **Chick-fil-A Vestavia Hills · Back of House**
 
-This guide explains how to run the schedule app, SmartView, period blocks, positions/handovers, and cloud sync.
+This guide is for **shift leaders**: how to build the week schedule, assign BF/LN/DN leads, set stations for a period, handovers, and print the 2-page gameplan.
+
+**Open the app:** [Live app](https://roudic.github.io/boh-shift-ops/) · or local `index.html`  
+**Photo guide:** [guide/index.html](./index.html)  
+**Share hub:** [SHARE.md](./SHARE.md)
 
 ---
 
-## Always-handy links (share these)
+## Your job in 4 steps
 
-| What | Link |
-|------|------|
-| **Share hub (bookmark this)** | https://roudic.github.io/boh-shift-ops/guide/ |
-| **Live app** | https://roudic.github.io/boh-shift-ops/ |
-| **GitHub repo** | https://github.com/Roudic/boh-shift-ops |
-| **This full how-to** | https://roudic.github.io/boh-shift-ops/guide/HOW-TO.md |
-| **Supabase SQL** | https://github.com/Roudic/boh-shift-ops/blob/master/supabase-schema.sql |
-| **Supabase dashboard** | https://supabase.com/dashboard |
-| **Your Table Editor** | https://supabase.com/dashboard/project/oikrcoccaepgtvdswuuo/editor |
+1. **Schedule** — put every BOH person on Mon–Sat with real in/out times  
+2. **Leaders** — name Breakfast / Lunch / Dinner leads for each day  
+3. **Shift Setup** — drag people onto stations for the period you’re running  
+4. **Print** — 2 pages: Breakfast+Lunch · Afternoon+Dinner (side rosters included)
 
-**Tip:** Send teammates only the **Share hub** link. Everything they need is one click from there.
+**Golden rule:** Schedule first. If nobody is on the grid for that period, the Setup pool is empty.
 
 ---
 
-## 1. Open the app
+## 1. Build the week (Schedule tab)
 
-![App home](./images/01-app-home.png)
+### ClassicView (default week grid)
 
-1. Go to the [live app](https://roudic.github.io/boh-shift-ops/).
-2. Top bar has **Schedule** and **Shift Setup**.
-3. Use week arrows to change weeks.
-4. **Export** downloads a full JSON backup of your setup.
+1. Open **Schedule**.
+2. Use week arrows for the Mon–Sat week you need.
+3. Each **row** = person · each **column** = day.
+4. **Empty cell** → click → set start/end → Save.
+5. Already has a shift? **+ Shift** on the card to add a second block that day.
+6. **Drag a shift card** onto another person or day to **move** it (does not copy).
+7. **Edit** changes times · **✕** removes that block only.
+8. Day headers show headcount + BF/LN/DN lead chips.
 
-Local file (this PC only): `C:\Users\vinzi\boh-shift-app\index.html`  
-Note: local file and the live site store data separately unless you Export/Import or use Cloud.
-
----
-
-## 2. Classic week schedule (paint shifts)
-
-![Classic schedule demo](./images/02-classic-schedule.png)
-
-1. Stay on the **Schedule** tab.
-2. **Click-drag** an empty cell to paint a shift.
-3. **Drag the block** to move times; **drag left/right edges** to stretch.
-4. Under a day header, use **▲** (earliest start first) or **▼** (latest first).
-5. Double-click a shift for the full time editor.
-6. **Export** anytime for a JSON backup of periods, team, schedule, and positions.
-
----
-
-## 3. SmartView (hour timelines)
-
-![SmartView demo](./images/03-smartview-guide.png)
+### SmartView (hour timelines)
 
 1. Click **SmartView** in the toolbar (or a day → SmartView).
-2. Scroll sideways across **Mon–Sat** with hour marks (4:00 AM–11:00 PM).
-3. Drag empty rows to create; drag edges to stretch; drag middle to move.
-4. Use **▲ / ▼** on each day header to sort the team by that day’s start time.
-5. Footer shows **Employees / Hours / Productivity** by hour (productivity needs daily sales).
-6. **ClassicView** or **Esc** returns to the week grid.
+2. **Drag empty track** to paint a shift.
+3. **Drag the bar** to slide · **edges** to stretch start/end.
+4. Drag a bar to another row to reassign (move, not copy).
+5. **ClassicView** or **Esc** exits.
+
+**Pan days:** Shift+scroll or drag from the name column — names stay sticky.
 
 ---
 
-## 4. Period blocks & positions
+## 2. Assign leaders (Leaders tab)
 
-![Periods and positions demo](./images/04-periods-positions.png)
+1. Open **Leaders**.
+2. Add people to the leader roster if needed.
+3. For each day assign:
+   - **Breakfast Lead** ~ 4:30a–11:00a  
+   - **Lunch Lead** ~ 10:00a–3:00p  
+   - **Dinner Lead** ~ 3:00p–11:00p  
+4. Assigning a lead can **auto-add leadership hours** on the Schedule.
+5. On **Shift Setup**, leaders appear as **header chips** (not in the station pool).
+6. Gold outline = that lead window overlaps the period you’re viewing.
 
-### Period blocks (your coverage windows)
+Leaders run the period — keep the pool for floor team.
 
-1. Schedule sidebar → **Period Blocks**.
-2. **+ Add period** → name + start/end + color → Save.
-3. **Edit** or **Delete** any period anytime.
-4. Optional seed is only a starter — you own every block.
+---
 
-### Positions (station board)
+## 3. Set up a shift (Shift Setup tab)
 
 1. Open **Shift Setup**.
-2. Pick **day** + **period**.
-3. **Edit Positions** → build groups (Primary, Machines, etc.) and positions.
-4. Check **every period** that should share that board → **Save to N periods**.
-5. Drag people from the pool onto a station; set **from / until** times.
-6. For handovers: same station → **+ Add person / handover**  
-   Example: Alex **5:00a–3:00p**, then Sam **3:00p–close**.
+2. Pick **Day** + **Period block** (Breakfast, Lunch, Afternoon, Dinner…).
+3. Confirm the **lead chip** in the header is correct for that window.
+4. **Team pool** = people scheduled on that block (sorted by **out time**).
+5. **Drag a name onto a station** → set from/until times → Save.  
+   Or click name (select) → click station.
+6. **Handover (same station):**
+   - Person A already on the pad  
+   - **+ Add person / handover**  
+   - Person B + times (example: 5:00a–3:00p then 3:00p–close)
+7. **✕** on a person row removes them from that station (back to pool).
+8. Fill that period’s **checklist** and **notes** (each period has its own).
+
+### Empty pool?
+
+Nobody’s schedule overlaps that period. Go back to **Schedule** and add hours first.
+
+### Edit Positions (once per store / season)
+
+1. Shift Setup → **Edit Positions**.
+2. Build groups (Primary, Secondary, Machines, Breading, Fries…).
+3. Check every period that should share the same board → **Save to N periods**.
 
 ---
 
-## 5. Cloud database (Supabase)
+## 4. Print the gameplan
 
-![Cloud and sharing demo](./images/05-cloud-share.png)
+1. Shift Setup → correct **day**.
+2. Click **Print**.
+3. Browser print dialog — landscape recommended.
 
-### One-time setup
+| Page | What’s on it | Side rail |
+|------|----------------|-----------|
+| **1** | Breakfast + Lunch boards | Combined roster for those dayparts |
+| **2** | Afternoon + Dinner boards | Combined roster for those dayparts |
 
-1. Supabase → **SQL Editor** → run [`supabase-schema.sql`](https://github.com/Roudic/boh-shift-ops/blob/master/supabase-schema.sql).
-2. **Settings → API** → copy Project URL + **anon public** key.
-3. Live app → click **Local only** badge (top bar).
-4. Paste URL + key · Store id = `default`.
-5. **Save connection** → **Test** → **Push to DB**.
-
-**This project’s URL format:**
-
-```text
-https://oikrcoccaepgtvdswuuo.supabase.co
-```
-
-(Keep the anon key private — only paste it in the app.)
-
-### Day-to-day
-
-| Action | Where |
-|--------|--------|
-| Auto-save to cloud | After connect — saves push in the background |
-| Force upload | Cloud badge → **Push to DB** |
-| Load on another device | Open app → Cloud badge → **Pull from DB** |
-| See raw data | Supabase **Table Editor** → `boh_app_state` |
+**Export ZIP** (top bar) uses the same 2-page staffing layout per day + week schedule PDF.
 
 ---
 
-## 6. Moving data between local file and live site
+## Before rush — 2-minute check
 
-1. Open **local** `index.html` → **Export** → save JSON.
-2. Open **live** site → **Backup JSON** import → choose that file.
-3. Cloud badge → **Push to DB**.
-
----
-
-## Troubleshooting
-
-| Problem | Fix |
-|---------|-----|
-| No cloud badge | Hard refresh (**Ctrl+F5**); widen the window |
-| SQL error | Use the simplified `supabase-schema.sql` from the repo |
-| Only Project ID | URL = `https://PROJECT_ID.supabase.co` |
-| Empty cloud row | Click **Push** after connecting |
-| Two people overwrote each other | Pull before big edits; last push wins |
+- [ ] Correct **day** on Shift Setup  
+- [ ] Correct **period** for the rush you’re prepping  
+- [ ] **Lead chip** matches the person running the floor  
+- [ ] Primary / Machines / Breading / Fries covered (or owned open slots)  
+- [ ] Handovers timed  
+- [ ] Checklist + notes current  
+- [ ] Print fresh gameplan if the board copy is old  
 
 ---
 
-## What to send new leaders
+## Cheat sheet
 
-Just this one link:
+| I want to… | Do this |
+|------------|---------|
+| Put someone on the week | Schedule → empty cell · or SmartView paint |
+| Two shifts same day | **+ Shift** on card · or second SmartView block |
+| Move a shift | Drag card/bar — moves, does not copy |
+| Name BF/LN/DN lead | **Leaders** tab for that day |
+| Fill Lunch stations | Setup → Day + Lunch → drag pool → pads |
+| 3:00 handover | Station → + Add person / handover |
+| Remove from station | ✕ on their row |
+| Print board | Setup → Print (2 pages) |
+| Empty pool | Schedule overlapping hours first |
+| Lead not in pool | Normal — header only |
+| Station training flags | **Skills** tab |
+| Sync another device | Cloud → Pull · or Export ZIP/JSON |
+
+---
+
+## Cloud (short)
+
+- Connected badge → **Pull from DB** when you open a new browser  
+- After big changes → **Push to DB**  
+- Not on cloud → **Export** and share the file  
+- Last push wins — pull before a long edit if others are working  
+
+Full IT setup (SQL, keys) is only needed once for the store — see older cloud notes in the repo if you’re connecting a brand-new project.
+
+---
+
+## What to send a new shift leader
+
+Just this guide:
 
 **https://roudic.github.io/boh-shift-ops/guide/**
 
-They get the app, GitHub, photos, and cloud links on one page.
+Or on this PC: open `guide/index.html` next to the app.
+
+---
+
+*CFA Vestavia Hills · BOH Shift Ops*

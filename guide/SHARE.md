@@ -1,40 +1,47 @@
-# BOH Shift Ops — Share this page
+# BOH Shift Ops — Share with shift leaders
 
-**Bookmark & send this link only:**
+**Send this one link:**
 
-## 🔗 https://roudic.github.io/boh-shift-ops/guide/
+## https://roudic.github.io/boh-shift-ops/guide/
 
-That’s the always-handy hub (app + guide + photos + cloud links).
+That’s the **shift leader guide**: how to schedule the week, assign leads, set up stations, handovers, and print the 2-page gameplan.
 
 ---
 
 ### One-click destinations
 
-| Need | Click |
-|------|--------|
+| Need | Link |
+|------|------|
+| **Leader guide (bookmark)** | https://roudic.github.io/boh-shift-ops/guide/ |
 | **Open the app** | https://roudic.github.io/boh-shift-ops/ |
-| **How-to with photos** | https://roudic.github.io/boh-shift-ops/guide/ |
-| **Full written guide** | https://roudic.github.io/boh-shift-ops/guide/HOW-TO.md |
-| **GitHub code** | https://github.com/Roudic/boh-shift-ops |
-| **Database SQL** | https://github.com/Roudic/boh-shift-ops/blob/master/supabase-schema.sql |
-| **Supabase login** | https://supabase.com/dashboard |
-| **Your data table** | https://supabase.com/dashboard/project/oikrcoccaepgtvdswuuo/editor |
+| **Full written how-to** | https://roudic.github.io/boh-shift-ops/guide/HOW-TO.md |
+| **GitHub** | https://github.com/Roudic/boh-shift-ops |
 
 ---
 
-### Cloud (already set up for Vestavia)
+### On this computer (local)
 
-- Project URL: `https://oikrcoccaepgtvdswuuo.supabase.co`
-- In the app: top bar **Cloud** badge → paste **anon public** key (from Supabase Settings → API) if a new device needs connect  
-- Then **Pull from DB** to load the shared schedule
+| Need | Path |
+|------|------|
+| App | `boh-shift-app/index.html` |
+| Leader guide | `boh-shift-app/guide/index.html` |
 
 ---
 
-### 30-second start for a new user
+### 30-second start for a new leader
 
-1. Open the **app** link  
-2. Cloud badge → **Pull from DB** (if already connected on that browser)  
-3. Or ask a leader for the shared schedule after they **Push**  
-4. Read the **photo guide** if something is unclear  
+1. Open the **app**  
+2. If cloud is connected → **Pull from DB**  
+3. Read **Schedule → Leaders → Shift Setup → Print** in the guide  
+4. Build the week, set stations, print the gameplan  
+
+---
+
+### Cloud (store already connected)
+
+- Badge in the top bar → **Pull** on a new device · **Push** after big edits  
+- Supabase dashboard (admin only): https://supabase.com/dashboard  
+
+---
 
 **CFA Vestavia Hills · BOH**

@@ -1,0 +1,4038 @@
+{
+  "version": 8,
+  "shifts": [
+    {
+      "id": "sh1783882203646rr0",
+      "name": "Breakfast",
+      "start": "06:00",
+      "end": "11:00",
+      "color": "#DD0033",
+      "min": 2,
+      "max": 20,
+      "carCount": 150,
+      "layout": [
+        {
+          "id": "g1783882203678_0b4y",
+          "name": "Primary",
+          "slots": [
+            {
+              "id": "p1",
+              "label": "Main Primary Builder",
+              "sub": "Builds orders — speed + accuracy",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "p2",
+              "label": "Primary Support / Middleman",
+              "sub": "Chute, warming drawers, bases",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "p3",
+              "label": "Buns Person",
+              "sub": "Buns only during peak",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "pf",
+              "label": "Primary Fries",
+              "sub": "Fries for Primary side",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_15p5",
+          "name": "Secondary",
+          "slots": [
+            {
+              "id": "s1",
+              "label": "Burrtios/Bowls",
+              "sub": "",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "s2",
+              "label": "Minis",
+              "sub": "",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "sf",
+              "label": "Hash/Egg",
+              "sub": "",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "slot1783882589639",
+              "label": "Biscuits",
+              "sub": "",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_2bqb",
+          "name": "Machines",
+          "slots": [
+            {
+              "id": "m1",
+              "label": "Machines",
+              "sub": "Controls protein rhythm",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "m2",
+              "label": "Machines Support",
+              "sub": "Second machines if volume spikes",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_3e3n",
+          "name": "Breading / Raw",
+          "slots": [
+            {
+              "id": "b1",
+              "label": "Main Breader",
+              "sub": "Filets, nuggets, strips — stay in rhythm",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "b2",
+              "label": "Second Raw",
+              "sub": "Restock, baskets, table reset",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_4nuu",
+          "name": "Flow",
+          "slots": [
+            {
+              "id": "fl",
+              "label": "Breaks",
+              "sub": "Move to pressure before crash",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "x1",
+              "label": "Prep / Support",
+              "sub": "Flex coverage",
+              "start": "",
+              "end": ""
+            }
+          ]
+        }
+      ],
+      "checklistDef": {
+        "title": "",
+        "sections": [
+          {
+            "id": "sec_mrimm2z5otn4",
+            "name": "Opening",
+            "assignedStaffIds": [],
+            "items": [
+              {
+                "id": "ci_mrimm2z57qso",
+                "text": "Is Store Alarm Off"
+              },
+              {
+                "id": "ci_mrimmqtff13b",
+                "text": "Is Everything Plugged up and Turnt On?"
+              },
+              {
+                "id": "ci_mrimn5v1qhef",
+                "text": "Is Breading Table and Machines Getting Setup"
+              },
+              {
+                "id": "ci_mrimnj7bskr1",
+                "text": "Is Biscuits getting setup"
+              },
+              {
+                "id": "ci_mrimnqeucwon",
+                "text": "Centerline Setup"
+              },
+              {
+                "id": "ci_mrimnvrexaag",
+                "text": "Truck Done"
+              },
+              {
+                "id": "ci_mrimnzzw3812",
+                "text": "Breakfast Prep Items good Fruit, Yogurts"
+              }
+            ]
+          },
+          {
+            "id": "sec_mrimu09rg1uu",
+            "name": "Primary",
+            "assignedStaffIds": [],
+            "items": [
+              {
+                "id": "ci_mrimuaclrr0y",
+                "text": "Stock"
+              },
+              {
+                "id": "ci_mrimuo4i810y",
+                "text": "Clean Floors"
+              },
+              {
+                "id": "ci_mrimussud8dk",
+                "text": "Clean Toaster"
+              },
+              {
+                "id": "ci_mrimuzy2j4vr",
+                "text": "Lunch Transition"
+              },
+              {
+                "id": "ci_mrimvbe56k7h",
+                "text": "Cheese/ Lettuce/ Tomatoes"
+              },
+              {
+                "id": "ci_mrimvllq6v69",
+                "text": "Check with Shift Leader"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "sh1783882261475v0t",
+      "name": "Lunch",
+      "start": "11:00",
+      "end": "14:00",
+      "color": "#0EA5E9",
+      "min": 2,
+      "max": 20,
+      "carCount": 150,
+      "layout": [
+        {
+          "id": "g1783882203678_0b4y",
+          "name": "Primary",
+          "slots": [
+            {
+              "id": "p1",
+              "label": "Main Primary Builder",
+              "sub": "Builds orders — speed + accuracy",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "p2",
+              "label": "Primary Support / Middleman",
+              "sub": "Chute, warming drawers, bases",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "p3",
+              "label": "Buns Person",
+              "sub": "Buns only during peak",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "pf",
+              "label": "Primary Fries",
+              "sub": "Fries for Primary side",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_15p5",
+          "name": "Secondary",
+          "slots": [
+            {
+              "id": "s1",
+              "label": "Specials Person",
+              "sub": "Grilled, strips, detail items",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "s2",
+              "label": "Nugget / Chute Keeper",
+              "sub": "Nugget flow + product calls",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "sf",
+              "label": "Secondary Fries",
+              "sub": "Fries for Secondary side",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_2bqb",
+          "name": "Machines",
+          "slots": [
+            {
+              "id": "m1",
+              "label": "Machines",
+              "sub": "Controls protein rhythm",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "m2",
+              "label": "Machines Support",
+              "sub": "Second machines if volume spikes",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_3e3n",
+          "name": "Breading / Raw",
+          "slots": [
+            {
+              "id": "b1",
+              "label": "Main Breader",
+              "sub": "Filets, nuggets, strips — stay in rhythm",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "b2",
+              "label": "Second Raw",
+              "sub": "Restock, baskets, table reset",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_4nuu",
+          "name": "Flow",
+          "slots": [
+            {
+              "id": "fl",
+              "label": "Breaks",
+              "sub": "Move to pressure before crash",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "x1",
+              "label": "Prep / Support",
+              "sub": "Flex coverage",
+              "start": "",
+              "end": ""
+            }
+          ]
+        }
+      ],
+      "checklistDef": {
+        "title": "",
+        "sections": []
+      }
+    },
+    {
+      "id": "sh1783882282483twk",
+      "name": "Snack",
+      "start": "14:00",
+      "end": "16:00",
+      "color": "#8B5CF6",
+      "min": 2,
+      "max": 20,
+      "carCount": 150,
+      "layout": [
+        {
+          "id": "g1783882203678_0b4y",
+          "name": "Primary",
+          "slots": [
+            {
+              "id": "p1",
+              "label": "Main Primary Builder",
+              "sub": "Builds orders — speed + accuracy",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "p2",
+              "label": "Primary Support / Middleman",
+              "sub": "Chute, warming drawers, bases",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "p3",
+              "label": "Buns Person",
+              "sub": "Buns only during peak",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "pf",
+              "label": "Primary Fries",
+              "sub": "Fries for Primary side",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_15p5",
+          "name": "Secondary",
+          "slots": [
+            {
+              "id": "s1",
+              "label": "Specials Person",
+              "sub": "Grilled, strips, detail items",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "s2",
+              "label": "Nugget / Chute Keeper",
+              "sub": "Nugget flow + product calls",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "sf",
+              "label": "Secondary Fries",
+              "sub": "Fries for Secondary side",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_2bqb",
+          "name": "Machines",
+          "slots": [
+            {
+              "id": "m1",
+              "label": "Machines",
+              "sub": "Controls protein rhythm",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "m2",
+              "label": "Machines Support",
+              "sub": "Second machines if volume spikes",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_3e3n",
+          "name": "Breading / Raw",
+          "slots": [
+            {
+              "id": "b1",
+              "label": "Main Breader",
+              "sub": "Filets, nuggets, strips — stay in rhythm",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "b2",
+              "label": "Second Raw",
+              "sub": "Restock, baskets, table reset",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_4nuu",
+          "name": "Flow",
+          "slots": [
+            {
+              "id": "fl",
+              "label": "Breaks",
+              "sub": "Move to pressure before crash",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "x1",
+              "label": "Prep / Support",
+              "sub": "Flex coverage",
+              "start": "",
+              "end": ""
+            }
+          ]
+        }
+      ],
+      "checklistDef": {
+        "title": "",
+        "sections": []
+      }
+    },
+    {
+      "id": "sh1783882305225ag9",
+      "name": "Dinner",
+      "start": "16:00",
+      "end": "22:00",
+      "color": "#6366F1",
+      "min": 2,
+      "max": 20,
+      "carCount": 150,
+      "layout": [
+        {
+          "id": "g1783882203678_0b4y",
+          "name": "Primary",
+          "slots": [
+            {
+              "id": "p1",
+              "label": "Main Primary Builder",
+              "sub": "Builds orders — speed + accuracy",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "p2",
+              "label": "Primary Support / Middleman",
+              "sub": "Chute, warming drawers, bases",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "p3",
+              "label": "Buns Person",
+              "sub": "Buns only during peak",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "pf",
+              "label": "Primary Fries",
+              "sub": "Fries for Primary side",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_15p5",
+          "name": "Secondary",
+          "slots": [
+            {
+              "id": "s1",
+              "label": "Specials Person",
+              "sub": "Grilled, strips, detail items",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "s2",
+              "label": "Nugget / Chute Keeper",
+              "sub": "Nugget flow + product calls",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "sf",
+              "label": "Secondary Fries",
+              "sub": "Fries for Secondary side",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_2bqb",
+          "name": "Machines",
+          "slots": [
+            {
+              "id": "m1",
+              "label": "Machines",
+              "sub": "Controls protein rhythm",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "m2",
+              "label": "Machines Support",
+              "sub": "Second machines if volume spikes",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_3e3n",
+          "name": "Breading / Raw",
+          "slots": [
+            {
+              "id": "b1",
+              "label": "Main Breader",
+              "sub": "Filets, nuggets, strips — stay in rhythm",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "b2",
+              "label": "Second Raw",
+              "sub": "Restock, baskets, table reset",
+              "start": "",
+              "end": ""
+            }
+          ]
+        },
+        {
+          "id": "g1783882203678_4nuu",
+          "name": "Flow",
+          "slots": [
+            {
+              "id": "fl",
+              "label": "Breaks",
+              "sub": "Move to pressure before crash",
+              "start": "",
+              "end": ""
+            },
+            {
+              "id": "x1",
+              "label": "Prep / Support",
+              "sub": "Flex coverage",
+              "start": "",
+              "end": ""
+            }
+          ]
+        }
+      ],
+      "checklistDef": {
+        "title": "",
+        "sections": []
+      }
+    }
+  ],
+  "staff": [
+    {
+      "id": "p1782373014194hjx10",
+      "name": "Abla Nasser",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194nxu71",
+      "name": "Alejandro Gonzalez Gonzalez",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194toe63",
+      "name": "Ana-Maria Izaguirre-Guzman",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194rysd4",
+      "name": "Ashley Reed",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194mx9t5",
+      "name": "Axel Menjivar",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194dcba8",
+      "name": "Christopher Goree",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p178237301419428d59",
+      "name": "Cordell Nalls",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194pzwo11",
+      "name": "Damarion Moss",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194ktb112",
+      "name": "Darius Stringer",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p178237301419440f913",
+      "name": "Destin Robinson",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194ika815",
+      "name": "Joshua Vinziant",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194758a16",
+      "name": "Kasaan Abrams",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194wr5719",
+      "name": "Matthew Luster",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p178237301419428uj20",
+      "name": "Michael Wiggins",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194fbac21",
+      "name": "Necole Hall",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p17823730141944sx822",
+      "name": "Patricia Rojas",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194iyg423",
+      "name": "Robert Hannah",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194z5ea24",
+      "name": "Sahar Al-qadri",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p1782373014194oqay25",
+      "name": "Tyler Schafer",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    },
+    {
+      "id": "p17823730141949yce26",
+      "name": "Vanessa Joseph",
+      "role": "",
+      "skill": "solid",
+      "stations": [
+        "primary",
+        "secondary",
+        "fries",
+        "machines",
+        "breading",
+        "buns",
+        "prep",
+        "floater"
+      ]
+    }
+  ],
+  "schedule": {
+    "p1782373014194hjx10_2026-07-01": {
+      "start": "05:00",
+      "end": "13:15"
+    },
+    "p1782373014194hjx10_2026-07-02": {
+      "start": "05:00",
+      "end": "13:15"
+    },
+    "p1782373014194hjx10_2026-07-03": {
+      "start": "05:00",
+      "end": "13:15"
+    },
+    "p1782373014194hjx10_2026-07-04": {
+      "start": "05:00",
+      "end": "13:15"
+    },
+    "p1782373014194nxu71_2026-06-29": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194nxu71_2026-06-30": {
+      "start": "06:00",
+      "end": "14:00"
+    },
+    "p1782373014194nxu71_2026-07-02": {
+      "start": "06:00",
+      "end": "14:00"
+    },
+    "p1782373014194nxu71_2026-07-03": {
+      "start": "06:00",
+      "end": "14:00"
+    },
+    "p1782373014194nxu71_2026-07-04": {
+      "start": "06:00",
+      "end": "14:00"
+    },
+    "p1782373014194toe63_2026-06-29": {
+      "start": "10:45",
+      "end": "19:00"
+    },
+    "p1782373014194rysd4_2026-06-29": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194mx9t5_2026-06-29": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p1782373014194dcba8_2026-06-29": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p178237301419428d59_2026-06-29": {
+      "start": "05:00",
+      "end": "11:15"
+    },
+    "p1782373014194pzwo11_2026-06-29": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p178237301419440f913_2026-06-30": {
+      "start": "11:00",
+      "end": "17:00"
+    },
+    "p178237301419440f913_2026-07-01": {
+      "start": "11:00",
+      "end": "17:00"
+    },
+    "p178237301419440f913_2026-07-02": {
+      "start": "11:00",
+      "end": "17:00"
+    },
+    "p178237301419440f913_2026-07-03": {
+      "start": "11:00",
+      "end": "17:00"
+    },
+    "p1782373014194ktb112_2026-06-29": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p1782373014194ktb112_2026-06-30": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p1782373014194ktb112_2026-07-01": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p1782373014194ktb112_2026-07-04": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p1782373014194ktb112_2026-07-03": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p178237301419428uj20_2026-06-29": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p1782373014194758a16_2026-06-29": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194oqay25_2026-06-30": {
+      "start": "04:30",
+      "end": "14:00"
+    },
+    "p1782373014194oqay25_2026-07-01": {
+      "start": "04:30",
+      "end": "14:00"
+    },
+    "p1782373014194oqay25_2026-07-03": {
+      "start": "04:30",
+      "end": "14:00"
+    },
+    "p1782373014194oqay25_2026-07-02": {
+      "start": "04:30",
+      "end": "14:00"
+    },
+    "p178237301419428uj20_2026-07-01": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p178237301419428uj20_2026-07-02": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p178237301419428uj20_2026-07-03": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p178237301419428uj20_2026-07-04": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p178237301419440f913_2026-07-04": {
+      "start": "11:00",
+      "end": "17:00"
+    },
+    "p1782373014194z5ea24_2026-06-29": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p178237301419428d59_2026-06-30": {
+      "start": "05:00",
+      "end": "11:00"
+    },
+    "p178237301419428d59_2026-07-01": {
+      "start": "05:00",
+      "end": "11:00"
+    },
+    "p178237301419428d59_2026-07-02": {
+      "start": "05:00",
+      "end": "11:00"
+    },
+    "p178237301419428d59_2026-07-03": {
+      "start": "05:00",
+      "end": "11:00"
+    },
+    "p178237301419428d59_2026-07-04": {
+      "start": "05:00",
+      "end": "11:00"
+    },
+    "p1782373014194oqay25_2026-07-04": {
+      "start": "04:30",
+      "end": "13:15"
+    },
+    "p1782373014194toe63_2026-06-30": {
+      "start": "10:45",
+      "end": "19:00"
+    },
+    "p1782373014194toe63_2026-07-01": {
+      "start": "10:45",
+      "end": "17:00"
+    },
+    "p1782373014194iyg423_2026-06-29": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p17823730141944sx822_2026-06-29": {
+      "start": "15:45",
+      "end": "23:00"
+    },
+    "p17823730141949yce26_2026-06-29": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p17823730141949yce26_2026-06-30": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p17823730141949yce26_2026-07-01": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p17823730141949yce26_2026-07-02": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p17823730141949yce26_2026-07-03": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p1782373014194rysd4_2026-06-30": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194rysd4_2026-07-02": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194rysd4_2026-07-03": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194rysd4_2026-07-04": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194758a16_2026-06-30": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194758a16_2026-07-02": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194758a16_2026-07-03": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194758a16_2026-07-04": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194hjx10_2026-06-30": {
+      "start": "05:00",
+      "end": "13:15"
+    },
+    "p1782373014194z5ea24_2026-07-01": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194z5ea24_2026-07-02": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194z5ea24_2026-07-03": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194z5ea24_2026-07-04": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194toe63_2026-07-02": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194iyg423_2026-07-01": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p1782373014194iyg423_2026-07-02": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p1782373014194iyg423_2026-06-30": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p1782373014194iyg423_2026-07-04": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p1782373014194nxu71_2026-07-20": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194toe63_2026-07-20": {
+      "start": "10:45",
+      "end": "19:00"
+    },
+    "p1782373014194rysd4_2026-07-20": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194mx9t5_2026-07-20": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p1782373014194dcba8_2026-07-20": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p178237301419428d59_2026-07-20": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194pzwo11_2026-07-20": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p1782373014194ktb112_2026-07-20": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p1782373014194758a16_2026-07-20": {
+      "start": "07:30",
+      "end": "15:30"
+    },
+    "p178237301419428uj20_2026-07-20": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p1782373014194iyg423_2026-07-20": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p1782373014194z5ea24_2026-07-20": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p17823730141949yce26_2026-07-20": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p1782373014194hjx10_2026-07-21": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194nxu71_2026-07-21": {
+      "start": "06:00",
+      "end": "14:00"
+    },
+    "p1782373014194toe63_2026-07-21": {
+      "start": "10:45",
+      "end": "19:00"
+    },
+    "p1782373014194rysd4_2026-07-21": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p178237301419428d59_2026-07-21": {
+      "start": "05:00",
+      "end": "11:00"
+    },
+    "p1782373014194ktb112_2026-07-21": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p1782373014194758a16_2026-07-21": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194iyg423_2026-07-21": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p1782373014194oqay25_2026-07-21": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p17823730141949yce26_2026-07-21": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p1782373014194hjx10_2026-07-22": {
+      "start": "05:00",
+      "end": "13:15"
+    },
+    "p1782373014194toe63_2026-07-22": {
+      "start": "10:45",
+      "end": "17:00"
+    },
+    "p178237301419428d59_2026-07-22": {
+      "start": "05:00",
+      "end": "11:00"
+    },
+    "p1782373014194ktb112_2026-07-22": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p178237301419440f913_2026-07-22": {
+      "start": "11:00",
+      "end": "17:00"
+    },
+    "p1782373014194iyg423_2026-07-22": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p1782373014194z5ea24_2026-07-22": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194oqay25_2026-07-22": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p17823730141949yce26_2026-07-22": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p1782373014194nxu71_2026-07-23": {
+      "start": "06:00",
+      "end": "14:00"
+    },
+    "p1782373014194toe63_2026-07-23": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p1782373014194rysd4_2026-07-23": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p178237301419440f913_2026-07-23": {
+      "start": "11:00",
+      "end": "17:00"
+    },
+    "p1782373014194758a16_2026-07-23": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p178237301419428uj20_2026-07-23": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p1782373014194iyg423_2026-07-23": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p1782373014194z5ea24_2026-07-23": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194oqay25_2026-07-23": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p17823730141949yce26_2026-07-23": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p1782373014194nxu71_2026-07-24": {
+      "start": "06:00",
+      "end": "14:00"
+    },
+    "p1782373014194rysd4_2026-07-24": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p178237301419428d59_2026-07-24": {
+      "start": "05:00",
+      "end": "11:00"
+    },
+    "p1782373014194ktb112_2026-07-24": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p178237301419440f913_2026-07-24": {
+      "start": "11:00",
+      "end": "17:00"
+    },
+    "p1782373014194758a16_2026-07-24": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p178237301419428uj20_2026-07-24": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p1782373014194z5ea24_2026-07-24": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194oqay25_2026-07-24": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p17823730141949yce26_2026-07-24": {
+      "start": "16:00",
+      "end": "23:00"
+    },
+    "p1782373014194hjx10_2026-07-25": {
+      "start": "05:00",
+      "end": "13:15"
+    },
+    "p1782373014194nxu71_2026-07-25": {
+      "start": "06:00",
+      "end": "14:00"
+    },
+    "p1782373014194rysd4_2026-07-25": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p178237301419428d59_2026-07-25": {
+      "start": "05:00",
+      "end": "11:00"
+    },
+    "p1782373014194ktb112_2026-07-25": {
+      "start": "11:00",
+      "end": "19:00"
+    },
+    "p178237301419440f913_2026-07-25": {
+      "start": "11:00",
+      "end": "17:00"
+    },
+    "p1782373014194758a16_2026-07-25": {
+      "start": "07:00",
+      "end": "15:00"
+    },
+    "p178237301419428uj20_2026-07-25": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p1782373014194iyg423_2026-07-25": {
+      "start": "14:00",
+      "end": "22:45"
+    },
+    "p1782373014194z5ea24_2026-07-25": {
+      "start": "05:00",
+      "end": "13:00"
+    },
+    "p1782373014194oqay25_2026-07-25": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p1782373014194pzwo11_2026-07-21": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p1782373014194pzwo11_2026-07-22": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p1782373014194pzwo11_2026-07-24": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p1782373014194pzwo11_2026-07-25": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p1782373014194hjx10_2026-07-20": {
+      "start": "05:00",
+      "end": "13:15"
+    },
+    "p178237301419428uj20_2026-07-22": {
+      "start": "04:30",
+      "end": "13:00"
+    },
+    "p1782373014194mx9t5_2026-07-22": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p1782373014194mx9t5_2026-07-23": {
+      "start": "15:00",
+      "end": "23:00"
+    },
+    "p178237301419428d59_2026-07-23": {
+      "start": "05:00",
+      "end": "11:00"
+    }
+  },
+  "shiftSetups": {
+    "2026-06-29_sh1782373003700b": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-06-29_sh1782373003700m": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-06-29_sh1782373003700c": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-06-30_sh1782373003700b": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-06-30_sh1782373003700m": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-06-30_sh1782373003700c": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-01_sh1782373003700b": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-01_sh1782373003700m": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-01_sh1782373003700c": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-02_sh1782373003700b": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-02_sh1782373003700m": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-02_sh1782373003700c": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-03_sh1782373003700b": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-03_sh1782373003700m": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-03_sh1782373003700c": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-04_sh1782373003700b": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-04_sh1782373003700m": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-04_sh1782373003700c": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-06-30_sh1783882203646rr0": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-06-29_sh1783882203646rr0": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "p1": [
+          {
+            "id": "seg17838826444227bj",
+            "personId": "p1782373014194nxu71",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg17838826522305hd",
+            "personId": "p1782373014194z5ea24",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg1783882662776som",
+            "personId": "p1782373014194758a16",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "slot1783882589639": [
+          {
+            "id": "seg1783882669068icc",
+            "personId": "p178237301419428uj20",
+            "start": "04:30",
+            "end": "13:00"
+          }
+        ],
+        "b1": [
+          {
+            "id": "seg1783882674889s7l",
+            "personId": "p178237301419428d59",
+            "start": "05:00",
+            "end": "11:00"
+          }
+        ],
+        "s2": [
+          {
+            "id": "seg1783882681190hy5",
+            "personId": "p1782373014194rysd4",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "x1": [
+          {
+            "id": "seg1783882685621445",
+            "personId": "p1782373014194hjx10",
+            "start": "05:00",
+            "end": "13:15"
+          }
+        ]
+      },
+      "checklist": {
+        "0": true,
+        "1": true,
+        "2": true,
+        "3": false
+      },
+      "notes": ""
+    },
+    "2026-06-29_sh1783882282483twk": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "p1": [
+          {
+            "id": "seg1783882786090aai",
+            "personId": "p1782373014194toe63",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg1783882792517yz5",
+            "personId": "p1782373014194rysd4",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "b1": [
+          {
+            "id": "seg1783882800295bie",
+            "personId": "p1782373014194ktb112",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg17838828047714ed",
+            "personId": "p1782373014194dcba8",
+            "start": "11:00",
+            "end": "15:00"
+          },
+          {
+            "id": "seg1783882842665ita",
+            "personId": "p1782373014194pzwo11",
+            "start": "15:00",
+            "end": "23:00"
+          }
+        ],
+        "pf": [
+          {
+            "id": "seg1783882810234inh",
+            "personId": "p1782373014194mx9t5",
+            "start": "15:00",
+            "end": "23:00"
+          }
+        ],
+        "fl": [
+          {
+            "id": "seg1783882824154prq",
+            "personId": "p1782373014194758a16",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ]
+      },
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-06-29_sh1783882261475v0t": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "p1": [
+          {
+            "id": "seg1783882714012cvc",
+            "personId": "p1782373014194nxu71",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "p2": [
+          {
+            "id": "seg1783882716622g0x",
+            "personId": "p1782373014194toe63",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg1783882728359b5j",
+            "personId": "p1782373014194z5ea24",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "p3": [
+          {
+            "id": "seg1783882743053v4y",
+            "personId": "p1782373014194rysd4",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg1783882750920b2f",
+            "personId": "p1782373014194dcba8",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "pf": [
+          {
+            "id": "seg1783882753486jw6",
+            "personId": "p178237301419428uj20",
+            "start": "04:30",
+            "end": "13:00"
+          }
+        ],
+        "b1": [
+          {
+            "id": "seg17838827606726nu",
+            "personId": "p1782373014194758a16",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "b2": [
+          {
+            "id": "seg1783882763304pul",
+            "personId": "p1782373014194ktb112",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "x1": [
+          {
+            "id": "seg1783882768517lub",
+            "personId": "p1782373014194hjx10",
+            "start": "05:00",
+            "end": "13:15"
+          }
+        ]
+      },
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-06-29_sh1783882305225ag9": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-20_sh1783882203646rr0": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "b1": [
+          {
+            "id": "seg178390320616153j",
+            "personId": "p178237301419428d59",
+            "start": "05:00",
+            "end": "11:00"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg1783903213113ujy",
+            "personId": "p1782373014194758a16",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg17839033175920qz",
+            "personId": "p1782373014194z5ea24",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "p1": [
+          {
+            "id": "seg1783903323772sqh",
+            "personId": "p1782373014194nxu71",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "s2": [
+          {
+            "id": "seg1783903669862e5q",
+            "personId": "p1782373014194rysd4",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "x1": [
+          {
+            "id": "seg17839038972061nk",
+            "personId": "p1782373014194hjx10",
+            "start": "05:00",
+            "end": "13:15"
+          }
+        ],
+        "slot1783882589639": [
+          {
+            "id": "seg1783903904618df9",
+            "personId": "p178237301419428uj20",
+            "start": "04:30",
+            "end": "13:00"
+          }
+        ],
+        "fl": [
+          {
+            "id": "seg1783903915985hsk",
+            "personId": "p1782373014194toe63",
+            "start": "10:45",
+            "end": "19:00"
+          }
+        ]
+      },
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-20_sh1783882261475v0t": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "x1": [
+          {
+            "id": "seg1783904034765xta",
+            "personId": "p1782373014194hjx10",
+            "start": "05:00",
+            "end": "13:15"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg17839040650957n8",
+            "personId": "p1782373014194dcba8",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg17839040767191bv",
+            "personId": "p1782373014194z5ea24",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "p1": [
+          {
+            "id": "seg1783904084004ir0",
+            "personId": "p1782373014194nxu71",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "p2": [
+          {
+            "id": "seg17839040891786ln",
+            "personId": "p1782373014194rysd4",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "b1": [
+          {
+            "id": "seg17839040973451jl",
+            "personId": "p1782373014194ktb112",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "b2": [
+          {
+            "id": "seg1783904101028ed5",
+            "personId": "p1782373014194758a16",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "p3": [
+          {
+            "id": "seg1783904106376du1",
+            "personId": "p1782373014194toe63",
+            "start": "10:45",
+            "end": "19:00"
+          }
+        ],
+        "pf": [
+          {
+            "id": "seg1783904109324bfe",
+            "personId": "p178237301419428uj20",
+            "start": "04:30",
+            "end": "13:00"
+          }
+        ]
+      },
+      "checklist": {
+        "3": false,
+        "4": false
+      },
+      "notes": ""
+    },
+    "2026-07-20_sh1783882282483twk": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "b1": [
+          {
+            "id": "seg178390426641247o",
+            "personId": "p1782373014194ktb112",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg1783904421488i12",
+            "personId": "p1782373014194rysd4",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "p1": [
+          {
+            "id": "seg17839044239949l0",
+            "personId": "p1782373014194toe63",
+            "start": "10:45",
+            "end": "19:00"
+          }
+        ],
+        "fl": [
+          {
+            "id": "seg1783904436467ct6",
+            "personId": "p1782373014194iyg423",
+            "start": "14:00",
+            "end": "22:45"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg17839044637919gt",
+            "personId": "p1782373014194dcba8",
+            "start": "11:00",
+            "end": "15:00"
+          },
+          {
+            "id": "seg17839045349093oh",
+            "personId": "p1782373014194pzwo11",
+            "start": "15:00",
+            "end": "23:00"
+          }
+        ],
+        "pf": [
+          {
+            "id": "seg17839045492293g0",
+            "personId": "p1782373014194758a16",
+            "start": "07:00",
+            "end": "15:00"
+          },
+          {
+            "id": "seg1783905246698xyl",
+            "personId": "p1782373014194mx9t5",
+            "start": "15:00",
+            "end": "23:00"
+          }
+        ]
+      },
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-20_sh1783882305225ag9": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "b1": [
+          {
+            "id": "seg178390539269736d",
+            "personId": "p1782373014194mx9t5",
+            "start": "15:00",
+            "end": "23:00"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg1783905403176p5m",
+            "personId": "p1782373014194pzwo11",
+            "start": "15:00",
+            "end": "23:00"
+          }
+        ],
+        "p1": [
+          {
+            "id": "seg1783905413804hol",
+            "personId": "p1782373014194toe63",
+            "start": "10:45",
+            "end": "19:00"
+          },
+          {
+            "id": "seg17839054267128hr",
+            "personId": "p1782373014194iyg423",
+            "start": "19:00",
+            "end": "22:45"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg1783905418589xb2",
+            "personId": "p17823730141949yce26",
+            "start": "16:00",
+            "end": "23:00"
+          }
+        ],
+        "fl": [
+          {
+            "id": "seg1783905486664o6j",
+            "personId": "p1782373014194ktb112",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "pf": [
+          {
+            "id": "seg17839055205058ar",
+            "personId": "p1782373014194dcba8",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ]
+      },
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-21_sh1783882261475v0t": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "p1": [
+          {
+            "id": "seg1783905987697a0b",
+            "personId": "p1782373014194nxu71",
+            "start": "06:00",
+            "end": "14:00"
+          }
+        ],
+        "x1": [
+          {
+            "id": "seg1783908414021ga2",
+            "personId": "p1782373014194hjx10",
+            "start": "05:00",
+            "end": "13:15"
+          }
+        ],
+        "p2": [
+          {
+            "id": "seg17839084310626ao",
+            "personId": "p1782373014194oqay25",
+            "start": "04:30",
+            "end": "14:00"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg1783908436501u6u",
+            "personId": "p178237301419440f913",
+            "start": "11:00",
+            "end": "17:00"
+          }
+        ],
+        "b1": [
+          {
+            "id": "seg178390844864101f",
+            "personId": "p1782373014194ktb112",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "pf": [
+          {
+            "id": "seg1783908462693bry",
+            "personId": "p1782373014194rysd4",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg178390847541569i",
+            "personId": "p1782373014194758a16",
+            "start": "07:00",
+            "end": "15:00"
+          }
+        ],
+        "s2": [
+          {
+            "id": "seg1783908479703vsh",
+            "personId": "p1782373014194toe63",
+            "start": "10:45",
+            "end": "19:00"
+          }
+        ]
+      },
+      "checklist": {},
+      "notes": ""
+    },
+    "2026-07-21_sh1783882282483twk": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "p1": [
+          {
+            "id": "seg17839109289044p5",
+            "personId": "p1782373014194toe63",
+            "start": "10:45",
+            "end": "19:00"
+          }
+        ]
+      },
+      "checklist": {},
+      "notes": "",
+      "sectionAssign": {}
+    },
+    "2026-07-21_sh1783882203646rr0": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {},
+      "checklist": {
+        "ci_mrimmqtff13b": false,
+        "ci_mrimn5v1qhef": false
+      },
+      "sectionAssign": {
+        "sec_mrimu09rg1uu": "p1782373014194nxu71",
+        "sec_mrimm2z5otn4": "p1782373014194fbac21"
+      },
+      "notes": ""
+    },
+    "2026-07-22_sh1783882261475v0t": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "pf": [
+          {
+            "id": "seg1783912098999n4f",
+            "personId": "p178237301419428uj20",
+            "start": "04:30",
+            "end": "13:00"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg1783912106998qb2",
+            "personId": "p1782373014194z5ea24",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "p1": [
+          {
+            "id": "seg1783912112307mhl",
+            "personId": "p1782373014194toe63",
+            "start": "10:45",
+            "end": "17:00"
+          }
+        ],
+        "p3": [
+          {
+            "id": "seg1783912117614fld",
+            "personId": "p1782373014194oqay25",
+            "start": "04:30",
+            "end": "13:00"
+          }
+        ],
+        "b1": [
+          {
+            "id": "seg1783912124946st9",
+            "personId": "p1782373014194ktb112",
+            "start": "11:00",
+            "end": "19:00"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg1783912128054eab",
+            "personId": "p178237301419440f913",
+            "start": "11:00",
+            "end": "17:00"
+          }
+        ],
+        "x1": [
+          {
+            "id": "seg1783912135007jrs",
+            "personId": "p1782373014194hjx10",
+            "start": "05:00",
+            "end": "13:15"
+          }
+        ]
+      },
+      "checklist": {},
+      "sectionAssign": {},
+      "notes": ""
+    },
+    "2026-07-22_sh1783882203646rr0": {
+      "carCount": 150,
+      "period": "lunch",
+      "assignments": {
+        "slot1783882589639": [
+          {
+            "id": "seg1783912046714zc4",
+            "personId": "p178237301419428uj20",
+            "start": "04:30",
+            "end": "13:00"
+          }
+        ],
+        "b1": [
+          {
+            "id": "seg1783912051144v0i",
+            "personId": "p178237301419428d59",
+            "start": "05:00",
+            "end": "11:00"
+          }
+        ],
+        "x1": [
+          {
+            "id": "seg1783912056143ffp",
+            "personId": "p1782373014194hjx10",
+            "start": "05:00",
+            "end": "13:15"
+          }
+        ],
+        "s1": [
+          {
+            "id": "seg1783912064949ekb",
+            "personId": "p1782373014194z5ea24",
+            "start": "05:00",
+            "end": "13:00"
+          }
+        ],
+        "p1": [
+          {
+            "id": "seg1783912070351yrc",
+            "personId": "p1782373014194toe63",
+            "start": "10:45",
+            "end": "17:00"
+          }
+        ],
+        "m1": [
+          {
+            "id": "seg1783912079287jnf",
+            "personId": "p1782373014194oqay25",
+            "start": "04:30",
+            "end": "13:00"
+          }
+        ]
+      },
+      "checklist": {},
+      "sectionAssign": {},
+      "notes": ""
+    }
+  },
+  "availabilities": {
+    "p1782373014194hjx10_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194hjx10_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194hjx10_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194hjx10_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194hjx10_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194hjx10_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194nxu71_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194nxu71_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194nxu71_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194nxu71_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194nxu71_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194nxu71_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194wuzr2_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194wuzr2_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194wuzr2_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194wuzr2_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194wuzr2_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194wuzr2_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194toe63_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194toe63_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194toe63_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194toe63_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194toe63_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194toe63_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194rysd4_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194rysd4_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194rysd4_2026-07-01": {
+      "status": "unavailable",
+      "raw": "Unavailable All Day",
+      "windows": []
+    },
+    "p1782373014194rysd4_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194rysd4_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194rysd4_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194mx9t5_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194mx9t5_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194mx9t5_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194mx9t5_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194mx9t5_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194mx9t5_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194b0y66_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194b0y66_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194b0y66_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194b0y66_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194b0y66_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194b0y66_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194635v7_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194635v7_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194635v7_2026-07-01": {
+      "status": "unavailable",
+      "raw": "Unavailable All Day",
+      "windows": []
+    },
+    "p1782373014194635v7_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194635v7_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194635v7_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194dcba8_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 6:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "18:00"
+        }
+      ]
+    },
+    "p1782373014194dcba8_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 8:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "20:00"
+        }
+      ]
+    },
+    "p1782373014194dcba8_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 10:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "22:00"
+        }
+      ]
+    },
+    "p1782373014194dcba8_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 10:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "22:00"
+        }
+      ]
+    },
+    "p1782373014194dcba8_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 10:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "22:00"
+        }
+      ]
+    },
+    "p1782373014194dcba8_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 10:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "22:00"
+        }
+      ]
+    },
+    "p178237301419428d59_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 1:00 PM, 6:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "13:00"
+        },
+        {
+          "start": "18:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p178237301419428d59_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 1:00 PM, 6:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "13:00"
+        },
+        {
+          "start": "18:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p178237301419428d59_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 1:00 PM, 6:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "13:00"
+        },
+        {
+          "start": "18:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p178237301419428d59_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 1:00 PM, 6:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "13:00"
+        },
+        {
+          "start": "18:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p178237301419428d59_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 1:00 PM, 6:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "13:00"
+        },
+        {
+          "start": "18:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p178237301419428d59_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 1:00 PM, 6:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "13:00"
+        },
+        {
+          "start": "18:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p17823730141945drn10_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 1:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "13:00"
+        }
+      ]
+    },
+    "p17823730141945drn10_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 1:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "13:00"
+        }
+      ]
+    },
+    "p17823730141945drn10_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 1:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "13:00"
+        }
+      ]
+    },
+    "p17823730141945drn10_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 1:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "13:00"
+        }
+      ]
+    },
+    "p17823730141945drn10_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 1:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "13:00"
+        }
+      ]
+    },
+    "p17823730141945drn10_2026-07-04": {
+      "status": "unavailable",
+      "raw": "Unavailable All Day",
+      "windows": []
+    },
+    "p1782373014194pzwo11_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194pzwo11_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194pzwo11_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194pzwo11_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194pzwo11_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194pzwo11_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 2:00 PM - 12:00 AM",
+      "windows": [
+        {
+          "start": "14:00",
+          "end": "00:00"
+        }
+      ]
+    },
+    "p1782373014194ktb112_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ktb112_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ktb112_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ktb112_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ktb112_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ktb112_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p178237301419440f913_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 5:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "17:00"
+        }
+      ]
+    },
+    "p178237301419440f913_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 5:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "17:00"
+        }
+      ]
+    },
+    "p178237301419440f913_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 5:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "17:00"
+        }
+      ]
+    },
+    "p178237301419440f913_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 5:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "17:00"
+        }
+      ]
+    },
+    "p178237301419440f913_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 5:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "17:00"
+        }
+      ]
+    },
+    "p178237301419440f913_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 5:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "17:00"
+        }
+      ]
+    },
+    "p17823730141949yit14_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141949yit14_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141949yit14_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141949yit14_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141949yit14_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141949yit14_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ika815_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ika815_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ika815_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ika815_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ika815_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194ika815_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194758a16_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p1782373014194758a16_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 7:00 AM - 3:00 PM",
+      "windows": [
+        {
+          "start": "07:00",
+          "end": "15:00"
+        }
+      ]
+    },
+    "p1782373014194758a16_2026-07-01": {
+      "status": "unavailable",
+      "raw": "Unavailable All Day",
+      "windows": []
+    },
+    "p1782373014194758a16_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 11:00 AM - 7:00 PM",
+      "windows": [
+        {
+          "start": "11:00",
+          "end": "19:00"
+        }
+      ]
+    },
+    "p1782373014194758a16_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 11:00 AM - 7:00 PM",
+      "windows": [
+        {
+          "start": "11:00",
+          "end": "19:00"
+        }
+      ]
+    },
+    "p1782373014194758a16_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 7:00 AM - 3:00 PM",
+      "windows": [
+        {
+          "start": "07:00",
+          "end": "15:00"
+        }
+      ]
+    },
+    "p1782373014194npfd17_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194npfd17_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194npfd17_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194npfd17_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194npfd17_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194npfd17_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194hbpv18_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p1782373014194hbpv18_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p1782373014194hbpv18_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p1782373014194hbpv18_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p1782373014194hbpv18_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p1782373014194hbpv18_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p1782373014194wr5719_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 8:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "20:00"
+        }
+      ]
+    },
+    "p1782373014194wr5719_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 8:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "20:00"
+        }
+      ]
+    },
+    "p1782373014194wr5719_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194wr5719_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 8:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "20:00"
+        }
+      ]
+    },
+    "p1782373014194wr5719_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194wr5719_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 8:00 AM - 8:00 PM",
+      "windows": [
+        {
+          "start": "08:00",
+          "end": "20:00"
+        }
+      ]
+    },
+    "p178237301419428uj20_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p178237301419428uj20_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p178237301419428uj20_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p178237301419428uj20_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p178237301419428uj20_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p178237301419428uj20_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 4:00 PM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    "p1782373014194fbac21_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194fbac21_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194fbac21_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194fbac21_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194fbac21_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194fbac21_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 4:30 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "04:30",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p17823730141944sx822_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141944sx822_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141944sx822_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141944sx822_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141944sx822_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141944sx822_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194iyg423_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 7:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ]
+    },
+    "p1782373014194iyg423_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 7:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ]
+    },
+    "p1782373014194iyg423_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 7:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ]
+    },
+    "p1782373014194iyg423_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 7:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ]
+    },
+    "p1782373014194iyg423_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 7:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ]
+    },
+    "p1782373014194iyg423_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 10:00 AM - 7:00 PM",
+      "windows": [
+        {
+          "start": "10:00",
+          "end": "19:00"
+        }
+      ]
+    },
+    "p1782373014194z5ea24_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 5:00 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "05:00",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194z5ea24_2026-06-30": {
+      "status": "unavailable",
+      "raw": "Unavailable All Day",
+      "windows": []
+    },
+    "p1782373014194z5ea24_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 5:00 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "05:00",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194z5ea24_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 5:00 AM - 12:00 PM",
+      "windows": [
+        {
+          "start": "05:00",
+          "end": "12:00"
+        }
+      ]
+    },
+    "p1782373014194z5ea24_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 5:00 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "05:00",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194z5ea24_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 5:00 AM - 2:00 PM",
+      "windows": [
+        {
+          "start": "05:00",
+          "end": "14:00"
+        }
+      ]
+    },
+    "p1782373014194oqay25_2026-06-29": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194oqay25_2026-06-30": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194oqay25_2026-07-01": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194oqay25_2026-07-02": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194oqay25_2026-07-03": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p1782373014194oqay25_2026-07-04": {
+      "status": "available",
+      "raw": "Available All Day",
+      "windows": [
+        {
+          "start": "00:00",
+          "end": "23:59"
+        }
+      ]
+    },
+    "p17823730141949yce26_2026-06-29": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 PM - 11:00 PM",
+      "windows": [
+        {
+          "start": "16:00",
+          "end": "23:00"
+        }
+      ]
+    },
+    "p17823730141949yce26_2026-06-30": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 PM - 11:00 PM",
+      "windows": [
+        {
+          "start": "16:00",
+          "end": "23:00"
+        }
+      ]
+    },
+    "p17823730141949yce26_2026-07-01": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 PM - 11:00 PM",
+      "windows": [
+        {
+          "start": "16:00",
+          "end": "23:00"
+        }
+      ]
+    },
+    "p17823730141949yce26_2026-07-02": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 PM - 11:00 PM",
+      "windows": [
+        {
+          "start": "16:00",
+          "end": "23:00"
+        }
+      ]
+    },
+    "p17823730141949yce26_2026-07-03": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 PM - 11:00 PM",
+      "windows": [
+        {
+          "start": "16:00",
+          "end": "23:00"
+        }
+      ]
+    },
+    "p17823730141949yce26_2026-07-04": {
+      "status": "partial",
+      "raw": "Partially Available 4:00 AM - 11:00 PM",
+      "windows": [
+        {
+          "start": "04:00",
+          "end": "23:00"
+        }
+      ]
+    },
+    "p1782373014194rysd4_2026-07-22": {
+      "status": "unavailable",
+      "raw": "Unavailable All Day",
+      "windows": []
+    },
+    "p1782373014194758a16_2026-07-22": {
+      "status": "unavailable",
+      "raw": "Unavailable All Day",
+      "windows": []
+    }
+  },
+  "rotationOffWeeks": {},
+  "scheduleTemplates": [],
+  "rosterDaySort": {
+    "dayIndex": 1,
+    "dir": "asc"
+  },
+  "weekStart": "2026-07-20",
+  "setupContext": {
+    "dateKey": "2026-07-22",
+    "shiftId": "sh1783882261475v0t"
+  },
+  "useStaffingRef": true,
+  "schedulePublished": false,
+  "rosterFilter": "all",
+  "dailySales": {
+    "2026-06-29": 22000
+  },
+  "laborSettings": {
+    "splh": 81,
+    "daypartPct": {
+      "opening": 0,
+      "breakfast": 22,
+      "lunch": 35,
+      "afternoon": 18,
+      "dinner": 25,
+      "closing": 0
+    }
+  },
+  "exportedAt": "2026-07-13T03:09:08.802Z"
+}
