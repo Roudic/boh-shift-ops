@@ -292,27 +292,28 @@
       content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
       background: rgba(255,255,255,.9); border-radius: 12px 0 0 12px;
     }
-    /* Fallback tones when no period blocks exist */
-    .cv-card.tone-early {
-      background: linear-gradient(145deg, rgba(14,165,233,.97) 0%, rgba(3,105,161,.94) 100%);
+    /* Simple 3-band colors: Morning / Mid / Late (by clock-in) */
+    .cv-card.tone-morning {
+      background: linear-gradient(145deg, #0EA5E9 0%, #0369A1 100%);
     }
-    .cv-card.tone-mid {
-      background: linear-gradient(145deg, rgba(245,158,11,.97) 0%, rgba(194,65,12,.94) 100%);
+    .cv-card.tone-midday {
+      background: linear-gradient(145deg, #F59E0B 0%, #C2410C 100%);
     }
-    .cv-card.tone-late {
-      background: linear-gradient(145deg, rgba(139,92,246,.97) 0%, rgba(91,33,182,.94) 100%);
+    .cv-card.tone-evening {
+      background: linear-gradient(145deg, #8B5CF6 0%, #5B21B6 100%);
     }
-    .cv-card.tone-custom {
-      background: linear-gradient(145deg, rgba(240,58,95,.97) 0%, rgba(159,18,57,.95) 100%);
-    }
-    /* Period colors are applied inline (Breakfast / Lunch / etc.) */
-    .cv-card.tone-period {
-      background: linear-gradient(145deg, #0EA5E9, #0369A1);
-    }
-    .cv-card.tone-period.multi {
-      box-shadow: 0 6px 16px rgba(0,0,0,.24), inset 0 0 0 1px rgba(255,255,255,.25);
-    }
+    /* legacy class names still used in a few places */
+    .cv-card.tone-early { background: linear-gradient(145deg, #0EA5E9 0%, #0369A1 100%); }
+    .cv-card.tone-mid { background: linear-gradient(145deg, #F59E0B 0%, #C2410C 100%); }
+    .cv-card.tone-late { background: linear-gradient(145deg, #8B5CF6 0%, #5B21B6 100%); }
+    .cv-card.tone-custom { background: linear-gradient(145deg, #F03A5F 0%, #9F1239 100%); }
     .cv-card.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 6px 16px rgba(0,0,0,.24); }
+    .cv-band-tag {
+      display: inline-block; margin-top: 4px;
+      font-size: 9px; font-weight: 800; letter-spacing: .04em;
+      text-transform: uppercase; color: rgba(255,255,255,.92);
+      background: rgba(0,0,0,.22); padding: 2px 7px; border-radius: 999px;
+    }
     .period-legend {
       display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
       margin-top: 12px;
@@ -326,12 +327,6 @@
       padding: 3px 9px; border-radius: 999px;
       text-shadow: 0 1px 2px rgba(0,0,0,.25);
       box-shadow: 0 1px 4px rgba(0,0,0,.2);
-    }
-    .period-legend-chip.multi {
-      background: linear-gradient(90deg, #0EA5E9, #F59E0B, #8B5CF6);
-    }
-    .period-legend-chip.custom {
-      background: linear-gradient(90deg, #F03A5F, #9F1239);
     }
     /* Big start / end block — never hide these */
     .cv-times {
@@ -916,9 +911,12 @@
     }
     #weekScheduleWrap .hs-shift:hover { box-shadow: 0 12px 30px rgba(0,0,0,.4); z-index: 3; transform: translateY(-1px); }
     #weekScheduleWrap .hs-shift.dragging { cursor: grabbing; box-shadow: 0 14px 36px rgba(0,0,0,.45); z-index: 5; opacity: .97; }
-    #weekScheduleWrap .hs-shift.tone-early { background: linear-gradient(145deg, #38BDF8, #0284C7); }
-    #weekScheduleWrap .hs-shift.tone-mid { background: linear-gradient(145deg, #FBBF24, #EA580C); }
-    #weekScheduleWrap .hs-shift.tone-late { background: linear-gradient(145deg, #A78BFA, #6D28D9); }
+    #weekScheduleWrap .hs-shift.tone-morning,
+    #weekScheduleWrap .hs-shift.tone-early { background: linear-gradient(145deg, #0EA5E9, #0369A1); }
+    #weekScheduleWrap .hs-shift.tone-midday,
+    #weekScheduleWrap .hs-shift.tone-mid { background: linear-gradient(145deg, #F59E0B, #C2410C); }
+    #weekScheduleWrap .hs-shift.tone-evening,
+    #weekScheduleWrap .hs-shift.tone-late { background: linear-gradient(145deg, #8B5CF6, #5B21B6); }
     #weekScheduleWrap .hs-shift.tone-custom { background: linear-gradient(145deg, #F03A5F, #BE123C); }
     #weekScheduleWrap .hs-shift.has-conflict { box-shadow: inset 0 0 0 2px #FDE047, 0 8px 22px rgba(0,0,0,.32); }
     #weekScheduleWrap .hs-shift-time {
@@ -1333,21 +1331,20 @@
       z-index: 3;
       touch-action: none;
     }
+    .ssched-row-track .hs-shift.tone-morning,
     .ssched-row-track .hs-shift.tone-early {
       background: linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%) !important;
     }
+    .ssched-row-track .hs-shift.tone-midday,
     .ssched-row-track .hs-shift.tone-mid {
       background: linear-gradient(135deg, #F59E0B 0%, #C2410C 100%) !important;
     }
+    .ssched-row-track .hs-shift.tone-evening,
     .ssched-row-track .hs-shift.tone-late {
       background: linear-gradient(135deg, #8B5CF6 0%, #5B21B6 100%) !important;
     }
     .ssched-row-track .hs-shift.tone-custom {
       background: linear-gradient(135deg, #DD0033 0%, #9F1239 100%) !important;
-    }
-    .ssched-row-track .hs-shift.tone-period {
-      /* period color set inline */
-      border-color: rgba(255,255,255,.3);
     }
     .ssched-row-track .hs-shift.dragging {
       box-shadow: 0 6px 18px rgba(15,23,42,.35);
@@ -1850,7 +1847,7 @@
               <span><em>Drag</em> card to move</span>
               <span><em>In / Out</em> always shown</span>
               <span><em>Click</em> empty to add</span>
-              <span><em>Colors</em> = period (Breakfast / Lunch…)</span>
+              <span><em>Blue</em> morning · <em>Orange</em> mid · <em>Purple</em> late</span>
             </div>
             <div id="periodColorLegend"></div>
           </div>
@@ -2877,8 +2874,8 @@ function smartShiftBlockHtml(p, dk, di) {
   const periodLabel = periodStyle.label || 'Shift';
   return `<div class="hs-shift ${periodStyle.className}${conflict ? ' has-conflict' : ''}" role="button" tabindex="0"
     data-job="${escAttr(job)}"
-    style="left:${leftPct}%;width:${widthPct}%;${periodStyle.bgStyle}"
-    title="${escAttr(periodLabel)} · ${escAttr(job)} · ${timeLine} · ${hrs}h — drag to move, edges to stretch"
+    style="left:${leftPct}%;width:${widthPct}%"
+    title="${escAttr(periodStyle.bandLabel)} · ${escAttr(periodLabel)} · ${escAttr(job)} · ${timeLine} · ${hrs}h — drag to move, edges to stretch"
     onpointerdown="if(event.target.closest('.hs-handle,.hs-copy-btn,.hs-copy-to-btn'))return; onShiftPointerDown(event,'move','${p.id}','${dk}',${di})"
     ondblclick="handleCellDblClick('${p.id}','${dk}',${di},event)">
     <button type="button" class="hs-handle hs-handle-start" title="Drag left edge to change start"
@@ -3131,97 +3128,63 @@ function entryDisplayColor(entry) {
   return p?.color || COLORS[0];
 }
 
-/** Fallback when no Shift Periods are defined (time-of-day bands). */
-function shiftTone(start, end) {
-  const s = timeToMinutes(start);
-  if (s < 8 * 60) return 'early';
-  if (s < 14 * 60) return 'mid';
-  if (timeToMinutes(end) > 20 * 60) return 'late';
-  return 'mid';
-}
-
-function shadeHex(hex, factor) {
-  const h = String(hex || '').replace('#', '').trim();
-  if (h.length !== 6 || Number.isNaN(parseInt(h, 16))) return hex || '#DD0033';
-  const r = Math.round(parseInt(h.slice(0, 2), 16) * factor);
-  const g = Math.round(parseInt(h.slice(2, 4), 16) * factor);
-  const b = Math.round(parseInt(h.slice(4, 6), 16) * factor);
-  const clamp = n => Math.max(0, Math.min(255, n));
-  return `#${[clamp(r), clamp(g), clamp(b)].map(n => n.toString(16).padStart(2, '0')).join('')}`;
-}
-
 /**
- * Color by Shift Period: breakfast-only → breakfast color, lunch-only → lunch, etc.
- * Multi-period (e.g. breakfast+lunch) gets a blend so long shifts stand out.
+ * Simple color bands by clock-in time (easy to read at a glance):
+ *   Blue  Morning  — start before 10:30 (breakfast / open)
+ *   Orange Mid     — start 10:30–3:59 (lunch / mid)
+ *   Purple Late    — start 4:00+ (dinner / close)
  */
+function shiftBand(start, end) {
+  const s = timeToMinutes(start);
+  if (s < 10 * 60 + 30) {
+    return { key: 'morning', label: 'Morning', className: 'tone-morning' };
+  }
+  if (s < 16 * 60) {
+    return { key: 'midday', label: 'Mid', className: 'tone-midday' };
+  }
+  return { key: 'evening', label: 'Late', className: 'tone-evening' };
+}
+
+/** @deprecated alias — prefer shiftBand */
+function shiftTone(start, end) {
+  const b = shiftBand(start, end);
+  return b.key === 'morning' ? 'early' : b.key === 'evening' ? 'late' : 'mid';
+}
+
 function shiftStyleFromPeriods(start, end) {
+  const band = shiftBand(start, end);
   const periods = periodsForTimes(start, end);
-  if (!periods.length) {
-    const tone = shiftTone(start, end);
-    return {
-      className: `tone-${tone}`,
-      bgStyle: '',
-      label: 'Custom',
-      multi: false
-    };
-  }
-  if (periods.length === 1) {
-    const p = periods[0];
-    const c = p.color || COLORS[0];
-    return {
-      className: 'tone-period',
-      bgStyle: `background:linear-gradient(145deg,${c} 0%,${shadeHex(c, 0.68)} 100%)`,
-      label: p.name,
-      multi: false,
-      period: p
-    };
-  }
-  // Multi-period shift: gradient across covered period colors
-  const colors = periods.map((p, i) => p.color || COLORS[i % COLORS.length]);
-  const stops = colors.map((c, i) => {
-    const pct = colors.length === 1 ? 0 : Math.round((i / (colors.length - 1)) * 100);
-    return `${c} ${pct}%`;
-  }).join(', ');
+  const periodLabel = periods.length
+    ? periods.map(p => p.name).join(' · ')
+    : band.label;
   return {
-    className: 'tone-period multi',
-    bgStyle: `background:linear-gradient(135deg, ${stops})`,
-    label: periods.map(p => p.name).join(' · '),
-    multi: true,
+    className: band.className,
+    bgStyle: '', // CSS classes only — no rainbows
+    label: periodLabel,
+    bandLabel: band.label,
+    multi: periods.length > 1,
     period: primaryPeriodForTimes(start, end)
   };
 }
 
 function periodLegendHtml() {
-  if (!shifts.length) {
-    return `<div class="period-legend"><span class="period-legend-label">Colors</span>
-      <span class="period-legend-chip" style="background:linear-gradient(90deg,#0EA5E9,#0369A1)">Early</span>
-      <span class="period-legend-chip" style="background:linear-gradient(90deg,#F59E0B,#C2410C)">Mid</span>
-      <span class="period-legend-chip" style="background:linear-gradient(90deg,#8B5CF6,#5B21B6)">Late</span>
-      <span class="period-legend-chip custom">Custom</span></div>`;
-  }
-  const chips = shifts
-    .slice()
-    .sort((a, b) => a.start.localeCompare(b.start))
-    .map(p => {
-      const c = p.color || COLORS[0];
-      return `<span class="period-legend-chip" style="background:${c}" title="${escAttr(p.name)} ${formatTime12(p.start)}–${formatTime12(p.end)}">${escAttr(p.name)}</span>`;
-    })
-    .join('');
-  return `<div class="period-legend"><span class="period-legend-label">Period colors</span>${chips}<span class="period-legend-chip multi" title="Shift covers more than one period">Multi</span></div>`;
+  return `<div class="period-legend">
+    <span class="period-legend-label">Colors (by start time)</span>
+    <span class="period-legend-chip" style="background:#0EA5E9" title="Clock in before 10:30">Morning</span>
+    <span class="period-legend-chip" style="background:#F59E0B" title="Clock in 10:30–3:59">Mid</span>
+    <span class="period-legend-chip" style="background:#8B5CF6" title="Clock in 4:00 or later">Late</span>
+  </div>`;
 }
 
 function applyPeriodToneToBar(barEl, start, end) {
   if (!barEl) return;
-  barEl.classList.remove('tone-early', 'tone-mid', 'tone-late', 'tone-custom', 'tone-period', 'multi');
+  barEl.classList.remove(
+    'tone-early', 'tone-mid', 'tone-late', 'tone-custom',
+    'tone-morning', 'tone-midday', 'tone-evening', 'tone-period', 'multi'
+  );
   const info = shiftStyleFromPeriods(start, end);
   info.className.split(/\s+/).filter(Boolean).forEach(c => barEl.classList.add(c));
-  if (info.bgStyle) {
-    // Keep position styles; only set background*
-    const m = info.bgStyle.match(/background\s*:\s*([^;]+)/i);
-    if (m) barEl.style.background = m[1].trim();
-  } else {
-    barEl.style.background = '';
-  }
+  barEl.style.background = ''; // let CSS class drive color
 }
 
 function compactTime12(time24) {
@@ -6691,11 +6654,10 @@ function renderRoster() {
             ondragleave="classicDragLeave(event)"
             ondrop="classicDrop(event,'${p.id}','${dk}',${di})">
             <div class="cv-card ${periodStyle.className}${conflict ? ' has-conflict' : ''}"
-              style="${periodStyle.bgStyle}"
               draggable="${schedulePublished ? 'false' : 'true'}"
               ondragstart="classicDragStart(event,'${p.id}','${dk}',${di})"
               ondragend="classicDragEnd(event)"
-              title="${escAttr(roleLabel)} · ${tStart} – ${tEnd} · ${hrs}h — drag to move · double-click to edit">
+              title="${escAttr(periodStyle.bandLabel)} · ${escAttr(roleLabel)} · ${tStart} – ${tEnd} · ${hrs}h — drag to move · double-click to edit">
               ${conflict ? `<span class="cv-warn" title="${escAttr(conflict)}">⚠</span>` : ''}
               <div class="cv-times">
                 <div class="cv-time-range">${escAttr(tStart)} <span class="cv-sep">–</span> ${escAttr(tEnd)}</div>
@@ -6703,6 +6665,7 @@ function renderRoster() {
                   <span class="cv-hrs-pill">${hrs}h</span>
                   <span class="cv-role">${escAttr(roleLabel)}</span>
                 </div>
+                <span class="cv-band-tag">${escAttr(periodStyle.bandLabel)}</span>
               </div>
               ${setupBtns ? `<div class="cv-setups">${setupBtns}</div>` : ''}
               <div class="cv-actions">
