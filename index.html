@@ -2405,6 +2405,16 @@
       font-size: 1.55rem;
       text-shadow: 0 4px 16px rgba(240,58,95,.35);
     }
+    #view-setup .ss-metric-pop {
+      animation: ssMetricPop .55s cubic-bezier(.2,1.4,.3,1) both;
+      color: #6EE7B7 !important;
+      text-shadow: 0 0 20px rgba(52,211,153,.6) !important;
+    }
+    @keyframes ssMetricPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
     #view-setup .ss-controls {
       border-top-color: rgba(255,255,255,.1) !important;
     }
@@ -2550,31 +2560,147 @@
         12px 28px 36px rgba(0,0,0,.48),
         0 40px 22px -14px rgba(0,0,0,.4) !important;
     }
-    #view-setup .ss-slot.filled {
-      border-color: rgba(52,211,153,.55) !important;
+    /* Empty = needs attention (amber pulse) */
+    #view-setup .ss-slot.empty-required {
+      border-color: rgba(251,191,36,.65) !important;
       background:
-        linear-gradient(155deg, rgba(52,211,153,.22), rgba(16,185,129,.08)),
-        #12241c !important;
+        linear-gradient(155deg, rgba(251,191,36,.2), rgba(245,158,11,.08)),
+        #241c10 !important;
       box-shadow:
-        0 1px 0 rgba(167,243,208,.35) inset,
-        0 0 24px rgba(52,211,153,.12),
+        0 1px 0 rgba(253,230,138,.2) inset,
+        0 0 0 1px rgba(251,191,36,.15),
+        8px 18px 28px rgba(0,0,0,.4) !important;
+      animation: ssSlotFloat 4.5s ease-in-out infinite, ssEmptyPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes ssEmptyPulse {
+      0%, 100% { box-shadow: 0 1px 0 rgba(253,230,138,.2) inset, 0 0 0 1px rgba(251,191,36,.15), 8px 18px 28px rgba(0,0,0,.4); }
+      50% { box-shadow: 0 1px 0 rgba(253,230,138,.35) inset, 0 0 0 2px rgba(251,191,36,.35), 0 0 28px rgba(251,191,36,.2), 8px 18px 28px rgba(0,0,0,.4); }
+    }
+    /* Filled = big green pop — easy to scan */
+    #view-setup .ss-slot.filled {
+      border-color: rgba(52,211,153,.85) !important;
+      border-width: 2px !important;
+      background:
+        linear-gradient(155deg, rgba(52,211,153,.42) 0%, rgba(16,185,129,.18) 55%, #0c1f18 100%) !important;
+      box-shadow:
+        0 1px 0 rgba(167,243,208,.55) inset,
+        0 0 0 1px rgba(52,211,153,.35),
+        0 0 32px rgba(52,211,153,.28),
         8px 18px 28px rgba(0,0,0,.4) !important;
     }
     #view-setup .ss-slot.has-people {
-      border-color: rgba(56,189,248,.55) !important;
+      border-color: rgba(56,189,248,.85) !important;
+      border-width: 2px !important;
       background:
-        linear-gradient(155deg, rgba(56,189,248,.2), rgba(14,165,233,.08)),
-        #101f2e !important;
+        linear-gradient(155deg, rgba(56,189,248,.38) 0%, rgba(14,165,233,.16) 55%, #0a1a28 100%) !important;
       box-shadow:
-        0 1px 0 rgba(125,211,252,.3) inset,
-        0 0 24px rgba(56,189,248,.12),
+        0 1px 0 rgba(125,211,252,.5) inset,
+        0 0 0 1px rgba(56,189,248,.35),
+        0 0 32px rgba(56,189,248,.25),
         8px 18px 28px rgba(0,0,0,.4) !important;
     }
-    #view-setup .ss-slot.empty-required {
-      border-color: rgba(251,191,36,.5) !important;
-      background:
-        linear-gradient(155deg, rgba(251,191,36,.16), rgba(245,158,11,.06)),
-        #241c10 !important;
+    /* Status pill on every pad */
+    #view-setup .ss-status-badge {
+      position: absolute;
+      top: 10px; right: 10px;
+      z-index: 4;
+      font-size: 9px; font-weight: 900;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 4px 8px; border-radius: 999px;
+      border: 1px solid transparent;
+      box-shadow: 0 4px 12px rgba(0,0,0,.25);
+      pointer-events: none;
+      line-height: 1.2;
+    }
+    #view-setup .ss-status-badge.open {
+      background: rgba(251,191,36,.95);
+      color: #1c1405;
+      border-color: rgba(255,255,255,.35);
+      animation: ssBadgeBlink 1.6s ease-in-out infinite;
+    }
+    #view-setup .ss-status-badge.ok {
+      background: linear-gradient(180deg, #6EE7B7, #10B981);
+      color: #052e1c;
+      border-color: rgba(255,255,255,.4);
+    }
+    #view-setup .ss-status-badge.multi {
+      background: linear-gradient(180deg, #7DD3FC, #0EA5E9);
+      color: #0c2a3d;
+      border-color: rgba(255,255,255,.4);
+    }
+    @keyframes ssBadgeBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .85; transform: scale(1.05); }
+    }
+    /* Burst when a position is just filled */
+    #view-setup .ss-slot.just-filled {
+      animation: ssJustFilled 0.85s cubic-bezier(.2,1.2,.3,1) both !important;
+      z-index: 8;
+    }
+    @keyframes ssJustFilled {
+      0% {
+        transform: translate3d(0, -8px, 18px) rotateX(8deg) scale(.88);
+        filter: brightness(1.6);
+        box-shadow:
+          0 0 0 0 rgba(52,211,153,.7),
+          0 1px 0 rgba(167,243,208,.6) inset,
+          8px 18px 28px rgba(0,0,0,.4);
+      }
+      40% {
+        transform: translate3d(0, -28px, 48px) rotateX(12deg) scale(1.1);
+        filter: brightness(1.25);
+        box-shadow:
+          0 0 0 12px rgba(52,211,153,0),
+          0 0 48px rgba(52,211,153,.55),
+          0 1px 0 rgba(167,243,208,.7) inset,
+          12px 32px 40px rgba(0,0,0,.45);
+      }
+      100% {
+        transform: translate3d(0, -10px, 18px) rotateX(8deg) scale(1);
+        filter: brightness(1);
+      }
+    }
+    #view-setup .ss-slot.just-filled .ss-status-badge {
+      animation: ssBadgePop .7s cubic-bezier(.2,1.4,.3,1) both;
+    }
+    @keyframes ssBadgePop {
+      0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+      50% { transform: scale(1.25) rotate(4deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0); }
+    }
+    /* Soft confetti ring */
+    #view-setup .ss-slot.just-filled::before {
+      content: '';
+      position: absolute; inset: -6px;
+      border-radius: 22px;
+      border: 2px solid rgba(52,211,153,.8);
+      box-shadow: 0 0 0 8px rgba(52,211,153,.15), 0 0 40px rgba(52,211,153,.4);
+      animation: ssRingOut .85s ease-out both;
+      pointer-events: none;
+      z-index: 3;
+      background: none !important;
+      opacity: 1;
+    }
+    @keyframes ssRingOut {
+      0% { transform: scale(.9); opacity: 1; }
+      100% { transform: scale(1.15); opacity: 0; }
+    }
+    #view-setup .ss-slot.filled .ss-slot-title,
+    #view-setup .ss-slot.has-people .ss-slot-title {
+      text-shadow: 0 0 18px rgba(255,255,255,.2);
+    }
+    #view-setup .ss-slot.filled .ss-slot-icon,
+    #view-setup .ss-slot.has-people .ss-slot-icon {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.45) inset,
+        0 0 16px rgba(52,211,153,.45),
+        0 8px 16px rgba(0,0,0,.35) !important;
+    }
+    #view-setup .ss-slot.has-people .ss-slot-icon {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.45) inset,
+        0 0 16px rgba(56,189,248,.45),
+        0 8px 16px rgba(0,0,0,.35) !important;
     }
     #view-setup .ss-slot.drop-over,
     #view-setup .ss-slot.click-target {
@@ -8449,11 +8575,17 @@ function renderSetup() {
         const delay = ((gi * 0.35 + si * 0.18) % 4).toFixed(2);
         const poseRx = (6 + ((gi * 3 + si * 5) % 8)).toFixed(1);
         const poseRy = (-8 + ((gi * 2 + si * 4) % 10)).toFixed(1);
+        const statusBadge = !segs.length
+          ? '<span class="ss-status-badge open">Open</span>'
+          : (segs.length > 1
+            ? `<span class="ss-status-badge multi">${segs.length} on</span>`
+            : '<span class="ss-status-badge ok">✓ Filled</span>');
         return `<div class="ss-slot ${cls}${clickTarget}" data-drop-zone="station" data-slot-id="${slot.id}"
           style="--ss-delay:-${delay}s;--ss-rx:${poseRx}deg;--ss-ry:${poseRy}deg">
+          ${statusBadge}
           <div class="ss-slot-head">
             <div class="ss-slot-icon" style="background:${color};animation-delay:-${(si * 0.4).toFixed(1)}s">${icon}</div>
-            <div style="flex:1;min-width:0">
+            <div style="flex:1;min-width:0;padding-right:52px">
               <div class="ss-slot-title">${escAttr(slot.label)}</div>
               ${win}
               ${slot.sub && !(slot.start && slot.end) ? '' : (slot.sub && slot.start ? `<div class="ss-slot-sub">${escAttr(slot.sub)}</div>` : '')}
@@ -8539,6 +8671,32 @@ function assignStation(slotId, personId) {
   openSlotAssignModal(slotId, null, personId);
 }
 
+/** Big visual pop when a station pad gets someone */
+function celebrateFilledSlot(slotId) {
+  if (!slotId) return;
+  requestAnimationFrame(() => {
+    const el = document.querySelector(`#view-setup .ss-slot[data-slot-id="${CSS.escape ? CSS.escape(slotId) : slotId}"]`)
+      || document.querySelector(`#view-setup .ss-slot[data-slot-id="${slotId}"]`);
+    if (!el) return;
+    el.classList.remove('just-filled');
+    // reflow so animation restarts
+    void el.offsetWidth;
+    el.classList.add('just-filled');
+    // metric pop
+    const filledMetric = document.getElementById('ssMetricFilled');
+    if (filledMetric) {
+      filledMetric.classList.add('ss-metric-pop');
+      setTimeout(() => filledMetric.classList.remove('ss-metric-pop'), 600);
+    }
+    const pctEl = document.getElementById('ssMetricPct');
+    if (pctEl) {
+      pctEl.classList.add('ss-metric-pop');
+      setTimeout(() => pctEl.classList.remove('ss-metric-pop'), 600);
+    }
+    setTimeout(() => el.classList.remove('just-filled'), 900);
+  });
+}
+
 function openSlotAssignModal(slotId, segmentId, personId) {
   const dateKey = document.getElementById('setupDay')?.value;
   const shiftId = document.getElementById('setupShift')?.value;
@@ -8621,6 +8779,7 @@ function saveSlotAssign() {
   save();
   closeSlotAssignModal();
   renderSetup();
+  celebrateFilledSlot(slotId);
 }
 
 function removeSlotSegment() {
