@@ -324,44 +324,104 @@
     }
     .cell-off:hover { border-color: var(--border); background: rgba(0,0,0,.2); transform: none; box-shadow: none; }
 
-    /* Classic shift cards — liquid glass tiles */
+    /* ── Floating 3D shift cards (UE-style stage tiles) ──
+       GPU-cheap: transform + opacity + box-shadow only.
+       No backdrop-filter on cards (blur was the lag). */
+    .cell.assigned {
+      perspective: 760px;
+      perspective-origin: 50% 30%;
+      overflow: visible !important;
+      padding: 8px 6px 14px;
+      transform-style: preserve-3d;
+    }
     .cv-card {
+      --cv-rx: 8deg;
+      --cv-ry: -6deg;
+      --cv-lift: 14px;
+      --cv-z: 28px;
+      --cv-shadow-x: 8px;
+      --cv-shadow-y: 22px;
       position: relative; flex: 1; display: flex; flex-direction: column;
       min-height: 92px; min-width: 0; border-radius: 18px; padding: 10px 9px 9px 12px;
       overflow: hidden;
       isolation: isolate;
-      border: 1px solid rgba(255,255,255,.28);
-      background: rgba(255,255,255,.08);
-      backdrop-filter: blur(20px) saturate(1.7);
-      -webkit-backdrop-filter: blur(20px) saturate(1.7);
+      border: 1px solid rgba(255,255,255,.32);
+      background: linear-gradient(155deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
+      /* NO backdrop-filter — kills scroll performance */
+      transform:
+        translate3d(0, calc(var(--cv-lift) * -1), var(--cv-z))
+        rotateX(var(--cv-rx)) rotateY(var(--cv-ry));
+      transform-style: preserve-3d;
+      transform-origin: 50% 80%;
+      will-change: transform;
       box-shadow:
-        0 1px 0 rgba(255,255,255,.42) inset,
-        0 -8px 20px rgba(0,0,0,.12) inset,
-        0 10px 28px rgba(0,0,0,.28),
-        0 2px 6px rgba(0,0,0,.14);
-      transition: box-shadow .2s, transform .2s, opacity .15s, border-color .2s;
+        0 1px 0 rgba(255,255,255,.5) inset,
+        0 -10px 24px rgba(0,0,0,.15) inset,
+        var(--cv-shadow-x) var(--cv-shadow-y) 28px rgba(0,0,0,.45),
+        0 28px 18px -12px rgba(0,0,0,.4),
+        0 48px 30px -20px rgba(0,0,0,.28);
+      animation: cvFloat 4.8s ease-in-out infinite;
+      transition: border-color .2s, opacity .15s;
       cursor: grab;
     }
-    .cv-card:hover {
-      transform: translateY(-2px) scale(1.01);
-      border-color: rgba(255,255,255,.42);
+    @keyframes cvFloat {
+      0%, 100% {
+        transform:
+          translate3d(0, calc(var(--cv-lift) * -1), var(--cv-z))
+          rotateX(var(--cv-rx)) rotateY(var(--cv-ry));
+      }
+      50% {
+        transform:
+          translate3d(0, calc(var(--cv-lift) * -1 - 7px), calc(var(--cv-z) + 10px))
+          rotateX(calc(var(--cv-rx) + 1.5deg)) rotateY(calc(var(--cv-ry) - 1deg));
+      }
+    }
+    .cv-card:hover,
+    .cv-card.is-tilting {
+      animation: none;
+      border-color: rgba(255,255,255,.5);
+      z-index: 8;
+    }
+    .cv-card:hover:not(.is-tilting):not(.cv-dragging) {
+      --cv-lift: 22px;
+      --cv-z: 42px;
+      --cv-rx: 12deg;
+      --cv-ry: -10deg;
+      --cv-shadow-y: 34px;
+      transform:
+        translate3d(0, calc(var(--cv-lift) * -1), var(--cv-z))
+        rotateX(var(--cv-rx)) rotateY(var(--cv-ry)) scale(1.04);
       box-shadow:
-        0 1px 0 rgba(255,255,255,.55) inset,
-        0 -8px 22px rgba(0,0,0,.12) inset,
-        0 14px 34px rgba(0,0,0,.32),
-        0 0 0 1px rgba(255,255,255,.08);
+        0 1px 0 rgba(255,255,255,.6) inset,
+        0 -12px 28px rgba(0,0,0,.18) inset,
+        12px 36px 40px rgba(0,0,0,.5),
+        0 40px 24px -14px rgba(0,0,0,.45),
+        0 64px 40px -24px rgba(0,0,0,.3);
     }
     .cv-card:active { cursor: grabbing; }
-    .cv-card.cv-dragging {
-      opacity: .5; transform: scale(.97);
+    .cv-card.cv-dragging,
+    .cv-card.cv-dragging:hover {
+      animation: none !important;
+      opacity: .55;
+      --cv-lift: 4px; --cv-z: 8px; --cv-rx: 2deg; --cv-ry: 0deg;
+      transform: translate3d(0, -4px, 8px) scale(.96) !important;
+      box-shadow: 0 6px 16px rgba(0,0,0,.3) !important;
     }
     .cell.cv-drop-target .cv-empty,
     .cell.cv-drop-target .cv-card {
-      outline: 2px solid rgba(240,58,95,.65);
-      outline-offset: 2px;
-      box-shadow: 0 0 0 6px rgba(240,58,95,.12), 0 1px 0 rgba(255,255,255,.4) inset;
+      outline: 2px solid rgba(240,58,95,.7);
+      outline-offset: 3px;
     }
-    /* Specular rim / liquid edge */
+    .cell.cv-drop-target .cv-card {
+      animation: none;
+      --cv-lift: 26px; --cv-z: 48px;
+      box-shadow:
+        0 0 0 3px rgba(240,58,95,.35),
+        0 1px 0 rgba(255,255,255,.5) inset,
+        0 36px 40px rgba(240,58,95,.2),
+        0 48px 28px -16px rgba(0,0,0,.45);
+    }
+    /* Specular glass edge */
     .cv-card::before {
       content: '';
       position: absolute; inset: 0;
@@ -369,29 +429,30 @@
       pointer-events: none;
       z-index: 1;
       background:
-        linear-gradient(155deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.12) 28%, transparent 48%),
-        linear-gradient(180deg, transparent 60%, rgba(0,0,0,.12) 100%);
-      opacity: .9;
+        linear-gradient(145deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.12) 26%, transparent 50%),
+        linear-gradient(180deg, transparent 55%, rgba(0,0,0,.18) 100%);
+      opacity: .95;
     }
-    /* Soft left accent bloom */
+    /* Ground contact shadow (fake 3D floor under tile) */
     .cv-card::after {
       content: '';
-      position: absolute; left: 0; top: 12%; bottom: 12%; width: 3px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.75);
-      box-shadow: 0 0 12px rgba(255,255,255,.35);
-      z-index: 2;
+      position: absolute;
+      left: 12%; right: 12%; bottom: -18px; height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,.5) 0%, transparent 70%);
+      filter: blur(2px);
+      z-index: 0;
       pointer-events: none;
+      transform: translateZ(-20px) scale(1);
+      opacity: .85;
     }
     .cv-card > * { position: relative; z-index: 3; }
 
-    /* Tinted liquid glass by period */
+    /* Opaque-enough period tints (no blur needed) */
     .cv-card.tone-breakfast {
-      background:
-        linear-gradient(145deg, rgba(250,204,21,.52) 0%, rgba(202,138,4,.32) 100%),
-        rgba(255,255,255,.08);
+      background: linear-gradient(145deg, rgba(250,204,21,.92) 0%, rgba(202,138,4,.88) 100%);
       color: #1C1917;
-      border-color: rgba(253,224,71,.45);
+      border-color: rgba(253,224,71,.55);
     }
     .cv-card.tone-breakfast .cv-time-range,
     .cv-card.tone-breakfast .cv-role { color: #1C1917; text-shadow: 0 1px 0 rgba(255,255,255,.35); }
@@ -400,54 +461,37 @@
       border: 1px solid rgba(255,255,255,.35);
     }
     .cv-card.tone-lunch {
-      background:
-        linear-gradient(145deg, rgba(56,189,248,.5) 0%, rgba(2,132,199,.34) 100%),
-        rgba(255,255,255,.06);
-      border-color: rgba(125,211,252,.4);
+      background: linear-gradient(145deg, rgba(56,189,248,.9) 0%, rgba(2,132,199,.88) 100%);
+      border-color: rgba(125,211,252,.5);
     }
     .cv-card.tone-afternoon {
-      background:
-        linear-gradient(145deg, rgba(244,114,182,.5) 0%, rgba(219,39,119,.34) 100%),
-        rgba(255,255,255,.06);
-      border-color: rgba(249,168,212,.42);
+      background: linear-gradient(145deg, rgba(244,114,182,.9) 0%, rgba(219,39,119,.88) 100%);
+      border-color: rgba(249,168,212,.5);
     }
     .cv-card.tone-late, .cv-card.tone-evening {
-      background:
-        linear-gradient(145deg, rgba(167,139,250,.5) 0%, rgba(109,40,217,.34) 100%),
-        rgba(255,255,255,.06);
-      border-color: rgba(196,181,253,.4);
+      background: linear-gradient(145deg, rgba(167,139,250,.9) 0%, rgba(109,40,217,.88) 100%);
+      border-color: rgba(196,181,253,.5);
     }
     .cv-card.tone-bf-lunch {
-      background:
-        linear-gradient(125deg, rgba(250,204,21,.5) 0%, rgba(253,224,71,.28) 38%, rgba(56,189,248,.48) 100%),
-        rgba(255,255,255,.06);
-      border-color: rgba(255,255,255,.35);
+      background: linear-gradient(125deg, rgba(250,204,21,.92) 0%, rgba(56,189,248,.9) 100%);
+      border-color: rgba(255,255,255,.4);
     }
     .cv-card.tone-bf-lunch .cv-time-range {
       color: #0F172A; text-shadow: 0 1px 0 rgba(255,255,255,.3);
     }
     .cv-card.tone-mix {
-      background:
-        linear-gradient(125deg, rgba(250,204,21,.45) 0%, rgba(244,114,182,.42) 50%, rgba(139,92,246,.48) 100%),
-        rgba(255,255,255,.06);
-      border-color: rgba(255,255,255,.32);
+      background: linear-gradient(125deg, rgba(250,204,21,.9) 0%, rgba(244,114,182,.88) 50%, rgba(139,92,246,.9) 100%);
+      border-color: rgba(255,255,255,.4);
     }
-    /* legacy aliases */
     .cv-card.tone-morning, .cv-card.tone-early {
-      background:
-        linear-gradient(145deg, rgba(250,204,21,.52) 0%, rgba(202,138,4,.32) 100%),
-        rgba(255,255,255,.08);
+      background: linear-gradient(145deg, rgba(250,204,21,.92) 0%, rgba(202,138,4,.88) 100%);
       color: #1C1917;
     }
     .cv-card.tone-midday, .cv-card.tone-mid {
-      background:
-        linear-gradient(145deg, rgba(56,189,248,.5) 0%, rgba(2,132,199,.34) 100%),
-        rgba(255,255,255,.06);
+      background: linear-gradient(145deg, rgba(56,189,248,.9) 0%, rgba(2,132,199,.88) 100%);
     }
     .cv-card.tone-custom {
-      background:
-        linear-gradient(145deg, rgba(240,58,95,.5) 0%, rgba(159,18,57,.35) 100%),
-        rgba(255,255,255,.06);
+      background: linear-gradient(145deg, rgba(240,58,95,.9) 0%, rgba(159,18,57,.88) 100%);
     }
     .cv-card.has-conflict {
       box-shadow:
@@ -1898,101 +1942,73 @@
     ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.28); background-clip: padding-box; }
 
     /* ═══════════════════════════════════════════
-       FULL SITE — Liquid Glass + soft 3D redesign
-       (debug-hardened: no body perspective, no tilting
-        containers that own sticky/scroll)
+       Performance glass + floating 3D stage
+       - No animated blur orbs (lag)
+       - Minimal backdrop-filter
+       - 3D reserved for shift cards
        ═══════════════════════════════════════════ */
-    body {
-      overflow-x: hidden;
-    }
+    body { overflow-x: hidden; }
     .bg-orbs {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;
-      contain: strict;
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      /* static painted glows — no filter:blur animation */
+      background:
+        radial-gradient(600px 400px at 10% 0%, rgba(250,204,21,.12), transparent 60%),
+        radial-gradient(560px 380px at 90% 8%, rgba(56,189,248,.12), transparent 58%),
+        radial-gradient(520px 420px at 50% 100%, rgba(244,114,182,.1), transparent 55%),
+        radial-gradient(400px 320px at 75% 45%, rgba(139,92,246,.08), transparent 55%);
     }
-    .bg-orbs span {
-      position: absolute; border-radius: 50%;
-      filter: blur(60px); opacity: .42;
-      animation: orbFloat 22s ease-in-out infinite;
+    .bg-orbs span { display: none; }
+
+    /* NEVER transform schedule panel */
+    #schedulePanel { transform: none !important; }
+
+    .panel {
+      /* solid-ish glass, no blur = smooth scroll */
+      background: rgba(18, 22, 34, .92) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      transition: box-shadow .2s ease, border-color .2s;
     }
-    .bg-orbs span:nth-child(1) {
-      width: 420px; height: 420px; left: -80px; top: -60px;
-      background: radial-gradient(circle, rgba(250,204,21,.45), transparent 70%);
+    .panel:hover {
+      border-color: rgba(255,255,255,.2);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.14) inset,
+        0 16px 40px rgba(0,0,0,.35);
     }
-    .bg-orbs span:nth-child(2) {
-      width: 480px; height: 480px; right: -100px; top: 10%;
-      background: radial-gradient(circle, rgba(56,189,248,.4), transparent 70%);
-      animation-delay: -4s; animation-duration: 22s;
+    .header {
+      backdrop-filter: blur(12px) saturate(1.2) !important;
+      -webkit-backdrop-filter: blur(12px) saturate(1.2) !important;
+      background: rgba(12, 14, 22, .78) !important;
     }
-    .bg-orbs span:nth-child(3) {
-      width: 380px; height: 380px; left: 30%; bottom: -80px;
-      background: radial-gradient(circle, rgba(244,114,182,.38), transparent 70%);
-      animation-delay: -8s; animation-duration: 20s;
+    .stat, .classic-hero, .ss-card, .labor-day-card {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: rgba(22, 26, 40, .9) !important;
     }
-    .bg-orbs span:nth-child(4) {
-      width: 320px; height: 320px; right: 18%; bottom: 12%;
-      background: radial-gradient(circle, rgba(139,92,246,.35), transparent 70%);
-      animation-delay: -12s; animation-duration: 24s;
+    .btn {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
-    @keyframes orbFloat {
-      0%, 100% { transform: translate3d(0,0,0) scale(1); }
-      33% { transform: translate3d(30px,-40px,0) scale(1.08); }
-      66% { transform: translate3d(-25px,25px,0) scale(.94); }
+    input, select, textarea, .list-item, .hs-filter {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
 
-    /* Tilt only on leaf surfaces — never on #schedulePanel / sticky parents */
-    .glass-tilt {
-      position: relative;
-      transition: transform .16s ease-out, box-shadow .2s ease, border-color .2s ease;
-    }
-    .glass-tilt.is-tilting {
-      transition: transform .05s linear, box-shadow .2s ease;
-      z-index: 6;
-    }
-    .glass-tilt.is-tilting:not(.cv-card)::after {
-      content: '';
-      position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 4;
-      background: radial-gradient(
-        420px circle at var(--mx, 50%) var(--my, 20%),
-        rgba(255,255,255,.18),
-        transparent 55%
-      );
-      mix-blend-mode: soft-light;
+    /* Mouse-driven UE tilt only while hovering cards */
+    .cv-card.is-tilting {
+      animation: none !important;
+      z-index: 12;
+      transition: none;
     }
     .cv-card.is-tilting::before {
       background:
         radial-gradient(
-          380px circle at var(--mx, 50%) var(--my, 20%),
-          rgba(255,255,255,.35),
-          transparent 50%
+          320px circle at var(--mx, 50%) var(--my, 25%),
+          rgba(255,255,255,.45),
+          transparent 55%
         ),
-        linear-gradient(155deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.12) 28%, transparent 48%),
-        linear-gradient(180deg, transparent 60%, rgba(0,0,0,.12) 100%);
-    }
-
-    .panel,
-    .stat,
-    .classic-hero,
-    .ss-hero,
-    .ss-card,
-    .labor-day-card,
-    .cloud-badge {
-      position: relative;
-    }
-
-    /* NEVER put transform on schedule panel — sticky columns / scroll break */
-    #schedulePanel {
-      transform: none !important;
-    }
-
-    .panel {
-      transition: box-shadow .25s ease, border-color .2s;
-    }
-    .panel:hover {
-      border-color: rgba(255,255,255,.22);
-      box-shadow:
-        0 1px 0 rgba(255,255,255,.18) inset,
-        0 18px 48px rgba(0,0,0,.38),
-        0 6px 16px rgba(0,0,0,.2);
+        linear-gradient(145deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.1) 30%, transparent 55%),
+        linear-gradient(180deg, transparent 55%, rgba(0,0,0,.2) 100%);
     }
 
     .brand-mark {
@@ -2114,36 +2130,28 @@
       box-shadow: 0 0 24px rgba(240,58,95,.15);
     }
 
-    /* Cards: allow slight lift without clipping so badly */
-    .cell {
-      overflow: visible !important;
-    }
-    .cv-card {
-      transition: transform .14s ease-out, box-shadow .2s, border-color .2s, opacity .15s !important;
-    }
-    .cv-card:hover {
-      z-index: 5;
-      /* hover lift only when NOT pointer-tilting (inline transform wins while tilting) */
-      transform: translateY(-2px);
-    }
-    .cv-card.is-tilting {
-      box-shadow:
-        0 1px 0 rgba(255,255,255,.55) inset,
-        0 -10px 24px rgba(0,0,0,.14) inset,
-        0 18px 36px rgba(0,0,0,.38),
-        0 6px 14px rgba(0,0,0,.18) !important;
-    }
-    .cv-card.cv-dragging,
-    .cv-card.cv-dragging:hover {
-      transform: scale(.97) !important;
-      opacity: .5;
-    }
-
+    .cell { overflow: visible !important; }
     .cv-empty {
       transition: transform .18s ease, border-color .18s, background .18s, box-shadow .18s !important;
     }
     .cell:hover .cv-empty {
       transform: translateY(-2px);
+    }
+
+    /* SmartView bars float a bit too */
+    .ssched-row-track .hs-shift {
+      transform: translateY(-1px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.4) inset,
+        0 6px 14px rgba(0,0,0,.28) !important;
+      transition: transform .15s ease, box-shadow .15s ease !important;
+    }
+    .ssched-row-track .hs-shift:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.5) inset,
+        0 14px 24px rgba(0,0,0,.35) !important;
+      z-index: 6;
     }
 
     .ss-hero {
@@ -2266,11 +2274,42 @@
       transition: transform .25s ease, box-shadow .25s ease;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .bg-orbs span { animation: none !important; }
-      .glass-tilt, .cv-card, .panel, .stat, .btn, .list-item, .ss-chip, .labor-day-card {
-        transition: none !important; transform: none !important;
+    @media (prefers-reduced-motion: reduce), (pointer: coarse) {
+      .cv-card {
+        animation: none !important;
+        transform: none !important;
+        box-shadow:
+          0 1px 0 rgba(255,255,255,.4) inset,
+          0 8px 20px rgba(0,0,0,.3) !important;
       }
+      .cell.assigned { perspective: none; }
+      .ssched-row-track .hs-shift { transform: none !important; }
+    }
+    html.reduce-3d .cv-card {
+      animation: none !important;
+      transform: translateY(-4px) !important;
+    }
+
+    /* Performance kill-switch: strip expensive blurs site-wide (keep only header + modal) */
+    .panel, .stat, .classic-hero, .ss-card, .ss-hero, .labor-day-card,
+    .list-item, .btn, input, select, textarea, .hs-filter, .cv-hrs-pill,
+    .cv-band-tag, .period-legend-chip, .cloud-badge, .ss-chip, .ss-metric,
+    #schedulePanel, .table-wrap, .hs-toolbar {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    .header {
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+    }
+    .modal-bg {
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+    }
+    .modal {
+      backdrop-filter: blur(16px) saturate(1.2) !important;
+      -webkit-backdrop-filter: blur(16px) saturate(1.2) !important;
+      background: rgba(18, 22, 34, .88) !important;
     }
   </style>
 </head>
@@ -7311,7 +7350,7 @@ function renderRoster() {
     renderRosterFooter();
     return;
   }
-  tbody.innerHTML = visible.map(p => {
+  tbody.innerHTML = visible.map((p, rowIdx) => {
     const maxH = p.maxHours || MAX_WEEKLY_HOURS;
     const meta = [];
     if (p.canOpen) meta.push('Open');
@@ -7338,6 +7377,11 @@ function renderRoster() {
         const hrs = shiftHours(entry);
         const tStart = formatTime12(entry.start) || entry.start || '?';
         const tEnd = formatTime12(entry.end) || entry.end || '?';
+        // Stagger float animation so the board feels alive (not a single wave)
+        const floatDelay = ((rowIdx * 0.17 + di * 0.11) % 4.2).toFixed(2);
+        // Slight pose variance per cell — "hand-placed" 3D tiles
+        const poseRx = (6 + ((rowIdx * 3 + di * 5) % 7)).toFixed(1);
+        const poseRy = (-10 + ((rowIdx * 2 + di * 4) % 9)).toFixed(1);
         return `<td>
           <div class="cell assigned ${avCls}${sel}" data-staff="${p.id}" data-date="${dk}"
             onclick="handleCellClick('${p.id}','${dk}',${di},event)"
@@ -7347,6 +7391,7 @@ function renderRoster() {
             ondragleave="classicDragLeave(event)"
             ondrop="classicDrop(event,'${p.id}','${dk}',${di})">
             <div class="cv-card ${periodStyle.className}${conflict ? ' has-conflict' : ''}"
+              style="animation-delay:-${floatDelay}s;--cv-rx:${poseRx}deg;--cv-ry:${poseRy}deg"
               draggable="${schedulePublished ? 'false' : 'true'}"
               ondragstart="classicDragStart(event,'${p.id}','${dk}',${di})"
               ondragend="classicDragEnd(event)"
@@ -8725,11 +8770,8 @@ function renderAll() {
   if (document.getElementById('view-setup').classList.contains('active')) renderSetup();
 }
 
-// ── Liquid glass 3D tilt (debug-hardened) ──
-// Only leaf UI surfaces. NEVER #schedulePanel / table parents / modals
-// (CSS transform on ancestors kills position:sticky and breaks scroll).
-const GLASS_TILT_SEL = '.stat, .classic-hero, .ss-hero, .ss-card, .labor-day-card, .cv-card';
-const GLASS_TILT_BLOCK = 'button, input, select, textarea, a, label, .cv-act, .hs-handle, .hs-copy-btn, .hs-copy-to-btn, .day-sort-btn';
+// ── Floating 3D shift cards (UE-style) — cards ONLY, rAF, cheap ──
+const GLASS_TILT_BLOCK = 'button, input, select, textarea, a, label, .cv-act';
 let glassTiltEl = null;
 let glassTiltRaf = 0;
 let glassTiltPending = null;
@@ -8745,8 +8787,9 @@ function glassTiltEnabled() {
 
 function clearGlassTilt(el) {
   if (!el) return;
-  el.classList.remove('is-tilting', 'glass-tilt', 'glass-3d');
+  el.classList.remove('is-tilting');
   el.style.transform = '';
+  el.style.boxShadow = '';
   el.style.removeProperty('--mx');
   el.style.removeProperty('--my');
 }
@@ -8756,42 +8799,44 @@ function clearAllGlassTilt() {
     clearGlassTilt(glassTiltEl);
     glassTiltEl = null;
   }
-  document.querySelectorAll('.is-tilting').forEach(clearGlassTilt);
 }
 
-function applyGlassTilt(el, clientX, clientY) {
-  if (!el || !el.isConnected) {
+function applyCardTilt(el, clientX, clientY) {
+  if (!el || !el.isConnected || el.classList.contains('cv-dragging')) {
     clearAllGlassTilt();
     return;
   }
   const r = el.getBoundingClientRect();
-  if (r.width < 12 || r.height < 12) return;
+  if (r.width < 10 || r.height < 10) return;
   const x = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
   const y = Math.min(1, Math.max(0, (clientY - r.top) / r.height));
-  const isCard = el.classList.contains('cv-card');
-  // Keep tilt subtle so text stays readable and drag still works
-  const max = isCard ? 7 : 5;
-  const rx = (0.5 - y) * max;
-  const ry = (x - 0.5) * (max + 1);
-  const lift = isCard ? 6 : 4;
+  // UE-ish board tilt toward cursor
+  const rx = 6 + (0.5 - y) * 18;   // 6..24deg toward camera top/bottom
+  const ry = -8 + (x - 0.5) * 22;  // yaw left/right
+  const lift = 18 + (1 - Math.abs(y - 0.5)) * 10;
+  const z = 36 + lift;
+  const sx = (x - 0.5) * 18;
+  const sy = 24 + lift * 0.9;
+
   if (glassTiltEl && glassTiltEl !== el) clearGlassTilt(glassTiltEl);
   glassTiltEl = el;
-  el.classList.add('glass-tilt', 'is-tilting');
-  el.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`);
-  el.style.setProperty('--my', `${(y * 100).toFixed(1)}%`);
+  el.classList.add('is-tilting');
+  el.style.setProperty('--mx', `${(x * 100).toFixed(0)}%`);
+  el.style.setProperty('--my', `${(y * 100).toFixed(0)}%`);
   el.style.transform =
-    `perspective(800px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(${(-lift * 0.35).toFixed(2)}px)`;
+    `translate3d(0, ${(-lift).toFixed(1)}px, ${z.toFixed(1)}px) ` +
+    `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) scale(1.06)`;
+  el.style.boxShadow =
+    `0 1px 0 rgba(255,255,255,.55) inset,` +
+    `0 -12px 28px rgba(0,0,0,.18) inset,` +
+    `${sx.toFixed(1)}px ${sy.toFixed(1)}px 36px rgba(0,0,0,.5),` +
+    `0 ${(sy + 16).toFixed(1)}px 28px -10px rgba(0,0,0,.42),` +
+    `0 ${(sy + 36).toFixed(1)}px 48px -18px rgba(0,0,0,.28)`;
 }
 
 function onGlassTiltMove(e) {
   if (!glassTiltEnabled()) return;
-  // Pause during any drag / paint / modal interaction
-  if (classicDragActive || shiftDrag) {
-    clearAllGlassTilt();
-    return;
-  }
-  if (e.buttons === 1) {
-    // user is pressing — don't fight click/drag
+  if (classicDragActive || shiftDrag || e.buttons === 1) {
     clearAllGlassTilt();
     return;
   }
@@ -8799,41 +8844,33 @@ function onGlassTiltMove(e) {
     clearAllGlassTilt();
     return;
   }
-  const el = e.target.closest?.(GLASS_TILT_SEL);
+  const el = e.target.closest?.('.cv-card');
   if (!el || el.classList.contains('cv-dragging')) {
     clearAllGlassTilt();
     return;
   }
-  // Never tilt a surface that owns a scrolling grid (sticky/scroll break)
-  if (el.querySelector?.('table.roster, .table-wrap, .ssched-scroll, #smartScroll, .smart-schedule')) {
-    clearAllGlassTilt();
-    return;
-  }
-
   glassTiltPending = { el, x: e.clientX, y: e.clientY };
   if (glassTiltRaf) return;
   glassTiltRaf = requestAnimationFrame(() => {
     glassTiltRaf = 0;
     const p = glassTiltPending;
     glassTiltPending = null;
-    if (!p) return;
-    applyGlassTilt(p.el, p.x, p.y);
+    if (p) applyCardTilt(p.el, p.x, p.y);
   });
 }
 
-function onGlassTiltLeaveDoc(e) {
-  // left the window
-  if (!e.relatedTarget) clearAllGlassTilt();
-}
-
 function initGlass3d() {
-  if (!glassTiltEnabled()) return;
-  document.addEventListener('pointermove', onGlassTiltMove, { passive: true });
-  document.addEventListener('pointerleave', onGlassTiltLeaveDoc, { passive: true });
+  if (!glassTiltEnabled()) {
+    document.documentElement.classList.add('reduce-3d');
+    return;
+  }
+  // Only listen while pointer is over classic roster (cheap)
+  const wrap = document.getElementById('weekScheduleWrap') || document.body;
+  wrap.addEventListener('pointermove', onGlassTiltMove, { passive: true });
+  wrap.addEventListener('pointerleave', clearAllGlassTilt, { passive: true });
   document.addEventListener('dragstart', clearAllGlassTilt, true);
   document.addEventListener('pointerdown', (e) => {
-    // clear tilt on press so click/drag geometry is stable
-    if (e.target.closest?.(GLASS_TILT_SEL)) clearAllGlassTilt();
+    if (e.target.closest?.('.cv-card')) clearAllGlassTilt();
   }, true);
   window.addEventListener('blur', clearAllGlassTilt);
 }
