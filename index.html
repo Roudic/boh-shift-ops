@@ -827,10 +827,22 @@
 
     .ss-sidebar { display: flex; flex-direction: column; gap: 14px; align-self: start; }
     @media (min-width: 1101px) {
+      .ss-sidebar {
+        align-self: start;
+      }
       .ss-pool-card {
         position: sticky;
-        top: calc(64px + 1.25rem);
-        z-index: 25;
+        top: calc(72px + 0.75rem);
+        z-index: 40;
+        max-height: calc(100vh - 88px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .ss-pool-card .ss-pool-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        max-height: none;
       }
     }
     .ss-card {
@@ -2652,7 +2664,11 @@
     }
 
     /* Team pool sidebar cards */
-    #view-setup .ss-sidebar { gap: 16px; perspective: 1000px; }
+    #view-setup .ss-sidebar {
+      gap: 16px;
+      /* no perspective here — it breaks position:sticky on the pool */
+      align-self: start;
+    }
     #view-setup .ss-card {
       background: rgba(16, 20, 32, .94) !important;
       border: 1px solid rgba(255,255,255,.12) !important;
@@ -2660,28 +2676,48 @@
       box-shadow:
         0 1px 0 rgba(255,255,255,.1) inset,
         0 18px 40px rgba(0,0,0,.35) !important;
-      transform: rotateY(-2deg) rotateX(2deg);
-      transform-origin: 100% 50%;
-      transition: transform .2s ease, box-shadow .2s ease;
-      overflow: visible !important;
+      transition: box-shadow .2s ease, border-color .2s ease;
+      overflow: hidden !important;
     }
-    #view-setup .ss-card:hover {
-      transform: rotateY(0) rotateX(0) translateY(-3px);
+    /* Non-pool cards can keep a light float hover */
+    #view-setup .ss-card:not(.ss-pool-card):hover {
       box-shadow:
         0 1px 0 rgba(255,255,255,.14) inset,
         0 24px 48px rgba(0,0,0,.42) !important;
+      border-color: rgba(255,255,255,.2) !important;
+    }
+    /* Sticky team pool — stays on screen while scrolling the board */
+    #view-setup .ss-pool-card {
+      position: sticky !important;
+      top: calc(72px + 0.75rem) !important;
+      z-index: 40;
+      transform: none !important;
+      max-height: calc(100vh - 88px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden !important;
+    }
+    #view-setup .ss-pool-card:hover {
+      transform: none !important;
     }
     #view-setup .ss-card-head {
       background: linear-gradient(180deg, rgba(255,255,255,.08), transparent) !important;
       border-bottom: 1px solid rgba(255,255,255,.08) !important;
       border-radius: 20px 20px 0 0;
+      flex-shrink: 0;
     }
     #view-setup .ss-card-head h3 { color: #F1F5F9 !important; }
     #view-setup .ss-pool-body {
       background: rgba(0,0,0,.2) !important;
-      min-height: 140px;
+      min-height: 120px;
+      flex: 1 1 auto;
+      max-height: none;
+      overflow-y: auto;
       gap: 10px !important;
-      perspective: 800px;
+      /* chips still float; no parent perspective (sticky-safe) */
+    }
+    #view-setup .ss-pool-card .ss-pool-hint {
+      flex-shrink: 0;
     }
     #view-setup .ss-pool-body.drop-over {
       background: rgba(240,58,95,.12) !important;
@@ -4617,7 +4653,7 @@ function updateClipboardUi() {
   if (!hint) return;
   if (clipboardShift && pasteMode) {
     hint.style.display = 'inline';
-    hint.textContent = `Paste mode: ${compactShiftRange(clipboardShift.start, clipboardShift.end)} — click cells to paste`;
+    hint.textContent = `Paste mode: ${compactShiftRange(clipboardShift.start, clipboardShift.end)} — click to paste · right-click to exit`;
     if (clearBtn) clearBtn.style.display = 'inline-flex';
   } else if (clipboardShift) {
     hint.style.display = 'inline';
@@ -4846,6 +4882,13 @@ function handleCellDblClick(staffId, dateKey, dayIndex, e) {
 
 function handleCellContextMenu(staffId, dateKey, dayIndex, e) {
   e.preventDefault();
+  // In paste mode, right-click exits paste mode (no need to scroll to top)
+  if (pasteMode && clipboardShift) {
+    clearClipboard();
+    closeCtxMenu();
+    setSelectedCell(staffId, dateKey, dayIndex);
+    return;
+  }
   ctxCell = { staffId, dateKey, dayIndex };
   setSelectedCell(staffId, dateKey, dayIndex);
   const menu = document.getElementById('hsCtxMenu');
