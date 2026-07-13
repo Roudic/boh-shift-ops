@@ -8761,7 +8761,7 @@ function renderSetup() {
     </li>`).join('');
 
   initSetupDragDrop();
-  stopFilledSlotSparkles(); // no continuous sparkles (was glitchy)
+  startFilledSlotSparkles();
 }
 
 function findSlotLabel(layout, slotId) {
@@ -8774,7 +8774,7 @@ function assignStation(slotId, personId) {
   openSlotAssignModal(slotId, null, personId);
 }
 
-/** Big visual pop when a station pad gets someone — one burst only (no continuous loop) */
+/** Big visual pop when a station pad gets someone */
 function celebrateFilledSlot(slotId) {
   if (!slotId) return;
   requestAnimationFrame(() => {
@@ -8784,7 +8784,7 @@ function celebrateFilledSlot(slotId) {
     el.classList.remove('just-filled');
     void el.offsetWidth;
     el.classList.add('just-filled');
-    spawnSlotStarsAndSparks(el, { multi: el.classList.contains('has-people') });
+    spawnSlotStarsAndSparks(el, { multi: el.classList.contains('has-people'), burst: true });
     const filledMetric = document.getElementById('ssMetricFilled');
     if (filledMetric) {
       filledMetric.classList.add('ss-metric-pop');
@@ -8799,38 +8799,133 @@ function celebrateFilledSlot(slotId) {
   });
 }
 
-function stopFilledSlotSparkles() {
-  // Continuous sparkles disabled — clear any leftover particles
+let filledSparkleTimer = null;
+let setupScrollPaused = false;
+let setupScrollTimer = null;
+let setupScrollBound = false;
+
+function clearFxParticles() {
   document.querySelectorAll('.ss-fx-star, .ss-fx-spark').forEach(el => el.remove());
 }
 
-/** One-shot star/spark burst from a pad (fixed to viewport at fire time — simple & stable) */
+function stopFilledSlotSparkles() {
+  if (filledSparkleTimer) {
+    clearInterval(filledSparkleTimer);
+    filledSparkleTimer = null;
+  }
+  if (setupScrollTimer) {
+    clearTimeout(setupScrollTimer);
+    setupScrollTimer = null;
+  }
+  setupScrollPaused = false;
+  clearFxParticles();
+}
+
+function bindSetupScrollSparklePause() {
+  if (setupScrollBound) return;
+  setupScrollBound = true;
+  // Capture scroll on window + any nested scrollers; pause particles while moving
+  const onScroll = () => {
+    if (!document.getElementById('view-setup')?.classList.contains('active')) return;
+    setupScrollPaused = true;
+    clearFxParticles(); // avoid frozen stars mid-flight while scrolling
+    if (setupScrollTimer) clearTimeout(setupScrollTimer);
+    setupScrollTimer = setTimeout(() => {
+      setupScrollPaused = false;
+    }, 140);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true, capture: true });
+  document.addEventListener('scroll', onScroll, { passive: true, capture: true });
+}
+
+/** Continuous stars from filled pads — stable: fixed particles, pause on scroll */
+function startFilledSlotSparkles() {
+  stopFilledSlotSparkles();
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  const setupView = document.getElementById('view-setup');
+  if (!setupView || !setupView.classList.contains('active')) return;
+  bindSetupScrollSparklePause();
+
+  filledSparkleTimer = setInterval(() => {
+    if (!document.getElementById('view-setup')?.classList.contains('active')) {
+      stopFilledSlotSparkles();
+      return;
+    }
+    if (setupScrollPaused) return;
+    if (document.querySelectorAll('.ss-fx-star, .ss-fx-spark').length > 70) return;
+
+    const slots = [...document.querySelectorAll('#view-setup .ss-slot.filled, #view-setup .ss-slot.has-people')];
+    if (!slots.length) return;
+
+    const vh = window.innerHeight || 800;
+    const visible = slots.filter(el => {
+      const r = el.getBoundingClientRect();
+      return r.bottom > 48 && r.top < vh - 48 && r.right > 8 && r.left < (window.innerWidth || 1200) - 8;
+    });
+    if (!visible.length) return;
+
+    // A few pads emit each tick so every filled pad keeps sparkling
+    const emitCount = Math.min(visible.length, 2 + Math.floor(Math.random() * 3));
+    for (let i = 0; i < emitCount; i++) {
+      const el = visible[Math.floor(Math.random() * visible.length)];
+      spawnSlotStarsAndSparks(el, {
+        multi: el.classList.contains('has-people'),
+        idle: true,
+        count: 2 + Math.floor(Math.random() * 2)
+      });
+    }
+  }, 420);
+}
+
+/**
+ * Stars/sparks from a pad.
+ * Uses fixed viewport coords at fire time (short life). Continuous loop pauses on scroll.
+ */
 function spawnSlotStarsAndSparks(slotEl, opts = {}) {
   if (!slotEl || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
   if (!slotEl.isConnected) return;
+  if (setupScrollPaused && opts.idle) return;
+
   const rect = slotEl.getBoundingClientRect();
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
+  if (!opts.burst && (rect.bottom < 0 || rect.top > (window.innerHeight || 800) + 40)) return;
+
   const multi = !!opts.multi;
+  const idle = !!opts.idle;
+  const burst = !!opts.burst;
+  const cx = rect.left + rect.width / 2 + (idle ? (Math.random() - 0.5) * rect.width * 0.45 : 0);
+  const cy = rect.top + rect.height / 2 + (idle ? (Math.random() - 0.5) * rect.height * 0.3 : 0);
   const colors = multi
     ? ['#7DD3FC', '#38BDF8', '#E0F2FE', '#FDE68A', '#A5F3FC', '#fff']
     : ['#FDE68A', '#FBBF24', '#6EE7B7', '#34D399', '#ECFDF5', '#fff', '#FDE047'];
   const starChars = ['✦', '★', '✧', '⋆', '✶', '✩'];
-  const count = multi ? 20 : 16;
+  const count = opts.count != null
+    ? opts.count
+    : (burst ? (multi ? 20 : 16) : 3);
 
   for (let i = 0; i < count; i++) {
-    const isStar = i % 3 !== 0;
+    const isStar = idle ? Math.random() > 0.22 : i % 3 !== 0;
     const el = document.createElement('span');
-    el.className = isStar ? 'ss-fx-star' : (i % 2 === 0 ? 'ss-fx-spark' : 'ss-fx-spark line');
+    el.className = isStar ? 'ss-fx-star' : (Math.random() > 0.45 ? 'ss-fx-spark' : 'ss-fx-spark line');
     if (isStar) el.textContent = starChars[i % starChars.length];
 
-    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.45;
-    const dist = 40 + Math.random() * 85;
-    const dx = Math.cos(angle) * dist;
-    const dy = Math.sin(angle) * dist - (18 + Math.random() * 36);
+    let dx, dy;
+    if (idle) {
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.35;
+      const dist = 24 + Math.random() * 64;
+      dx = Math.cos(angle) * dist * (0.35 + Math.random() * 0.65);
+      dy = -Math.abs(Math.sin(angle) * dist) - (8 + Math.random() * 32);
+    } else {
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.45;
+      const dist = 40 + Math.random() * 85;
+      dx = Math.cos(angle) * dist;
+      dy = Math.sin(angle) * dist - (18 + Math.random() * 36);
+    }
     const color = colors[i % colors.length];
-    const size = isStar ? (11 + Math.random() * 10) : (4 + Math.random() * 6);
-    const dur = 0.65 + Math.random() * 0.5;
+    const size = isStar
+      ? (idle ? 9 + Math.random() * 8 : 11 + Math.random() * 10)
+      : (idle ? 3 + Math.random() * 4 : 4 + Math.random() * 6);
+    // Keep idle flights short so scroll mismatch is rare
+    const dur = idle ? (0.55 + Math.random() * 0.4) : (0.65 + Math.random() * 0.5);
 
     el.style.left = cx + 'px';
     el.style.top = cy + 'px';
@@ -8840,36 +8935,37 @@ function spawnSlotStarsAndSparks(slotEl, opts = {}) {
     el.style.setProperty('--fx-color', color);
     el.style.setProperty('--fx-glow', color);
     el.style.setProperty('--fx-size', size.toFixed(1) + 'px');
-    el.style.setProperty('--fx-scale0', (0.35 + Math.random() * 0.35).toFixed(2));
-    el.style.setProperty('--fx-scale1', (0.7 + Math.random() * 0.9).toFixed(2));
-    el.style.setProperty('--fx-rot', ((Math.random() > 0.5 ? 1 : -1) * (120 + Math.random() * 220)).toFixed(0) + 'deg');
+    el.style.setProperty('--fx-scale0', (idle ? 0.55 : 0.35 + Math.random() * 0.35).toFixed(2));
+    el.style.setProperty('--fx-scale1', (idle ? 0.85 + Math.random() * 0.5 : 0.7 + Math.random() * 0.9).toFixed(2));
+    el.style.setProperty('--fx-rot', ((Math.random() > 0.5 ? 1 : -1) * (100 + Math.random() * 220)).toFixed(0) + 'deg');
 
     document.body.appendChild(el);
-    setTimeout(() => el.remove(), (dur + 0.12) * 1000);
+    setTimeout(() => el.remove(), (dur + 0.1) * 1000);
   }
 
-  // Quick center sparkle wave
-  setTimeout(() => {
-    for (let i = 0; i < 8; i++) {
-      const el = document.createElement('span');
-      el.className = 'ss-fx-spark';
-      const angle = Math.random() * Math.PI * 2;
-      const dist = 12 + Math.random() * 34;
-      el.style.left = cx + 'px';
-      el.style.top = cy + 'px';
-      el.style.setProperty('--fx-dx', (Math.cos(angle) * dist).toFixed(1) + 'px');
-      el.style.setProperty('--fx-dy', (Math.sin(angle) * dist - 12).toFixed(1) + 'px');
-      el.style.setProperty('--fx-dur', (0.4 + Math.random() * 0.3).toFixed(2) + 's');
-      el.style.setProperty('--fx-color', '#fff');
-      el.style.setProperty('--fx-glow', multi ? '#38BDF8' : '#6EE7B7');
-      el.style.setProperty('--fx-size', (3 + Math.random() * 4).toFixed(1) + 'px');
-      el.style.setProperty('--fx-scale0', '1');
-      el.style.setProperty('--fx-scale1', '0.2');
-      el.style.setProperty('--fx-rot', '0deg');
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 650);
-    }
-  }, 70);
+  if (burst) {
+    setTimeout(() => {
+      for (let i = 0; i < 8; i++) {
+        const el = document.createElement('span');
+        el.className = 'ss-fx-spark';
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 12 + Math.random() * 34;
+        el.style.left = cx + 'px';
+        el.style.top = cy + 'px';
+        el.style.setProperty('--fx-dx', (Math.cos(angle) * dist).toFixed(1) + 'px');
+        el.style.setProperty('--fx-dy', (Math.sin(angle) * dist - 12).toFixed(1) + 'px');
+        el.style.setProperty('--fx-dur', (0.4 + Math.random() * 0.3).toFixed(2) + 's');
+        el.style.setProperty('--fx-color', '#fff');
+        el.style.setProperty('--fx-glow', multi ? '#38BDF8' : '#6EE7B7');
+        el.style.setProperty('--fx-size', (3 + Math.random() * 4).toFixed(1) + 'px');
+        el.style.setProperty('--fx-scale0', '1');
+        el.style.setProperty('--fx-scale1', '0.2');
+        el.style.setProperty('--fx-rot', '0deg');
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 650);
+      }
+    }, 70);
+  }
 }
 
 function openSlotAssignModal(slotId, segmentId, personId) {
