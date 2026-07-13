@@ -1823,6 +1823,7 @@
           </div>
           <div class="classic-hero-actions">
             <button class="btn btn-primary" onclick="autoScheduleWeek()">Auto-Fill Week</button>
+            <button class="btn" onclick="openCopyWeekModal()" title="Copy this Mon–Sat schedule onto another week">Copy Week →</button>
             <button class="btn" onclick="clearWeekSchedule()">Clear Week</button>
             <label class="btn" style="cursor:pointer">Import HS<input type="file" accept="*/*" hidden onchange="openScheduleImport(event)"></label>
             <button class="btn" onclick="exportScheduleCsv()">Export CSV</button>
@@ -2204,6 +2205,56 @@
     <div class="modal-foot">
       <button class="btn" onclick="closeStaffModal()">Cancel</button>
       <button class="btn btn-primary" onclick="saveStaff()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Copy whole week schedule to another week -->
+<div class="modal-bg" id="copyWeekModal" onclick="if(event.target===this)closeCopyWeekModal()">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:460px">
+    <div class="modal-head">
+      <h3>Copy week schedule</h3>
+      <button type="button" class="icon-btn" onclick="closeCopyWeekModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.45">
+        Copy every shift from the <strong>current</strong> Mon–Sat week onto another week (Mon→Mon, Tue→Tue, …).
+      </p>
+      <div class="field" style="margin-bottom:12px">
+        <label class="field-label">From (this week)</label>
+        <div id="copyWeekSourceLabel" style="font-weight:800;font-size:14px;color:var(--text)">—</div>
+        <div id="copyWeekSourceCount" style="font-size:12px;color:var(--muted);margin-top:4px"></div>
+      </div>
+      <div class="field" style="margin-bottom:12px">
+        <label class="field-label">To week</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button type="button" class="btn" style="justify-content:flex-start" onclick="setCopyWeekOffset(1)" id="copyWeekOpt1">Next week</button>
+          <button type="button" class="btn" style="justify-content:flex-start" onclick="setCopyWeekOffset(2)" id="copyWeekOpt2">+2 weeks</button>
+          <button type="button" class="btn" style="justify-content:flex-start" onclick="setCopyWeekOffset(3)" id="copyWeekOpt3">+3 weeks</button>
+          <button type="button" class="btn" style="justify-content:flex-start" onclick="setCopyWeekOffset(4)" id="copyWeekOpt4">+4 weeks</button>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:12px">
+        <label class="field-label">Or pick any date in the target week</label>
+        <input type="date" id="copyWeekDate" onchange="onCopyWeekDatePicked()" style="width:100%">
+      </div>
+      <div id="copyWeekTargetLabel" style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:12px"></div>
+      <label class="field-label" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;font-weight:600;text-transform:none;letter-spacing:0">
+        <input type="checkbox" id="copyWeekIncludeOff" checked style="width:auto"> Copy rotation off days
+      </label>
+      <label class="field-label" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;font-weight:600;text-transform:none;letter-spacing:0">
+        <input type="checkbox" id="copyWeekIncludeSetups" style="width:auto"> Copy station setups / boards
+      </label>
+      <label class="field-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;text-transform:none;letter-spacing:0">
+        <input type="checkbox" id="copyWeekGoTo" checked style="width:auto"> Jump to target week after copy
+      </label>
+      <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.4">
+        Existing shifts on the target week are replaced for people who have a shift in the source week. Other people on the target week are left alone.
+      </p>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn" onclick="closeCopyWeekModal()">Cancel</button>
+      <button type="button" class="btn btn-primary" onclick="confirmCopyWeekSchedule()">Copy week</button>
     </div>
   </div>
 </div>
@@ -4950,6 +5001,204 @@ function clearWeekSchedule() {
   delete rotationOffWeeks[weekKey()];
   save();
   renderAll();
+}
+
+// ── Copy whole week schedule to another week ──
+let copyWeekTargetStart = null;
+
+function formatWeekRangeLabel(startDate) {
+  const dates = getWeekDates(startDate);
+  const optsA = { month: 'short', day: 'numeric' };
+  const optsB = { month: 'short', day: 'numeric', year: 'numeric' };
+  return `Mon–Sat · ${dates[0].toLocaleDateString('en-US', optsA)} – ${dates[dates.length - 1].toLocaleDateString('en-US', optsB)}`;
+}
+
+function countWeekShifts(startDate) {
+  const dates = getWeekDates(startDate).map(getDateKey);
+  let n = 0;
+  staff.forEach(p => {
+    dates.forEach(dk => {
+      if (getScheduleEntry(p.id, dk)) n++;
+    });
+  });
+  return n;
+}
+
+function mondayOf(date) {
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const day = d.getDay();
+  const toMonday = day === 0 ? 1 : (day === 1 ? 0 : 1 - day);
+  d.setDate(d.getDate() + toMonday);
+  return d;
+}
+
+function openCopyWeekModal() {
+  if (!weekStart) return;
+  const sourceCount = countWeekShifts(weekStart);
+  const srcEl = document.getElementById('copyWeekSourceLabel');
+  const cntEl = document.getElementById('copyWeekSourceCount');
+  if (srcEl) srcEl.textContent = formatWeekRangeLabel(weekStart);
+  if (cntEl) {
+    cntEl.textContent = sourceCount
+      ? `${sourceCount} shift${sourceCount === 1 ? '' : 's'} will be copied`
+      : 'No shifts on this week yet — nothing to copy';
+  }
+  setCopyWeekOffset(1);
+  // default date picker = next week Monday
+  const next = new Date(weekStart);
+  next.setDate(next.getDate() + 7);
+  const dateInput = document.getElementById('copyWeekDate');
+  if (dateInput) dateInput.value = getDateKey(next);
+  document.getElementById('copyWeekModal')?.classList.add('open');
+}
+
+function closeCopyWeekModal() {
+  document.getElementById('copyWeekModal')?.classList.remove('open');
+  copyWeekTargetStart = null;
+}
+
+function setCopyWeekOffset(weeksAhead) {
+  if (!weekStart) return;
+  const t = new Date(weekStart);
+  t.setDate(t.getDate() + weeksAhead * 7);
+  copyWeekTargetStart = mondayOf(t);
+  updateCopyWeekTargetUI(weeksAhead);
+  const dateInput = document.getElementById('copyWeekDate');
+  if (dateInput) dateInput.value = getDateKey(copyWeekTargetStart);
+}
+
+function onCopyWeekDatePicked() {
+  const raw = document.getElementById('copyWeekDate')?.value;
+  if (!raw) return;
+  copyWeekTargetStart = mondayOf(parseDateKey(raw));
+  updateCopyWeekTargetUI(null);
+}
+
+function updateCopyWeekTargetUI(activeOffset) {
+  const label = document.getElementById('copyWeekTargetLabel');
+  if (label && copyWeekTargetStart) {
+    const same = getDateKey(copyWeekTargetStart) === getDateKey(weekStart);
+    const existing = countWeekShifts(copyWeekTargetStart);
+    label.innerHTML = same
+      ? '⚠ Target is the same as the source week — pick a different week.'
+      : `Target: <strong style="color:var(--text)">${formatWeekRangeLabel(copyWeekTargetStart)}</strong>` +
+        (existing ? `<br><span style="color:var(--amber);font-weight:600">${existing} existing shift(s) may be replaced</span>` : '');
+  }
+  [1, 2, 3, 4].forEach(n => {
+    const btn = document.getElementById(`copyWeekOpt${n}`);
+    if (!btn || !weekStart) return;
+    const t = new Date(weekStart);
+    t.setDate(t.getDate() + n * 7);
+    const mon = mondayOf(t);
+    btn.textContent = (n === 1 ? 'Next week' : `+${n} weeks`) + ` · ${formatWeekRangeLabel(mon)}`;
+    btn.style.borderColor = activeOffset === n ? 'var(--red)' : '';
+    btn.style.background = activeOffset === n ? 'var(--red-light)' : '';
+  });
+}
+
+function confirmCopyWeekSchedule() {
+  if (!weekStart || !copyWeekTargetStart) {
+    alert('Pick a target week first.');
+    return;
+  }
+  if (getDateKey(copyWeekTargetStart) === getDateKey(weekStart)) {
+    alert('Source and target week are the same. Pick a different week.');
+    return;
+  }
+  const sourceCount = countWeekShifts(weekStart);
+  if (!sourceCount) {
+    alert('This week has no shifts to copy.');
+    return;
+  }
+
+  const includeOff = !!document.getElementById('copyWeekIncludeOff')?.checked;
+  const includeSetups = !!document.getElementById('copyWeekIncludeSetups')?.checked;
+  const goTo = !!document.getElementById('copyWeekGoTo')?.checked;
+  const targetLabel = formatWeekRangeLabel(copyWeekTargetStart);
+  const existing = countWeekShifts(copyWeekTargetStart);
+
+  let msg =
+    `Copy ${sourceCount} shift${sourceCount === 1 ? '' : 's'} from\n` +
+    `${formatWeekRangeLabel(weekStart)}\n→ ${targetLabel}?`;
+  if (existing) {
+    msg += `\n\n${existing} existing shift(s) on the target week for those people/days will be replaced.`;
+  }
+  if (!confirm(msg)) return;
+
+  const result = copyWeekSchedule(weekStart, copyWeekTargetStart, { includeOff, includeSetups });
+  schedulePublished = false;
+  save();
+  closeCopyWeekModal();
+  if (goTo) setWeekStart(copyWeekTargetStart);
+  renderAll();
+  alert(
+    `Copied ${result.copied} shift${result.copied === 1 ? '' : 's'}` +
+    (result.overwritten ? ` (${result.overwritten} replaced)` : '') +
+    (result.offDays ? `, ${result.offDays} off-day assignment(s)` : '') +
+    (result.setups ? `, ${result.setups} station setup(s)` : '') +
+    '.'
+  );
+}
+
+/**
+ * Map Mon–Sat source week onto target week (same day indexes).
+ * Only writes people who have a source shift; leaves other target people alone.
+ */
+function copyWeekSchedule(fromStart, toStart, opts = {}) {
+  const { includeOff = true, includeSetups = false } = opts;
+  const fromDates = getWeekDates(fromStart).map(getDateKey);
+  const toDates = getWeekDates(toStart).map(getDateKey);
+  let copied = 0;
+  let overwritten = 0;
+  let setups = 0;
+  let offDays = 0;
+
+  for (let i = 0; i < fromDates.length; i++) {
+    const fromDk = fromDates[i];
+    const toDk = toDates[i];
+    staff.forEach(p => {
+      const entry = getScheduleEntry(p.id, fromDk);
+      if (!entry) return;
+      if (getScheduleEntry(p.id, toDk)) overwritten++;
+      setScheduleEntry(p.id, toDk, entry.start, entry.end);
+      copied++;
+    });
+
+    if (includeSetups && shifts.length) {
+      shifts.forEach(sh => {
+        const fromK = setupKey(fromDk, sh.id);
+        const src = shiftSetups[fromK];
+        if (!src) return;
+        // only copy if there's real assignment data
+        const hasData =
+          (src.assignments && Object.keys(src.assignments).length) ||
+          (src.checklist && Object.keys(src.checklist).length) ||
+          (src.notes && String(src.notes).trim());
+        if (!hasData && !src.layout) return;
+        shiftSetups[setupKey(toDk, sh.id)] = JSON.parse(JSON.stringify(src));
+        setups++;
+      });
+    }
+  }
+
+  if (includeOff) {
+    const fromWk = getDateKey(mondayOf(fromStart));
+    const toWk = getDateKey(mondayOf(toStart));
+    const offMap = rotationOffWeeks[fromWk];
+    if (offMap && typeof offMap === 'object') {
+      const mapped = { ...(rotationOffWeeks[toWk] || {}) };
+      Object.entries(offMap).forEach(([pid, offDk]) => {
+        const idx = fromDates.indexOf(offDk);
+        if (idx >= 0) {
+          mapped[pid] = toDates[idx];
+          offDays++;
+        }
+      });
+      rotationOffWeeks[toWk] = mapped;
+    }
+  }
+
+  return { copied, overwritten, setups, offDays };
 }
 
 function clearSetupForShift(dateKey, shiftId) {
