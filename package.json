@@ -1,0 +1,22 @@
+{
+  "name": "boh-shift-ops",
+  "version": "1.0.0",
+  "description": "Chick-fil-A Vestavia Hills BOH scheduling + shift setup — iOS app",
+  "private": true,
+  "scripts": {
+    "sync:www": "node scripts/sync-www.mjs",
+    "cap:sync": "npm run sync:www && npx cap sync",
+    "cap:ios": "npm run cap:sync && npx cap open ios",
+    "ios:build-prep": "npm run cap:sync"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/keyboard": "^7.0.0",
+    "@capacitor/splash-screen": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}

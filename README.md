@@ -2,6 +2,16 @@
 
 Chick-fil-A Vestavia Hills BOH scheduling + shift setup app.
 
+**One app, three surfaces (same `index.html`):**
+
+| Surface | How you use it |
+|---------|----------------|
+| **Desktop / laptop** | [Live web app](https://roudic.github.io/boh-shift-ops/) or open `index.html` in a browser — full layout, all toolbar actions |
+| **Phone & tablet (browser)** | Same site — responsive layout (bottom tabs on phone, split setup on tablet) |
+| **iPhone & iPad (native app)** | Capacitor iOS shell — see [iOS build](#ios-app-iphone--ipad) |
+
+Desktop is still the primary BOH office experience. Mobile/iOS adapts the same app; it does not replace the desktop site.
+
 ## Share this (always handy)
 
 **Team hub (bookmark & send):**  
@@ -49,6 +59,41 @@ git push origin master
 ```
 
 GitHub Pages serves from the `master` branch root.
+
+## iOS app (iPhone & iPad)
+
+Optional native wrapper around the **same** web app. Desktop users keep using GitHub Pages or a local browser — no change required.
+
+On phone/tablet layouts: **phone** gets a bottom tab bar + action sheet; **tablet** gets split setup layouts. Viewports ≥1101px keep the full desktop chrome.
+
+### Requirements
+
+- Mac with **Xcode 15+**
+- **Node.js 18+**
+- **CocoaPods** (`sudo gem install cocoapods`)
+
+### Build & run on device / simulator
+
+```bash
+npm install
+npm run cap:sync          # copy index.html → www/ and sync to ios/
+cd ios/App && pod install && cd ../..
+npx cap open ios          # opens Xcode
+```
+
+In Xcode: select a simulator or your iPhone/iPad → **Run** (▶).
+
+### After web changes
+
+```bash
+npm run cap:sync
+```
+
+Then rebuild in Xcode. The live GitHub Pages site (`index.html` at repo root) and the iOS app share the same source file.
+
+### App id
+
+Bundle id: `com.vestavia.bohshiftops` — change in `capacitor.config.json` before App Store submission if needed.
 
 ## Seed / backup data
 
