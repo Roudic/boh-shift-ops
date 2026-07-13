@@ -2631,93 +2631,157 @@
       border: 1px solid rgba(255,255,255,.12);
     }
     #view-setup .ss-slots {
-      gap: 14px !important;
-      padding: 18px !important;
-      perspective: none;
+      gap: 16px !important;
+      padding: 20px !important;
+      perspective: 960px;
     }
 
-    /* Station pads — glass look WITHOUT floating transforms (click-stable) */
+    /*
+      Dual-layer station pads (stable clicks + floating look):
+      - .ss-slot      = static hit root (NO transform)
+      - .ss-slot-fx   = decorative float/tilt shell (pointer-events: none)
+      - .ss-slot-hit  = interactive content (buttons, drag drop)
+    */
     #view-setup .ss-slot {
+      --ss-rx: 8deg;
+      --ss-ry: -5deg;
+      --ss-lift: 10px;
       position: relative;
-      border-radius: 18px !important;
-      border: 1px solid rgba(255,255,255,.16) !important;
-      border-style: solid !important;
-      background:
-        linear-gradient(155deg, rgba(255,255,255,.12), rgba(255,255,255,.03)),
-        #151a28 !important;
-      min-height: 120px !important;
-      padding: 14px !important;
-      /* Critical: no transform/animation on pads — was causing click miss/stutter */
+      min-height: 124px !important;
+      padding: 0 !important;
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
       transform: none !important;
       animation: none !important;
-      will-change: auto;
-      box-shadow:
-        0 1px 0 rgba(255,255,255,.28) inset,
-        0 10px 24px rgba(0,0,0,.35),
-        0 18px 12px -10px rgba(0,0,0,.3) !important;
-      transition: border-color .15s, box-shadow .15s, background .15s;
       overflow: visible !important;
       touch-action: manipulation;
     }
-    #view-setup .ss-slot:hover {
-      transform: none !important;
-      animation: none !important;
-      border-color: rgba(255,255,255,.28) !important;
+    #view-setup .ss-slot-fx {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      pointer-events: none; /* never steal clicks */
+      z-index: 0;
+      border: 1px solid rgba(255,255,255,.18);
+      background:
+        linear-gradient(155deg, rgba(255,255,255,.14), rgba(255,255,255,.04)),
+        #151a28;
       box-shadow:
-        0 1px 0 rgba(255,255,255,.35) inset,
-        0 12px 28px rgba(0,0,0,.38) !important;
+        0 1px 0 rgba(255,255,255,.3) inset,
+        0 -8px 18px rgba(0,0,0,.14) inset,
+        8px 18px 28px rgba(0,0,0,.4),
+        0 26px 14px -12px rgba(0,0,0,.38);
+      transform:
+        translate3d(0, calc(var(--ss-lift) * -1), 18px)
+        rotateX(var(--ss-rx)) rotateY(var(--ss-ry));
+      transform-origin: 50% 90%;
+      transform-style: preserve-3d;
+      will-change: transform;
+      animation: ssSlotFloat 4.6s ease-in-out infinite;
+      animation-delay: var(--ss-delay, 0s);
+      transition: border-color .15s, box-shadow .15s, background .15s;
     }
-    #view-setup .ss-slot::after {
+    @keyframes ssSlotFloat {
+      0%, 100% {
+        transform:
+          translate3d(0, calc(var(--ss-lift) * -1), 18px)
+          rotateX(var(--ss-rx)) rotateY(var(--ss-ry));
+      }
+      50% {
+        transform:
+          translate3d(0, calc(var(--ss-lift) * -1 - 6px), 26px)
+          rotateX(calc(var(--ss-rx) + 1deg)) rotateY(calc(var(--ss-ry) - 1deg));
+      }
+    }
+    /* Ground blob under the visual shell */
+    #view-setup .ss-slot-fx::after {
       content: '';
       position: absolute; left: 14%; right: 14%; bottom: -14px; height: 16px;
       border-radius: 50%;
-      background: radial-gradient(ellipse at center, rgba(0,0,0,.45), transparent 70%);
+      background: radial-gradient(ellipse at center, rgba(0,0,0,.42), transparent 72%);
       pointer-events: none;
-      z-index: 0;
     }
-    #view-setup .ss-slot > * { position: relative; z-index: 1; }
-    #view-setup .ss-slot.is-tilting {
-      transform: none !important;
-      animation: none !important;
+    #view-setup .ss-slot-fx::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(160deg, rgba(255,255,255,.28) 0%, transparent 42%);
+      opacity: .9;
     }
-    /* Empty = needs attention (amber glow pulse — no transform) */
-    #view-setup .ss-slot.empty-required {
-      border-color: rgba(251,191,36,.65) !important;
-      background:
-        linear-gradient(155deg, rgba(251,191,36,.2), rgba(245,158,11,.08)),
-        #241c10 !important;
+    #view-setup .ss-slot-hit {
+      position: relative;
+      z-index: 2;
+      min-height: 124px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      /* static content layer — clicks always land here */
+    }
+    #view-setup .ss-slot:hover .ss-slot-fx:not(.is-tilting) {
+      --ss-lift: 16px;
+      --ss-rx: 11deg;
+      --ss-ry: -8deg;
+      border-color: rgba(255,255,255,.32);
       box-shadow:
-        0 1px 0 rgba(253,230,138,.2) inset,
-        0 0 0 1px rgba(251,191,36,.15),
-        0 10px 24px rgba(0,0,0,.35) !important;
-      animation: ssEmptyPulse 2.2s ease-in-out infinite !important;
+        0 1px 0 rgba(255,255,255,.4) inset,
+        10px 24px 34px rgba(0,0,0,.45),
+        0 34px 18px -12px rgba(0,0,0,.38);
+    }
+    /* Pause float while hovering interactive controls (extra stability) */
+    #view-setup .ss-slot:has(.ss-add-seg:hover) .ss-slot-fx,
+    #view-setup .ss-slot:has(.ss-add-seg:active) .ss-slot-fx,
+    #view-setup .ss-slot:has(.ss-seg:hover) .ss-slot-fx,
+    #view-setup .ss-slot:has(.ss-seg:active) .ss-slot-fx,
+    #view-setup .ss-slot:has(.ss-seg-x:hover) .ss-slot-fx,
+    #view-setup .ss-slot.is-tilting .ss-slot-fx {
+      animation: none;
+    }
+    #view-setup .ss-slot.is-tilting .ss-slot-fx {
+      /* transform set inline by JS on .ss-slot-fx */
+      will-change: transform;
+    }
+    /* Empty = amber pulse on visual shell only */
+    #view-setup .ss-slot.empty-required .ss-slot-fx {
+      border-color: rgba(251,191,36,.65);
+      background:
+        linear-gradient(155deg, rgba(251,191,36,.22), rgba(245,158,11,.08)),
+        #241c10;
+      box-shadow:
+        0 1px 0 rgba(253,230,138,.25) inset,
+        0 0 0 1px rgba(251,191,36,.18),
+        8px 18px 28px rgba(0,0,0,.4);
+      animation: ssSlotFloat 4.6s ease-in-out infinite, ssEmptyPulse 2.2s ease-in-out infinite;
+      animation-delay: var(--ss-delay, 0s), 0s;
     }
     @keyframes ssEmptyPulse {
-      0%, 100% { box-shadow: 0 1px 0 rgba(253,230,138,.2) inset, 0 0 0 1px rgba(251,191,36,.15), 8px 18px 28px rgba(0,0,0,.4); }
-      50% { box-shadow: 0 1px 0 rgba(253,230,138,.35) inset, 0 0 0 2px rgba(251,191,36,.35), 0 0 28px rgba(251,191,36,.2), 8px 18px 28px rgba(0,0,0,.4); }
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.12); }
     }
-    /* Filled = big green pop — easy to scan */
-    #view-setup .ss-slot.filled {
-      border-color: rgba(52,211,153,.85) !important;
-      border-width: 2px !important;
+    /* Filled = green glass shell */
+    #view-setup .ss-slot.filled .ss-slot-fx {
+      border-color: rgba(52,211,153,.85);
+      border-width: 2px;
       background:
-        linear-gradient(155deg, rgba(52,211,153,.42) 0%, rgba(16,185,129,.18) 55%, #0c1f18 100%) !important;
+        linear-gradient(155deg, rgba(52,211,153,.42) 0%, rgba(16,185,129,.18) 55%, #0c1f18 100%);
       box-shadow:
         0 1px 0 rgba(167,243,208,.55) inset,
         0 0 0 1px rgba(52,211,153,.35),
         0 0 32px rgba(52,211,153,.28),
-        8px 18px 28px rgba(0,0,0,.4) !important;
+        8px 18px 28px rgba(0,0,0,.4);
     }
-    #view-setup .ss-slot.has-people {
-      border-color: rgba(56,189,248,.85) !important;
-      border-width: 2px !important;
+    #view-setup .ss-slot.has-people .ss-slot-fx {
+      border-color: rgba(56,189,248,.85);
+      border-width: 2px;
       background:
-        linear-gradient(155deg, rgba(56,189,248,.38) 0%, rgba(14,165,233,.16) 55%, #0a1a28 100%) !important;
+        linear-gradient(155deg, rgba(56,189,248,.38) 0%, rgba(14,165,233,.16) 55%, #0a1a28 100%);
       box-shadow:
         0 1px 0 rgba(125,211,252,.5) inset,
         0 0 0 1px rgba(56,189,248,.35),
         0 0 32px rgba(56,189,248,.25),
-        8px 18px 28px rgba(0,0,0,.4) !important;
+        8px 18px 28px rgba(0,0,0,.4);
     }
     /* Status pill on every pad */
     #view-setup .ss-status-badge {
@@ -2752,29 +2816,33 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: .85; transform: scale(1.05); }
     }
-    /* Burst when a position is just filled — glow only, no move (click-safe) */
+    /* Celebrate on visual shell only */
     #view-setup .ss-slot.just-filled {
-      animation: ssJustFilled 0.75s ease-out both !important;
       z-index: 8;
-      transform: none !important;
+    }
+    #view-setup .ss-slot.just-filled .ss-slot-fx {
+      animation: ssJustFilled 0.8s cubic-bezier(.2,1.15,.3,1) both !important;
     }
     @keyframes ssJustFilled {
       0% {
-        filter: brightness(1.55);
+        transform: translate3d(0, -8px, 18px) rotateX(8deg) scale(.92);
+        filter: brightness(1.5);
         box-shadow:
-          0 0 0 0 rgba(52,211,153,.75),
+          0 0 0 0 rgba(52,211,153,.7),
           0 1px 0 rgba(167,243,208,.6) inset,
-          0 10px 24px rgba(0,0,0,.35);
+          8px 18px 28px rgba(0,0,0,.4);
       }
-      45% {
+      40% {
+        transform: translate3d(0, -22px, 40px) rotateX(12deg) scale(1.06);
         filter: brightness(1.2);
         box-shadow:
           0 0 0 10px rgba(52,211,153,0),
-          0 0 40px rgba(52,211,153,.5),
+          0 0 42px rgba(52,211,153,.5),
           0 1px 0 rgba(167,243,208,.7) inset,
-          0 12px 28px rgba(0,0,0,.4);
+          12px 28px 36px rgba(0,0,0,.42);
       }
       100% {
+        transform: translate3d(0, -10px, 18px) rotateX(8deg) scale(1);
         filter: brightness(1);
       }
     }
@@ -2858,7 +2926,7 @@
       50% { opacity: 1; transform: scale(1.2) rotate(25deg); }
     }
     /* Soft confetti ring */
-    #view-setup .ss-slot.just-filled::before {
+    #view-setup .ss-slot.just-filled .ss-slot-fx::before {
       content: '';
       position: absolute; inset: -6px;
       border-radius: 22px;
@@ -2891,18 +2959,19 @@
         0 0 16px rgba(56,189,248,.45),
         0 8px 16px rgba(0,0,0,.35) !important;
     }
-    #view-setup .ss-slot.drop-over,
-    #view-setup .ss-slot.click-target {
+    #view-setup .ss-slot.drop-over .ss-slot-fx,
+    #view-setup .ss-slot.click-target .ss-slot-fx {
       animation: none !important;
-      transform: none !important;
-      border-color: rgba(240,58,95,.75) !important;
+      --ss-lift: 18px;
+      border-color: rgba(240,58,95,.75);
       background:
         linear-gradient(155deg, rgba(240,58,95,.28), rgba(240,58,95,.08)),
-        #2a1218 !important;
+        #2a1218;
       box-shadow:
         0 0 0 3px rgba(240,58,95,.3),
         0 0 24px rgba(240,58,95,.22),
-        0 12px 28px rgba(0,0,0,.4) !important;
+        0 16px 30px rgba(0,0,0,.4);
+      transform: translate3d(0, -18px, 30px) rotateX(10deg) rotateY(-6deg) scale(1.03);
     }
     #view-setup .ss-slot-title { color: #F8FAFC !important; }
     #view-setup .ss-slot-sub { color: #94A3B8 !important; }
@@ -3103,54 +3172,92 @@
     }
     #view-setup .ss-pool-hint { color: #94A3B8 !important; }
 
-    /* Pool chips — glass look, flat (stable drag/click) */
+    /* Pool chips — dual layer float (fx shell + static hit content) */
     #view-setup .ss-chip {
+      --chip-rx: 6deg;
+      --chip-ry: -8deg;
       position: relative;
-      background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.04)) !important;
-      border: 1px solid rgba(255,255,255,.18) !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
       border-radius: 14px !important;
       color: #F8FAFC !important;
-      box-shadow:
-        0 1px 0 rgba(255,255,255,.25) inset,
-        0 8px 18px rgba(0,0,0,.3) !important;
       transform: none !important;
       animation: none !important;
-      will-change: auto;
-      transition: border-color .12s, box-shadow .12s, background .12s;
+      padding: 0 !important;
       touch-action: manipulation;
+      overflow: visible;
     }
-    #view-setup .ss-chip:hover,
-    #view-setup .ss-chip.is-tilting {
-      animation: none !important;
-      transform: none !important;
-      z-index: 6;
-      border-color: rgba(253,164,175,.5) !important;
+    #view-setup .ss-chip-fx {
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      pointer-events: none;
+      z-index: 0;
+      border: 1px solid rgba(255,255,255,.2);
+      background: linear-gradient(145deg, rgba(255,255,255,.16), rgba(255,255,255,.05));
       box-shadow:
-        0 1px 0 rgba(255,255,255,.3) inset,
-        0 0 16px rgba(240,58,95,.15),
-        0 10px 20px rgba(0,0,0,.32) !important;
+        0 1px 0 rgba(255,255,255,.28) inset,
+        6px 12px 20px rgba(0,0,0,.32);
+      transform:
+        translate3d(0, -4px, 12px)
+        rotateX(var(--chip-rx)) rotateY(var(--chip-ry));
+      transform-origin: 50% 80%;
+      animation: ssChipFloat 3.8s ease-in-out infinite;
+      animation-delay: var(--ss-delay, 0s);
+      will-change: transform;
+    }
+    @keyframes ssChipFloat {
+      0%, 100% { transform: translate3d(0, -4px, 12px) rotateX(var(--chip-rx)) rotateY(var(--chip-ry)); }
+      50% { transform: translate3d(0, -9px, 16px) rotateX(calc(var(--chip-rx) + 1.5deg)) rotateY(calc(var(--chip-ry) - 1.5deg)); }
+    }
+    #view-setup .ss-chip-hit {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      min-height: 44px;
+    }
+    #view-setup .ss-chip:hover .ss-chip-fx:not(.is-tilting) {
+      --chip-rx: 9deg;
+      --chip-ry: -11deg;
+      border-color: rgba(253,164,175,.55);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.35) inset,
+        0 0 18px rgba(240,58,95,.18),
+        8px 16px 24px rgba(0,0,0,.36);
+      transform: translate3d(0, -10px, 20px) rotateX(9deg) rotateY(-11deg) scale(1.03);
+      animation: none;
+    }
+    #view-setup .ss-chip.is-tilting .ss-chip-fx {
+      animation: none;
     }
     #view-setup .ss-chip.dragging {
+      opacity: .8;
+    }
+    #view-setup .ss-chip.dragging .ss-chip-fx {
       animation: none !important;
-      opacity: .75;
-      transform: scale(.97) !important;
+      transform: scale(.96) !important;
       box-shadow: 0 6px 16px rgba(0,0,0,.35) !important;
     }
-    #view-setup .ss-chip.selected {
-      border-color: rgba(240,58,95,.7) !important;
+    #view-setup .ss-chip.selected .ss-chip-fx {
+      border-color: rgba(240,58,95,.7);
       box-shadow:
         0 0 0 3px rgba(240,58,95,.25),
         0 1px 0 rgba(255,255,255,.3) inset,
-        0 16px 28px rgba(240,58,95,.2) !important;
-      background: linear-gradient(145deg, rgba(240,58,95,.28), rgba(240,58,95,.1)) !important;
+        0 12px 22px rgba(240,58,95,.18);
+      background: linear-gradient(145deg, rgba(240,58,95,.28), rgba(240,58,95,.1));
     }
-    #view-setup .ss-chip.in-pool {
-      background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.03)) !important;
+    #view-setup .ss-chip.in-pool .ss-chip-fx {
+      background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
     }
-    #view-setup .ss-chip.assigned {
-      border-color: rgba(52,211,153,.5) !important;
-      background: linear-gradient(145deg, rgba(52,211,153,.18), rgba(16,185,129,.06)) !important;
+    #view-setup .ss-chip.assigned .ss-chip-fx {
+      border-color: rgba(52,211,153,.5);
+      background: linear-gradient(145deg, rgba(52,211,153,.18), rgba(16,185,129,.06));
     }
+
     #view-setup .ss-chip-name { color: #F8FAFC !important; }
     #view-setup .ss-chip-times { color: #94A3B8 !important; }
     #view-setup .ss-chip-in { color: #6EE7B7 !important; }
