@@ -5808,13 +5808,15 @@ function hsHourLabel(hour24) {
 
 function staffOnAtHour(dateKey, hourStartMin) {
   const slotEnd = hourStartMin + 60;
-  return staff.filter(p =>
-    getScheduleShifts(p.id, dateKey).some(e => {
+  // Floor headcount only — day leaders not included in daypart/hour counts
+  return staff.filter(p => {
+    if (isDayLeader(p.id, dateKey)) return false;
+    return getScheduleShifts(p.id, dateKey).some(e => {
       const s = timeToMinutes(e.start);
       const end = timeToMinutes(e.end);
       return s < slotEnd && end > hourStartMin;
-    })
-  ).length;
+    });
+  }).length;
 }
 
 /** Hourly sales estimate from daypart average $ (or scaled by actual daily sales). */
@@ -8068,13 +8070,19 @@ function daypartDurationHours(dp) {
   return shiftHours({ start: dp.start, end: dp.end });
 }
 
+/** People on a time window — floor team only (day leaders excluded from daypart counts) */
 function countStaffOverlapping(dateKey, start, end) {
-  return staff.filter(p => personAnyShiftOverlaps(p.id, dateKey, start, end)).length;
+  return staff.filter(p => {
+    if (isDayLeader(p.id, dateKey)) return false;
+    return personAnyShiftOverlaps(p.id, dateKey, start, end);
+  }).length;
 }
 
 function scheduledHoursInWindow(dateKey, start, end) {
   let total = 0;
   staff.forEach(p => {
+    // Match headcount: leadership hours not counted toward daypart labor totals
+    if (isDayLeader(p.id, dateKey)) return;
     getScheduleShifts(p.id, dateKey).forEach(e => {
       const overlap = intersectTimeRange(e.start, e.end, start, end);
       if (overlap) total += shiftHours(overlap);
@@ -8269,9 +8277,11 @@ function isOnFloorAt(entry, checkpoint) {
 }
 
 function countOnFloorAt(dateKey, checkpoint) {
-  return staff.filter(p =>
-    getScheduleShifts(p.id, dateKey).some(e => isOnFloorAt(e, checkpoint))
-  ).length;
+  // Floor headcount only — day leaders not counted
+  return staff.filter(p => {
+    if (isDayLeader(p.id, dateKey)) return false;
+    return getScheduleShifts(p.id, dateKey).some(e => isOnFloorAt(e, checkpoint));
+  }).length;
 }
 
 function shiftCoversCheckpoint(shift, checkpoint) {
@@ -11713,10 +11723,19 @@ function populateSetupSelectors() {
   setupContext = { dateKey: selectedDay, shiftId: shiftSel.value };
 }
 
-function getOnShiftStaff(dateKey, shiftId) {
+/**
+ * People scheduled for a period block (daypart).
+ * Day leaders are excluded — they run the period, not floor headcount.
+ * Pass { includeLeaders: true } only if you need everyone.
+ */
+function getOnShiftStaff(dateKey, shiftId, opts) {
   const period = shifts.find(s => s.id === shiftId);
   if (!period) return [];
-  return staff.filter(p => personAnyShiftOverlaps(p.id, dateKey, period.start, period.end));
+  const includeLeaders = !!(opts && opts.includeLeaders);
+  return staff.filter(p => {
+    if (!includeLeaders && isDayLeader(p.id, dateKey)) return false;
+    return personAnyShiftOverlaps(p.id, dateKey, period.start, period.end);
+  });
 }
 
 function cloneTemplateLayout(carCount) {
