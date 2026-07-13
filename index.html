@@ -2580,10 +2580,10 @@
       box-shadow: 0 0 16px rgba(240,58,95,.45);
     }
 
-    /* Board groups — flat shelves (no 3D transform: it breaks click hit-testing) */
+    /* Board groups — light float shelves (content stays clickable) */
     #view-setup .ss-board {
       gap: 1.35rem;
-      perspective: none;
+      perspective: 1100px;
     }
     #view-setup .ss-group {
       background: rgba(16, 20, 32, .92) !important;
@@ -2593,11 +2593,12 @@
       box-shadow:
         0 1px 0 rgba(255,255,255,.1) inset,
         0 18px 40px rgba(0,0,0,.35) !important;
-      transform: none !important;
-      transition: box-shadow .2s ease, border-color .2s ease;
+      transform: rotateX(1.5deg);
+      transform-origin: 50% 0;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     }
     #view-setup .ss-group:hover {
-      transform: none !important;
+      transform: rotateX(0deg) translateY(-2px);
       box-shadow:
         0 1px 0 rgba(255,255,255,.14) inset,
         0 24px 48px rgba(0,0,0,.4) !important;
@@ -2986,22 +2987,28 @@
       border-color: rgba(255,255,255,.12) !important;
     }
 
-    /* Station icons — static (spin was stealing smoothness near handoff clicks) */
+    /* Station icons — spin on visual only (pointer-events none keeps clicks stable) */
     #view-setup .ss-slot-icon {
       width: 36px !important; height: 36px !important;
       border-radius: 12px !important;
       box-shadow:
         0 1px 0 rgba(255,255,255,.35) inset,
         0 8px 16px rgba(0,0,0,.35);
-      animation: none !important;
       pointer-events: none;
+      transform-style: preserve-3d;
+      animation: ssIconSpin 7s linear infinite;
     }
     #view-setup .ss-slot:hover .ss-slot-icon {
-      animation: none !important;
+      animation-duration: 2.4s;
       box-shadow:
         0 1px 0 rgba(255,255,255,.5) inset,
-        0 0 14px rgba(255,255,255,.15),
+        0 0 16px rgba(255,255,255,.2),
         0 8px 16px rgba(0,0,0,.35);
+    }
+    @keyframes ssIconSpin {
+      0% { transform: rotateY(0deg) rotateX(10deg); }
+      50% { transform: rotateY(180deg) rotateX(10deg); }
+      100% { transform: rotateY(360deg) rotateX(10deg); }
     }
 
     /* Person segments — flat/stable for reliable handoff edit clicks */
@@ -3274,11 +3281,16 @@
       box-shadow:
         0 1px 0 rgba(255,255,255,.35) inset,
         0 6px 14px rgba(240,58,95,.4);
-      animation: none !important;
       pointer-events: none;
+      transform-style: preserve-3d;
+      animation: ssAvatarSpin 5.5s linear infinite;
     }
     #view-setup .ss-chip:hover .ss-avatar {
-      animation: none !important;
+      animation-duration: 1.5s;
+    }
+    @keyframes ssAvatarSpin {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
     }
     #view-setup .ss-chip-skill {
       background: rgba(0,0,0,.35) !important;
@@ -3312,18 +3324,17 @@
     }
 
     @media (prefers-reduced-motion: reduce), (pointer: coarse) {
-      #view-setup .ss-slot,
-      #view-setup .ss-chip,
+      #view-setup .ss-slot-fx,
+      #view-setup .ss-chip-fx,
       #view-setup .ss-metric,
       #view-setup .ss-slot-icon,
       #view-setup .ss-avatar,
       #view-setup .ss-hero-glow {
         animation: none !important;
       }
-      #view-setup .ss-slot,
-      #view-setup .ss-chip,
+      #view-setup .ss-slot-fx,
+      #view-setup .ss-chip-fx,
       #view-setup .ss-hero,
-      #view-setup .ss-card,
       #view-setup .ss-group {
         transform: none !important;
       }
@@ -8750,14 +8761,17 @@ function personChipHtml(person, opts = {}) {
     data-end="${entry?.end || ''}" data-start="${entry?.start || ''}"
     style="--ss-delay:-${delay}s;--chip-rx:${chipRx}deg;--chip-ry:${chipRy}deg"
     title="Drag to assign — or click then click a slot${titleTimes}">
-    <span class="ss-avatar" style="animation-delay:-${(Math.abs(hash) % 50) / 10}s">${initials}</span>
-    <span class="ss-chip-meta">
-      <span class="ss-chip-name">${escAttr(person.name)}</span>
-      ${timesHtml}
-    </span>
-    ${fitBadge}
-    <span class="ss-chip-skill ${skill}">${skill}</span>
-    ${removeBtn}
+    <div class="ss-chip-fx" aria-hidden="true"></div>
+    <div class="ss-chip-hit">
+      <span class="ss-avatar">${initials}</span>
+      <span class="ss-chip-meta">
+        <span class="ss-chip-name">${escAttr(person.name)}</span>
+        ${timesHtml}
+      </span>
+      ${fitBadge}
+      <span class="ss-chip-skill ${skill}">${skill}</span>
+      ${removeBtn}
+    </div>
   </div>`;
 }
 
@@ -8970,19 +8984,22 @@ function renderSetup() {
             : '<span class="ss-status-badge ok">✓ Filled</span>');
         return `<div class="ss-slot ${cls}${clickTarget}" data-drop-zone="station" data-slot-id="${slot.id}"
           style="--ss-delay:-${delay}s;--ss-rx:${poseRx}deg;--ss-ry:${poseRy}deg">
-          ${statusBadge}
-          <div class="ss-slot-head">
-            <div class="ss-slot-icon" style="background:${color};animation-delay:-${(si * 0.4).toFixed(1)}s">${icon}</div>
-            <div style="flex:1;min-width:0;padding-right:52px">
-              <div class="ss-slot-title">${escAttr(slot.label)}</div>
-              ${win}
-              ${slot.sub && !(slot.start && slot.end) ? '' : (slot.sub && slot.start ? `<div class="ss-slot-sub">${escAttr(slot.sub)}</div>` : '')}
+          <div class="ss-slot-fx" aria-hidden="true"></div>
+          <div class="ss-slot-hit">
+            ${statusBadge}
+            <div class="ss-slot-head">
+              <div class="ss-slot-icon" style="background:${color}">${icon}</div>
+              <div style="flex:1;min-width:0;padding-right:52px">
+                <div class="ss-slot-title">${escAttr(slot.label)}</div>
+                ${win}
+                ${slot.sub && !(slot.start && slot.end) ? '' : (slot.sub && slot.start ? `<div class="ss-slot-sub">${escAttr(slot.sub)}</div>` : '')}
+              </div>
             </div>
-          </div>
-          <div class="ss-slot-drop">
-            ${segHtml || empty}
-            ${handovers.map(h => `<div class="ss-handover-note">${escAttr(h)}</div>`).join('')}
-            <button type="button" class="ss-add-seg" data-action="add-seg" data-slot-id="${slot.id}">+ Add person / handover</button>
+            <div class="ss-slot-drop">
+              ${segHtml || empty}
+              ${handovers.map(h => `<div class="ss-handover-note">${escAttr(h)}</div>`).join('')}
+              <button type="button" class="ss-add-seg" data-action="add-seg" data-slot-id="${slot.id}">+ Add person / handover</button>
+            </div>
           </div>
         </div>`;
       }).join('');
@@ -10067,9 +10084,9 @@ function renderAll() {
 }
 
 // ── Floating 3D (UE-style) — schedule cards + setup stations/chips ──
-// Setup board: no 3D tilt (caused click stutter on handoff / segments)
-const GLASS_TILT_BLOCK = 'button, input, select, textarea, a, label, .cv-act, .ss-seg-x, .ss-add-seg, .ss-seg, .ss-slot-drop, .ss-chip-remove, #view-setup';
-const GLASS_TILT_SEL = '.cv-card';
+// Tilt only decorative shells; freeze when over real controls
+const GLASS_TILT_BLOCK = 'button, input, select, textarea, a, label, .cv-act, .ss-seg-x, .ss-add-seg, .ss-seg, .ss-chip-remove';
+const GLASS_TILT_SEL = '.cv-card, #view-setup .ss-slot, #view-setup .ss-chip, #view-setup .ss-metric';
 let glassTiltEl = null;
 let glassTiltRaf = 0;
 let glassTiltPending = null;
@@ -10083,9 +10100,21 @@ function glassTiltEnabled() {
   }
 }
 
+/** Prefer decorative shell for motion so hit targets stay stable */
+function glassFxLayer(el) {
+  if (!el) return null;
+  return el.querySelector?.('.ss-slot-fx, .ss-chip-fx') || el;
+}
+
 function clearGlassTilt(el) {
   if (!el) return;
   el.classList.remove('is-tilting');
+  const fx = glassFxLayer(el);
+  if (fx && fx !== el) {
+    fx.classList.remove('is-tilting');
+    fx.style.transform = '';
+    fx.style.boxShadow = '';
+  }
   el.style.transform = '';
   el.style.boxShadow = '';
   el.style.removeProperty('--mx');
@@ -10097,10 +10126,23 @@ function clearAllGlassTilt() {
     clearGlassTilt(glassTiltEl);
     glassTiltEl = null;
   }
+  document.querySelectorAll('.is-tilting').forEach(n => {
+    n.classList.remove('is-tilting');
+    if (n.classList.contains('ss-slot-fx') || n.classList.contains('ss-chip-fx')) {
+      n.style.transform = '';
+      n.style.boxShadow = '';
+    }
+  });
 }
 
 function applyCardTilt(el, clientX, clientY) {
   if (!el || !el.isConnected || el.classList.contains('cv-dragging') || el.classList.contains('dragging')) {
+    clearAllGlassTilt();
+    return;
+  }
+  // Freeze motion while over handoff/edit controls
+  if (el.matches?.('#view-setup .ss-slot, #view-setup .ss-chip') &&
+      document.elementFromPoint?.(clientX, clientY)?.closest?.(GLASS_TILT_BLOCK)) {
     clearAllGlassTilt();
     return;
   }
@@ -10111,30 +10153,42 @@ function applyCardTilt(el, clientX, clientY) {
   const isChip = el.classList.contains('ss-chip');
   const isSlot = el.classList.contains('ss-slot');
   const isMetric = el.classList.contains('ss-metric');
-  // Stronger board feel on setup tiles
-  const max = isChip ? 16 : isSlot ? 14 : isMetric ? 12 : 18;
+  const isCard = el.classList.contains('cv-card');
+  const max = isChip ? 14 : isSlot ? 12 : isMetric ? 10 : 16;
   const rx = 6 + (0.5 - y) * max;
-  const ry = -8 + (x - 0.5) * (max + 4);
-  const lift = (isChip ? 12 : isSlot ? 16 : 18) + (1 - Math.abs(y - 0.5)) * 8;
-  const z = (isChip ? 22 : 32) + lift;
-  const scale = isChip ? 1.08 : isSlot ? 1.05 : 1.06;
-  const sx = (x - 0.5) * 16;
-  const sy = 20 + lift * 0.85;
+  const ry = -8 + (x - 0.5) * (max + 3);
+  const lift = (isChip ? 10 : isSlot ? 14 : 16) + (1 - Math.abs(y - 0.5)) * 7;
+  const z = (isChip ? 18 : 28) + lift;
+  const scale = isChip ? 1.05 : isSlot ? 1.04 : 1.05;
+  const sx = (x - 0.5) * 14;
+  const sy = 18 + lift * 0.8;
 
   if (glassTiltEl && glassTiltEl !== el) clearGlassTilt(glassTiltEl);
   glassTiltEl = el;
   el.classList.add('is-tilting');
-  el.style.setProperty('--mx', `${(x * 100).toFixed(0)}%`);
-  el.style.setProperty('--my', `${(y * 100).toFixed(0)}%`);
-  el.style.transform =
+
+  // Move the decorative shell only (setup). Schedule cards tilt themselves.
+  const fx = glassFxLayer(el);
+  const target = (isSlot || isChip) ? fx : el;
+  if (!target) return;
+  if (fx && fx !== el) fx.classList.add('is-tilting');
+
+  target.style.setProperty('--mx', `${(x * 100).toFixed(0)}%`);
+  target.style.setProperty('--my', `${(y * 100).toFixed(0)}%`);
+  target.style.transform =
     `translate3d(0, ${(-lift).toFixed(1)}px, ${z.toFixed(1)}px) ` +
     `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) scale(${scale})`;
-  el.style.boxShadow =
+  target.style.boxShadow =
     `0 1px 0 rgba(255,255,255,.55) inset,` +
-    `0 -12px 28px rgba(0,0,0,.18) inset,` +
-    `${sx.toFixed(1)}px ${sy.toFixed(1)}px 36px rgba(0,0,0,.5),` +
-    `0 ${(sy + 14).toFixed(1)}px 26px -10px rgba(0,0,0,.4),` +
-    `0 ${(sy + 30).toFixed(1)}px 44px -16px rgba(0,0,0,.28)`;
+    `0 -10px 22px rgba(0,0,0,.16) inset,` +
+    `${sx.toFixed(1)}px ${sy.toFixed(1)}px 32px rgba(0,0,0,.48),` +
+    `0 ${(sy + 12).toFixed(1)}px 24px -10px rgba(0,0,0,.38)`;
+
+  // Schedule cards keep full-card tilt (no dual layer)
+  if (isCard) {
+    el.style.transform = target.style.transform;
+    el.style.boxShadow = target.style.boxShadow;
+  }
 }
 
 function onGlassTiltMove(e) {
@@ -10143,6 +10197,7 @@ function onGlassTiltMove(e) {
     clearAllGlassTilt();
     return;
   }
+  // Over handoff / form controls → freeze motion, keep hit targets locked
   if (e.target.closest?.(GLASS_TILT_BLOCK)) {
     clearAllGlassTilt();
     return;
