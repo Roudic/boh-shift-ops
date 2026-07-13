@@ -352,45 +352,50 @@
     }
     .cell-off:hover { border-color: var(--border); background: rgba(0,0,0,.2); transform: none; box-shadow: none; }
 
-    /* ── Floating 3D shift cards (UE-style stage tiles) ──
-       GPU-cheap: transform + opacity + box-shadow only.
-       No backdrop-filter on cards (blur was the lag). */
+    /* ── Schedule cards: frosted glass (match glass.png ref) + period tints ── */
     .cell.assigned {
-      perspective: 760px;
-      perspective-origin: 50% 30%;
+      perspective: 900px;
+      perspective-origin: 50% 20%;
       overflow: visible !important;
-      padding: 8px 6px 14px;
+      padding: 8px 6px 16px;
       transform-style: preserve-3d;
     }
     .cv-card {
-      --cv-rx: 8deg;
-      --cv-ry: -6deg;
-      --cv-lift: 14px;
-      --cv-z: 28px;
-      --cv-shadow-x: 8px;
-      --cv-shadow-y: 22px;
+      --cv-rx: 6deg;
+      --cv-ry: -4deg;
+      --cv-lift: 10px;
+      --cv-z: 20px;
+      --cv-tint: rgba(255,255,255,.14);
+      --cv-tint-2: rgba(255,255,255,.05);
+      --cv-rim: rgba(255,255,255,.42);
       position: relative; flex: 1; display: flex; flex-direction: column;
-      min-height: 92px; min-width: 0; border-radius: 18px; padding: 10px 9px 9px 12px;
+      min-height: 96px; min-width: 0;
+      border-radius: 22px;
+      padding: 12px 12px 10px 14px;
       overflow: hidden;
       isolation: isolate;
-      border: 1px solid rgba(255,255,255,.32);
-      background: linear-gradient(155deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
-      /* NO backdrop-filter — kills scroll performance */
+      /* Glass shell */
+      border: 1px solid var(--cv-rim);
+      background:
+        linear-gradient(165deg, rgba(255,255,255,.28) 0%, rgba(255,255,255,.06) 42%, transparent 70%),
+        linear-gradient(145deg, var(--cv-tint), var(--cv-tint-2)),
+        rgba(18, 24, 40, .45);
+      backdrop-filter: blur(18px) saturate(1.55);
+      -webkit-backdrop-filter: blur(18px) saturate(1.55);
       transform:
         translate3d(0, calc(var(--cv-lift) * -1), var(--cv-z))
         rotateX(var(--cv-rx)) rotateY(var(--cv-ry));
       transform-style: preserve-3d;
-      transform-origin: 50% 80%;
-      will-change: transform;
+      transform-origin: 50% 85%;
       box-shadow:
-        0 1px 0 rgba(255,255,255,.5) inset,
-        0 -10px 24px rgba(0,0,0,.15) inset,
-        var(--cv-shadow-x) var(--cv-shadow-y) 28px rgba(0,0,0,.45),
-        0 28px 18px -12px rgba(0,0,0,.4),
-        0 48px 30px -20px rgba(0,0,0,.28);
-      animation: cvFloat 4.8s ease-in-out infinite;
-      transition: border-color .2s, opacity .15s;
+        0 1px 0 rgba(255,255,255,.55) inset,
+        0 -1px 0 rgba(255,255,255,.08) inset,
+        0 12px 28px rgba(0,0,0,.28),
+        0 28px 40px -12px rgba(0,0,0,.35);
+      animation: cvFloat 5.2s ease-in-out infinite;
+      transition: border-color .2s, box-shadow .2s, opacity .15s;
       cursor: grab;
+      color: #F8FAFC;
     }
     @keyframes cvFloat {
       0%, 100% {
@@ -400,31 +405,28 @@
       }
       50% {
         transform:
-          translate3d(0, calc(var(--cv-lift) * -1 - 7px), calc(var(--cv-z) + 10px))
-          rotateX(calc(var(--cv-rx) + 1.5deg)) rotateY(calc(var(--cv-ry) - 1deg));
+          translate3d(0, calc(var(--cv-lift) * -1 - 5px), calc(var(--cv-z) + 6px))
+          rotateX(calc(var(--cv-rx) + 1deg)) rotateY(calc(var(--cv-ry) - .8deg));
       }
     }
     .cv-card:hover,
     .cv-card.is-tilting {
       animation: none;
-      border-color: rgba(255,255,255,.5);
+      border-color: rgba(255,255,255,.62);
       z-index: 8;
     }
     .cv-card:hover:not(.is-tilting):not(.cv-dragging) {
-      --cv-lift: 22px;
-      --cv-z: 42px;
-      --cv-rx: 12deg;
-      --cv-ry: -10deg;
-      --cv-shadow-y: 34px;
+      --cv-lift: 16px;
+      --cv-z: 32px;
+      --cv-rx: 9deg;
+      --cv-ry: -7deg;
       transform:
         translate3d(0, calc(var(--cv-lift) * -1), var(--cv-z))
-        rotateX(var(--cv-rx)) rotateY(var(--cv-ry)) scale(1.04);
+        rotateX(var(--cv-rx)) rotateY(var(--cv-ry)) scale(1.03);
       box-shadow:
-        0 1px 0 rgba(255,255,255,.6) inset,
-        0 -12px 28px rgba(0,0,0,.18) inset,
-        12px 36px 40px rgba(0,0,0,.5),
-        0 40px 24px -14px rgba(0,0,0,.45),
-        0 64px 40px -24px rgba(0,0,0,.3);
+        0 1px 0 rgba(255,255,255,.65) inset,
+        0 18px 36px rgba(0,0,0,.32),
+        0 36px 48px -14px rgba(0,0,0,.38);
     }
     .cv-card:active { cursor: grabbing; }
     .cv-card.cv-dragging,
@@ -432,24 +434,23 @@
       animation: none !important;
       opacity: .55;
       --cv-lift: 4px; --cv-z: 8px; --cv-rx: 2deg; --cv-ry: 0deg;
-      transform: translate3d(0, -4px, 8px) scale(.96) !important;
-      box-shadow: 0 6px 16px rgba(0,0,0,.3) !important;
+      transform: translate3d(0, -4px, 8px) scale(.97) !important;
+      box-shadow: 0 8px 20px rgba(0,0,0,.28) !important;
     }
     .cell.cv-drop-target .cv-empty,
     .cell.cv-drop-target .cv-card {
-      outline: 2px solid rgba(240,58,95,.7);
+      outline: 2px solid rgba(240,58,95,.65);
       outline-offset: 3px;
     }
     .cell.cv-drop-target .cv-card {
       animation: none;
-      --cv-lift: 26px; --cv-z: 48px;
+      --cv-lift: 20px; --cv-z: 36px;
       box-shadow:
-        0 0 0 3px rgba(240,58,95,.35),
-        0 1px 0 rgba(255,255,255,.5) inset,
-        0 36px 40px rgba(240,58,95,.2),
-        0 48px 28px -16px rgba(0,0,0,.45);
+        0 0 0 2px rgba(240,58,95,.4),
+        0 1px 0 rgba(255,255,255,.55) inset,
+        0 24px 40px rgba(240,58,95,.18);
     }
-    /* Specular glass edge */
+    /* Top glass sheen (like the checkout cards) */
     .cv-card::before {
       content: '';
       position: absolute; inset: 0;
@@ -457,69 +458,120 @@
       pointer-events: none;
       z-index: 1;
       background:
-        linear-gradient(145deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.12) 26%, transparent 50%),
-        linear-gradient(180deg, transparent 55%, rgba(0,0,0,.18) 100%);
-      opacity: .95;
+        linear-gradient(180deg, rgba(255,255,255,.38) 0%, rgba(255,255,255,.08) 28%, transparent 52%),
+        radial-gradient(120% 80% at 20% -10%, rgba(255,255,255,.35), transparent 55%);
+      opacity: 1;
     }
-    /* Ground contact shadow (fake 3D floor under tile) */
+    /* Soft ground shadow under glass tile */
     .cv-card::after {
       content: '';
       position: absolute;
-      left: 12%; right: 12%; bottom: -18px; height: 18px;
+      left: 14%; right: 14%; bottom: -16px; height: 16px;
       border-radius: 50%;
-      background: radial-gradient(ellipse at center, rgba(0,0,0,.5) 0%, transparent 70%);
-      filter: blur(2px);
+      background: radial-gradient(ellipse at center, rgba(0,0,0,.4) 0%, transparent 72%);
       z-index: 0;
       pointer-events: none;
-      transform: translateZ(-20px) scale(1);
-      opacity: .85;
+      opacity: .75;
     }
     .cv-card > * { position: relative; z-index: 3; }
 
-    /* Opaque-enough period tints (no blur needed) */
+    /* Period colors as frosted tints (glass + hue, not solid paint) */
     .cv-card.tone-breakfast {
-      background: linear-gradient(145deg, rgba(250,204,21,.92) 0%, rgba(202,138,4,.88) 100%);
+      --cv-tint: rgba(250,204,21,.42);
+      --cv-tint-2: rgba(202,138,4,.22);
+      --cv-rim: rgba(253,224,71,.5);
       color: #1C1917;
-      border-color: rgba(253,224,71,.55);
     }
     .cv-card.tone-breakfast .cv-time-range,
-    .cv-card.tone-breakfast .cv-role { color: #1C1917; text-shadow: 0 1px 0 rgba(255,255,255,.35); }
+    .cv-card.tone-breakfast .cv-role,
+    .cv-card.tone-breakfast .cv-band-tag { color: #1C1917; text-shadow: 0 1px 0 rgba(255,255,255,.35); }
     .cv-card.tone-breakfast .cv-band-tag {
-      background: rgba(255,255,255,.45); color: #1C1917;
-      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(255,255,255,.42); border-color: rgba(255,255,255,.45);
     }
     .cv-card.tone-lunch {
-      background: linear-gradient(145deg, rgba(56,189,248,.9) 0%, rgba(2,132,199,.88) 100%);
-      border-color: rgba(125,211,252,.5);
+      --cv-tint: rgba(56,189,248,.4);
+      --cv-tint-2: rgba(2,132,199,.22);
+      --cv-rim: rgba(125,211,252,.5);
     }
     .cv-card.tone-afternoon {
-      background: linear-gradient(145deg, rgba(244,114,182,.9) 0%, rgba(219,39,119,.88) 100%);
-      border-color: rgba(249,168,212,.5);
+      --cv-tint: rgba(244,114,182,.4);
+      --cv-tint-2: rgba(219,39,119,.22);
+      --cv-rim: rgba(249,168,212,.5);
     }
     .cv-card.tone-late, .cv-card.tone-evening {
-      background: linear-gradient(145deg, rgba(167,139,250,.9) 0%, rgba(109,40,217,.88) 100%);
-      border-color: rgba(196,181,253,.5);
+      --cv-tint: rgba(167,139,250,.4);
+      --cv-tint-2: rgba(109,40,217,.22);
+      --cv-rim: rgba(196,181,253,.5);
     }
     .cv-card.tone-bf-lunch {
-      background: linear-gradient(125deg, rgba(250,204,21,.92) 0%, rgba(56,189,248,.9) 100%);
-      border-color: rgba(255,255,255,.4);
+      --cv-tint: rgba(250,204,21,.38);
+      --cv-tint-2: rgba(56,189,248,.32);
+      --cv-rim: rgba(255,255,255,.45);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.32) 0%, rgba(255,255,255,.06) 30%, transparent 55%),
+        linear-gradient(125deg, rgba(250,204,21,.4) 0%, rgba(56,189,248,.36) 100%),
+        rgba(18, 24, 40, .4);
     }
     .cv-card.tone-bf-lunch .cv-time-range {
-      color: #0F172A; text-shadow: 0 1px 0 rgba(255,255,255,.3);
+      color: #0F172A; text-shadow: 0 1px 0 rgba(255,255,255,.35);
     }
     .cv-card.tone-mix {
-      background: linear-gradient(125deg, rgba(250,204,21,.9) 0%, rgba(244,114,182,.88) 50%, rgba(139,92,246,.9) 100%);
-      border-color: rgba(255,255,255,.4);
+      --cv-rim: rgba(255,255,255,.42);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.3) 0%, rgba(255,255,255,.06) 28%, transparent 55%),
+        linear-gradient(125deg, rgba(250,204,21,.36) 0%, rgba(244,114,182,.34) 50%, rgba(139,92,246,.38) 100%),
+        rgba(18, 24, 40, .4);
     }
     .cv-card.tone-morning, .cv-card.tone-early {
-      background: linear-gradient(145deg, rgba(250,204,21,.92) 0%, rgba(202,138,4,.88) 100%);
+      --cv-tint: rgba(250,204,21,.42);
+      --cv-tint-2: rgba(202,138,4,.22);
+      --cv-rim: rgba(253,224,71,.5);
       color: #1C1917;
     }
     .cv-card.tone-midday, .cv-card.tone-mid {
-      background: linear-gradient(145deg, rgba(56,189,248,.9) 0%, rgba(2,132,199,.88) 100%);
+      --cv-tint: rgba(56,189,248,.4);
+      --cv-tint-2: rgba(2,132,199,.22);
+      --cv-rim: rgba(125,211,252,.5);
     }
     .cv-card.tone-custom {
-      background: linear-gradient(145deg, rgba(240,58,95,.9) 0%, rgba(159,18,57,.88) 100%);
+      --cv-tint: rgba(240,58,95,.4);
+      --cv-tint-2: rgba(159,18,57,.22);
+      --cv-rim: rgba(253,164,175,.5);
+    }
+
+    /* Empty cells — “Add card” frosted glass like the reference */
+    .cv-empty {
+      border-radius: 22px !important;
+      border: 1px solid rgba(255,255,255,.18) !important;
+      background:
+        linear-gradient(165deg, rgba(255,255,255,.12), rgba(255,255,255,.03)),
+        rgba(18, 24, 40, .35) !important;
+      backdrop-filter: blur(14px) saturate(1.3);
+      -webkit-backdrop-filter: blur(14px) saturate(1.3);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.2) inset,
+        0 12px 28px rgba(0,0,0,.22) !important;
+    }
+    .cell:hover .cv-empty {
+      border-color: rgba(255,255,255,.32) !important;
+      background:
+        linear-gradient(165deg, rgba(255,255,255,.16), rgba(240,58,95,.08)),
+        rgba(18, 24, 40, .4) !important;
+    }
+    .cv-hrs-pill {
+      background: rgba(255,255,255,.55) !important;
+      border: 1px solid rgba(255,255,255,.45) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 4px 12px rgba(0,0,0,.12);
+    }
+    .cv-band-tag {
+      background: rgba(255,255,255,.16) !important;
+      border: 1px solid rgba(255,255,255,.28) !important;
+      backdrop-filter: blur(6px);
+    }
+    .cv-time-range {
+      text-shadow: 0 1px 2px rgba(0,0,0,.25), 0 0 20px rgba(255,255,255,.12);
     }
     .cv-card.has-conflict {
       box-shadow:
@@ -2383,6 +2435,11 @@
     select option:checked, .hs-filter option:checked {
       background: #3D465C !important;
       color: #fff !important;
+    }
+    /* Keep schedule cards frosted glass (do not strip blur from .cv-card) */
+    .cv-card {
+      backdrop-filter: blur(18px) saturate(1.55) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(1.55) !important;
     }
     .header {
       backdrop-filter: blur(10px) !important;
