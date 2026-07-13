@@ -803,7 +803,24 @@
       width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg, var(--red), #9B0F28);
       color: #fff; font-size: 10px; font-weight: 800; display: grid; place-items: center; flex-shrink: 0;
     }
-    .ss-chip-name { font-size: 12px; font-weight: 700; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ss-chip-meta {
+      flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;
+    }
+    .ss-chip-name { font-size: 12px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ss-chip-times {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 800; letter-spacing: -.01em;
+      color: var(--muted); line-height: 1.2;
+    }
+    .ss-chip-in { color: #6EE7B7; }
+    .ss-chip-out { color: #FDA4AF; }
+    .ss-chip-arrow { opacity: .55; font-weight: 700; }
+    .ss-pool-sort-note {
+      width: 100%;
+      font-size: 10px; font-weight: 700; color: var(--muted);
+      padding: 2px 4px 6px; letter-spacing: .02em;
+    }
+    .ss-pool-sort-note strong { color: #FDA4AF; }
     .ss-chip-skill {
       font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
       padding: 2px 6px; border-radius: 6px; background: var(--bg); color: var(--muted);
@@ -3009,6 +3026,15 @@
       background: linear-gradient(145deg, rgba(52,211,153,.18), rgba(16,185,129,.06)) !important;
     }
     #view-setup .ss-chip-name { color: #F8FAFC !important; }
+    #view-setup .ss-chip-times { color: #94A3B8 !important; }
+    #view-setup .ss-chip-in { color: #6EE7B7 !important; }
+    #view-setup .ss-chip-out { color: #FDA4AF !important; font-weight: 900; }
+    #view-setup .ss-pool-sort-note { color: #94A3B8 !important; }
+    #view-setup .ss-pool-sort-note strong { color: #FDA4AF !important; }
+    #view-setup .ss-pool-body .ss-chip {
+      min-width: 160px;
+      max-width: 100%;
+    }
     #view-setup .ss-avatar {
       width: 32px !important; height: 32px !important;
       border-radius: 10px !important;
@@ -8475,6 +8501,14 @@ function personChipHtml(person, opts = {}) {
     ? `<button type="button" class="ss-chip-remove" data-action="unassign" data-person-id="${person.id}" title="Unassign">&#10005;</button>`
     : '';
   const fitBadge = opts.fitCount > 0 ? `<span class="ss-fit-badge">${opts.fitCount} fit</span>` : '';
+  // In / out from their schedule that day
+  const entry = opts.dateKey ? getScheduleEntry(person.id, opts.dateKey) : null;
+  const tIn = entry?.start ? (formatTime12(entry.start) || entry.start) : '';
+  const tOut = entry?.end ? (formatTime12(entry.end) || entry.end) : '';
+  const timesHtml = (tIn && tOut)
+    ? `<span class="ss-chip-times" title="In ${tIn} · Out ${tOut}"><span class="ss-chip-in">${escAttr(tIn)}</span><span class="ss-chip-arrow">→</span><span class="ss-chip-out">${escAttr(tOut)}</span></span>`
+    : '';
+  const titleTimes = tIn && tOut ? ` · In ${tIn} · Out ${tOut}` : '';
   // Deterministic 3D pose + float phase from person id (no laggy random per frame)
   let hash = 0;
   const id = String(person.id || person.name || '');
@@ -8483,10 +8517,14 @@ function personChipHtml(person, opts = {}) {
   const chipRx = (4 + (Math.abs(hash) % 8)).toFixed(1);
   const chipRy = (-10 + (Math.abs(hash >> 3) % 12)).toFixed(1);
   return `<div class="${cls}" draggable="true" data-person-id="${person.id}"
+    data-end="${entry?.end || ''}" data-start="${entry?.start || ''}"
     style="--ss-delay:-${delay}s;--chip-rx:${chipRx}deg;--chip-ry:${chipRy}deg"
-    title="Drag to assign — or click then click a slot">
+    title="Drag to assign — or click then click a slot${titleTimes}">
     <span class="ss-avatar" style="animation-delay:-${(Math.abs(hash) % 50) / 10}s">${initials}</span>
-    <span class="ss-chip-name">${escAttr(person.name)}</span>
+    <span class="ss-chip-meta">
+      <span class="ss-chip-name">${escAttr(person.name)}</span>
+      ${timesHtml}
+    </span>
     ${fitBadge}
     <span class="ss-chip-skill ${skill}">${skill}</span>
     ${removeBtn}
@@ -8735,7 +8773,22 @@ function renderSetup() {
       : `Drag people onto positions. Same spot can take 2+ people with different times for handovers.`)
     : `Nobody scheduled for ${shift?.name || 'this block'} — set times on the Schedule tab first.`;
 
-  const pool = onShift.filter(p => !assignedIds.has(p.id));
+  // Pool sorted by OUT (end) time ascending — leave earliest first for handoffs
+  const pool = onShift
+    .filter(p => !assignedIds.has(p.id))
+    .map(p => {
+      const e = getScheduleEntry(p.id, dateKey);
+      return { person: p, start: e?.start || '', end: e?.end || '' };
+    })
+    .sort((a, b) => {
+      const ae = timeToMinutes(a.end || '23:59');
+      const be = timeToMinutes(b.end || '23:59');
+      if (ae !== be) return ae - be;
+      const as = timeToMinutes(a.start || '00:00');
+      const bs = timeToMinutes(b.start || '00:00');
+      if (as !== bs) return as - bs;
+      return (a.person.name || '').localeCompare(b.person.name || '');
+    });
   document.getElementById('poolCount').textContent = pool.length;
   const poolEl = document.getElementById('staffPool');
   const poolHint = document.getElementById('poolHint');
@@ -8747,10 +8800,16 @@ function renderSetup() {
     poolEl.innerHTML = '<div class="empty-state" style="padding:1rem;font-size:12px;width:100%">Everyone placed — click a chip on a station to edit times / handover</div>';
     if (poolHint) poolHint.textContent = 'Drag chips back here to free them, or add a second person on a slot for handover.';
   } else {
-    poolEl.innerHTML = pool.map(p => personChipHtml(p, { pool: true, fitCount: countStationFits(p, templateForFit) })).join('');
+    poolEl.innerHTML =
+      `<div class="ss-pool-sort-note">Sorted by <strong>out time</strong> (earliest leave first — handoffs at top)</div>` +
+      pool.map(({ person: p }) => personChipHtml(p, {
+        pool: true,
+        dateKey,
+        fitCount: countStationFits(p, templateForFit)
+      })).join('');
     if (poolHint) poolHint.textContent = selectedName
       ? 'Click a position to place them (set start/end for handovers).'
-      : 'Drag onto a position · stack two people on one spot for 3:00 handover.';
+      : 'In → Out on each chip · earliest out at top for handoffs.';
   }
 
   const done = CHECKLIST_ITEMS.filter((_, i) => setup.checklist[i]).length;
