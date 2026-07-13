@@ -190,14 +190,42 @@
     label.field-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
     input, select, textarea {
       width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-      font-family: inherit; font-size: 14px; outline: none; background: var(--input-bg); color: var(--text);
+      font-family: inherit; font-size: 14px; outline: none;
+      background: #151922; color: #F1F5F9;
+      color-scheme: dark;
+      accent-color: var(--red);
     }
     input::placeholder, textarea::placeholder { color: #6B7280; }
     input:focus, select:focus, textarea:focus { border-color: rgba(240,58,95,.55); box-shadow: var(--glow); }
+    /* Dropdown list items (Windows/Chrome need explicit option colors) */
+    select {
+      background-color: #151922 !important;
+      color: #F1F5F9 !important;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%9AA3B5' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+    select option,
+    select optgroup {
+      background-color: #1A1F2B !important;
+      color: #F1F5F9 !important;
+    }
+    select option:checked,
+    select option:hover,
+    select option:focus {
+      background-color: #2A3144 !important;
+      color: #FFFFFF !important;
+    }
+    select option:disabled {
+      color: #6B7280 !important;
+    }
     .field { margin-bottom: 12px; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .time-picker { display: grid; grid-template-columns: 1fr 1fr 72px; gap: 6px; }
-    .time-picker select { font-size: 13px; padding: 9px 8px; }
+    .time-picker select { font-size: 13px; padding: 9px 8px; padding-right: 28px; }
 
     /* Lists */
     .item-list { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; }
@@ -2113,16 +2141,27 @@
     }
 
     input, select, textarea {
-      background: rgba(255,255,255,.06) !important;
+      background: #151922 !important;
+      color: #F1F5F9 !important;
       border: 1px solid rgba(255,255,255,.14) !important;
       border-radius: 12px !important;
-      backdrop-filter: blur(10px);
+      backdrop-filter: none !important;
       box-shadow: 0 1px 0 rgba(255,255,255,.08) inset;
       transition: border-color .15s, box-shadow .15s;
+      color-scheme: dark;
+    }
+    select option, select optgroup {
+      background: #1A1F2B !important;
+      color: #F1F5F9 !important;
+    }
+    select option:checked {
+      background: #3D465C linear-gradient(0deg, #3D465C 0%, #3D465C 100%) !important;
+      color: #FFFFFF !important;
     }
     input:focus, select:focus, textarea:focus {
       border-color: rgba(240,58,95,.55) !important;
       box-shadow: 0 0 0 3px rgba(240,58,95,.18), 0 1px 0 rgba(255,255,255,.1) inset !important;
+      color: #F1F5F9 !important;
     }
 
     table.roster thead th {
@@ -2331,6 +2370,20 @@
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
     }
+    /* Force readable dark dropdowns site-wide */
+    select, .hs-filter, #rosterFilter, #setupDay, #setupShift, #setupPeriod {
+      background-color: #151922 !important;
+      color: #F1F5F9 !important;
+      color-scheme: dark !important;
+    }
+    select option, .hs-filter option {
+      background-color: #1A1F2B !important;
+      color: #F1F5F9 !important;
+    }
+    select option:checked, .hs-filter option:checked {
+      background: #3D465C !important;
+      color: #fff !important;
+    }
     .header {
       backdrop-filter: blur(10px) !important;
       -webkit-backdrop-filter: blur(10px) !important;
@@ -2440,10 +2493,15 @@
       border-top-color: rgba(255,255,255,.1) !important;
     }
     #view-setup .ss-controls select {
-      background: rgba(8,10,16,.7) !important;
+      background: #151922 !important;
       border: 1px solid rgba(255,255,255,.16) !important;
       color: #F8FAFC !important;
       border-radius: 12px !important;
+      color-scheme: dark;
+    }
+    #view-setup .ss-controls select option {
+      background: #1A1F2B !important;
+      color: #F1F5F9 !important;
     }
     #view-setup .ss-progress-bar {
       height: 10px !important;
