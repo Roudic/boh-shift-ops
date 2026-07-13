@@ -1896,14 +1896,216 @@
     }
     .assign-quick-scroll .assign-opt { padding: 9px 12px; font-size: 12px; }
 
+    /* ── Screen: hide print gameplan ── */
+    .gameplan-print { display: none; }
+
     @media print {
-      .header, .ss-controls .btn, .ss-sidebar, .grid-2 > .panel:first-child, .modal-bg { display: none !important; }
-      .main { padding: 0; max-width: 100%; }
-      .view { display: block !important; }
-      #view-schedule { display: none !important; }
-      .ss-layout { grid-template-columns: 1fr; }
-      .ss-hero { background: #fff; color: #000; box-shadow: none; border: 1px solid #ddd; }
-      .ss-slot { break-inside: avoid; }
+      @page { size: landscape; margin: 0.35in; }
+      html, body {
+        background: #fff !important;
+        color: #0B1C2C !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .header, .modal-bg, .bg-orbs, .ss-fx-star, .ss-fx-spark,
+      #view-schedule, .classic-hero, .stats, .labor-panel,
+      .grid-2 > .panel:first-child { display: none !important; }
+      .main { padding: 0 !important; max-width: none !important; margin: 0 !important; }
+      body.printing-gameplan #view-setup > *:not(#gameplanPrint) { display: none !important; }
+      body.printing-gameplan #gameplanPrint { display: block !important; }
+      body.printing-gameplan .view { display: block !important; }
+      /* Fallback if print without gameplan class */
+      body:not(.printing-gameplan) #view-setup .ss-controls .btn { display: none !important; }
+      body:not(.printing-gameplan) #view-setup .ss-sidebar { display: none !important; }
+      body:not(.printing-gameplan) #view-setup .ss-hero { background: #fff !important; color: #000 !important; box-shadow: none !important; border: 1px solid #ddd !important; transform: none !important; }
+      body:not(.printing-gameplan) #view-setup .ss-layout { grid-template-columns: 1fr !important; }
+    }
+
+    /* ── Gameplan print sheet (CFASCD BOH layout) ── */
+    .gameplan-print {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      color: #0B1C2C;
+      background: #fff;
+    }
+    .gp-page {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px 14px;
+      min-height: 7.2in;
+    }
+    .gp-header {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .gp-logo {
+      width: 78px; height: 78px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #FF4D6D, #DD0033 55%, #9B0F28);
+      color: #fff; display: grid; place-items: center;
+      font-weight: 900; font-size: 13px; letter-spacing: -.02em;
+      box-shadow: 0 2px 0 #7A0A20 inset;
+      text-align: center; line-height: 1.15; padding: 6px;
+    }
+    .gp-logo small { display: block; font-size: 8px; font-weight: 700; opacity: .9; letter-spacing: .04em; }
+    .gp-meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .gp-meta-box {
+      background: #0E2A3D;
+      color: #E8F1F7;
+      border-radius: 12px;
+      min-height: 42px;
+      padding: 8px 10px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .gp-meta-box .k { font-size: 8px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+    .gp-meta-box .v { font-size: 13px; font-weight: 800; margin-top: 2px; }
+
+    .gp-left { display: flex; flex-direction: column; gap: 10px; }
+    .gp-panel {
+      background: #0E2A3D;
+      border-radius: 10px;
+      overflow: hidden;
+      color: #E8F1F7;
+      display: flex; flex-direction: column;
+    }
+    .gp-panel-head {
+      background: #2A3441;
+      height: 18px;
+    }
+    .gp-panel-body { padding: 8px 10px 10px; flex: 1; }
+    .gp-huddle-label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 9px; font-weight: 800; letter-spacing: .08em;
+      color: #0E2A3D; margin-right: 4px;
+    }
+    .gp-huddle-wrap {
+      display: flex; gap: 6px; align-items: stretch;
+      background: #fff; border: 1px solid #D1D5DB; border-radius: 10px;
+      padding: 8px 6px; min-height: 200px;
+    }
+    .gp-huddle-cols { display: flex; gap: 10px; flex: 1; }
+    .gp-huddle-col { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .gp-huddle-col span {
+      font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #334155;
+    }
+    .gp-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid #0E2A3D; background: #fff;
+    }
+    .gp-notes-box {
+      background: #0E2A3D; border-radius: 10px; min-height: 110px;
+      color: #E8F1F7; padding: 8px 10px; font-size: 10px; line-height: 1.35;
+    }
+    .gp-notes-box .t { font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .75; margin-bottom: 6px; }
+    .gp-notes-box .b { white-space: pre-wrap; min-height: 70px; }
+
+    .gp-boards {
+      display: flex; flex-direction: column; gap: 10px;
+      min-width: 0;
+    }
+    .gp-board {
+      background: #0E2A3D;
+      border-radius: 16px;
+      padding: 10px 12px 12px;
+      color: #E8F1F7;
+      position: relative;
+      flex: 1;
+      min-height: 0;
+    }
+    .gp-board-icon {
+      position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #0B1C2C; border: 1px solid rgba(255,255,255,.2);
+      display: grid; place-items: center; font-size: 12px;
+    }
+    .gp-board-title {
+      text-align: center; font-size: 11px; font-weight: 900;
+      letter-spacing: .14em; margin: 14px 0 8px; opacity: .95;
+    }
+    .gp-board-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr 0.85fr 1.15fr 1fr;
+      gap: 6px 10px;
+      align-items: start;
+    }
+    .gp-col-title {
+      font-size: 8px; font-weight: 800; letter-spacing: .1em;
+      text-transform: uppercase; color: #F03A5F;
+      border-bottom: 1px dotted rgba(240,58,95,.65);
+      padding-bottom: 3px; margin-bottom: 4px;
+      text-align: center;
+    }
+    .gp-line {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2px;
+      margin-bottom: 5px;
+      min-height: 18px;
+    }
+    .gp-line-label {
+      font-size: 7.5px; font-weight: 800; letter-spacing: .06em;
+      text-transform: uppercase; color: #F03A5F;
+      border-bottom: 1px dotted rgba(240,58,95,.55);
+      padding-bottom: 1px;
+    }
+    .gp-line-name {
+      font-size: 9.5px; font-weight: 700; color: #F8FAFC;
+      min-height: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      padding: 1px 0 2px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .gp-line-name.empty { color: rgba(255,255,255,.25); }
+    .gp-line-time {
+      font-size: 7.5px; font-weight: 700; color: #94A3B8;
+    }
+    .gp-centerline {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding-top: 4px;
+    }
+    .gp-tbar {
+      width: 100%; height: 16px; border-radius: 8px;
+      background: linear-gradient(180deg, #4B6B7F, #2C4454);
+    }
+    .gp-tstem {
+      width: 28px; flex: 1; min-height: 48px; border-radius: 0 0 8px 8px;
+      background: linear-gradient(180deg, #3D5A6C, #243845);
+    }
+    .gp-centerline-label {
+      font-size: 8px; font-weight: 900; letter-spacing: .12em;
+      writing-mode: vertical-rl; transform: rotate(180deg);
+      color: rgba(255,255,255,.55); margin-top: 4px;
+    }
+    .gp-footer {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .gp-footer-box {
+      background: #0E2A3D;
+      border-radius: 10px;
+      min-height: 48px;
+      color: #E8F1F7;
+      padding: 8px 10px;
+    }
+    .gp-footer-box .t {
+      font-size: 8px; font-weight: 800; letter-spacing: .1em;
+      text-transform: uppercase; opacity: .7; margin-bottom: 4px;
+    }
+    .gp-footer-box .b { font-size: 10px; font-weight: 600; min-height: 22px; white-space: pre-wrap; }
+
+    @media print {
+      .gameplan-print { display: block !important; }
+      .gp-page { min-height: auto; }
+      .gp-board { break-inside: avoid; }
     }
 
     .cloud-badge {
@@ -3684,7 +3886,7 @@
         <button class="btn btn-primary" onclick="openLayoutEditor()">Edit Positions</button>
         <button class="btn" onclick="openLoadLayoutPreset()">Load Preset</button>
         <button class="btn" onclick="autoAssign()">Auto-Fill</button>
-        <button class="btn" onclick="window.print()">Print</button>
+        <button class="btn" onclick="printSetupGameplan()" title="Print BOH gameplan sheet">Print</button>
         <button class="btn btn-ghost" style="color:#94A3B8;border-color:rgba(255,255,255,.2)" onclick="clearSetupAssignments()">Clear</button>
       </div>
     </div>
@@ -3716,6 +3918,9 @@
       </aside>
     </div>
   </div>
+
+  <!-- Print-only BOH gameplan (CFASCD-style layout) -->
+  <div id="gameplanPrint" class="gameplan-print" aria-hidden="true"></div>
 
 </main>
 
@@ -9099,6 +9304,223 @@ function findSlotLabel(layout, slotId) {
 function assignStation(slotId, personId) {
   // Opens time-range modal for handover support
   openSlotAssignModal(slotId, null, personId);
+}
+
+/** Classify a station into gameplan columns (CFASCD centerline board) */
+function gameplanColumnForLabel(label, groupName) {
+  const g = String(groupName || '').toLowerCase();
+  const l = String(label || '').toLowerCase();
+  if (/primary/.test(g) || /primary|bun|builder/.test(l)) return 'primary';
+  if (/secondary/.test(g) || /secondary|special|nugget|chute/.test(l)) return 'secondary';
+  if (/machine/.test(g) || /machine/.test(l)) return 'sideR';
+  if (/bread|raw/.test(g) || /bread|raw/.test(l)) return 'sideR';
+  if (/fries|fry|hash|egg|prep|dish|float|flex|support|flow/.test(g + ' ' + l)) return 'sideL';
+  return 'sideL';
+}
+
+function gameplanPeriodIcon(period) {
+  const n = String(period?.name || '').toLowerCase();
+  const s = timeToMinutes(period?.start || '12:00');
+  if (/break|early|open|bf/.test(n) || s < 10 * 60 + 30) return '☀';
+  if (/close|dinner|late|even/.test(n) || s >= 16 * 60) return '☾';
+  return '☀';
+}
+
+function gameplanPersonOnLine(segs) {
+  if (!segs?.length) return { name: '', time: '', multi: false };
+  if (segs.length === 1) {
+    const p = staff.find(s => s.id === segs[0].personId);
+    const t0 = segs[0].start ? compactTime12(segs[0].start) : '';
+    const t1 = segs[0].end ? compactTime12(segs[0].end) : '';
+    return {
+      name: p?.name || '—',
+      time: t0 && t1 ? `${t0}–${t1}` : '',
+      multi: false
+    };
+  }
+  // Handoff: show both short
+  const parts = segs.map(seg => {
+    const p = staff.find(s => s.id === seg.personId);
+    const t1 = seg.end ? compactTime12(seg.end) : '';
+    return `${(p?.name || '?').split(' ')[0]}${t1 ? '→' + t1 : ''}`;
+  });
+  return { name: parts.join(' · '), time: 'handoff', multi: true };
+}
+
+function buildGameplanStationLines(dateKey, period) {
+  const setup = getSetup(dateKey, period.id);
+  const layout = getSetupLayout(period, setup);
+  const cols = { sideL: [], secondary: [], primary: [], sideR: [] };
+  layout.forEach(g => {
+    const gName = g.name || g.group || '';
+    (g.slots || []).forEach(slot => {
+      const segs = getSlotSegments(setup, slot.id);
+      const info = gameplanPersonOnLine(segs);
+      const col = gameplanColumnForLabel(slot.label, gName);
+      cols[col].push({
+        label: slot.label,
+        name: info.name,
+        time: info.time,
+        empty: !segs.length
+      });
+    });
+  });
+  return cols;
+}
+
+function gameplanLinesHtml(lines) {
+  if (!lines.length) {
+    return `<div class="gp-line"><div class="gp-line-label">—</div><div class="gp-line-name empty"> </div></div>`;
+  }
+  return lines.map(ln => `
+    <div class="gp-line">
+      <div class="gp-line-label">${escAttr(ln.label)}</div>
+      <div class="gp-line-name${ln.empty ? ' empty' : ''}">${ln.empty ? '' : escAttr(ln.name)}</div>
+      ${ln.time && !ln.empty ? `<div class="gp-line-time">${escAttr(ln.time)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function buildGameplanPrintHtml(dateKey) {
+  const day = parseDateKey(dateKey);
+  const dayLabel = day.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+  const periods = [...shifts].sort((a, b) => a.start.localeCompare(b.start));
+  // Prefer periods with layout or people; fall back to all
+  const boards = periods.filter(p => {
+    const layout = getSetupLayout(p, getSetup(dateKey, p.id));
+    const on = getOnShiftStaff(dateKey, p.id).length;
+    return (layout && layout.length) || on > 0;
+  });
+  const useBoards = boards.length ? boards : periods.slice(0, 3);
+
+  let filled = 0, required = 0;
+  useBoards.forEach(p => {
+    const setup = getSetup(dateKey, p.id);
+    const layout = getSetupLayout(p, setup);
+    layout.forEach(g => (g.slots || []).forEach(slot => {
+      required++;
+      if (getSlotSegments(setup, slot.id).length) filled++;
+    }));
+  });
+
+  const notes = (() => {
+    // Prefer currently selected period notes, else first board notes
+    const curId = document.getElementById('setupShift')?.value || useBoards[0]?.id;
+    return (curId && getSetup(dateKey, curId).notes) || '';
+  })();
+
+  const boardHtml = useBoards.slice(0, 3).map(p => {
+    const cols = buildGameplanStationLines(dateKey, p);
+    const icon = gameplanPeriodIcon(p);
+    return `
+      <section class="gp-board">
+        <div class="gp-board-icon">${icon}</div>
+        <div class="gp-board-title">${escAttr(p.name).toUpperCase()} · ${formatTime12(p.start)}–${formatTime12(p.end)}</div>
+        <div class="gp-board-grid">
+          <div>
+            <div class="gp-col-title">Support</div>
+            ${gameplanLinesHtml(cols.sideL)}
+          </div>
+          <div>
+            <div class="gp-col-title">Secondary</div>
+            ${gameplanLinesHtml(cols.secondary)}
+          </div>
+          <div class="gp-centerline">
+            <div class="gp-tbar"></div>
+            <div class="gp-tstem"></div>
+            <div class="gp-centerline-label">CENTERLINE</div>
+          </div>
+          <div>
+            <div class="gp-col-title">Primary</div>
+            ${gameplanLinesHtml(cols.primary)}
+          </div>
+          <div>
+            <div class="gp-col-title">Machines</div>
+            ${gameplanLinesHtml(cols.sideR)}
+          </div>
+        </div>
+      </section>
+    `;
+  }).join('');
+
+  const huddleDots = Array.from({ length: 12 }, () => '<div class="gp-dot"></div>').join('');
+
+  return `
+    <div class="gp-page">
+      <header class="gp-header">
+        <div class="gp-logo">BOH<small>GAMEPLAN</small></div>
+        <div class="gp-meta">
+          <div class="gp-meta-box"><div class="k">Day</div><div class="v">${escAttr(dayLabel)}</div></div>
+          <div class="gp-meta-box"><div class="k">Coverage</div><div class="v">${filled}/${required || '—'} filled</div></div>
+          <div class="gp-meta-box"><div class="k">On floor</div><div class="v">${staff.filter(p => getScheduleEntry(p.id, dateKey)).length} scheduled</div></div>
+          <div class="gp-meta-box"><div class="k">Week of</div><div class="v">${weekStart ? weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—'}</div></div>
+        </div>
+      </header>
+
+      <aside class="gp-left">
+        <div class="gp-huddle-wrap">
+          <div class="gp-huddle-label">Huddle · Break</div>
+          <div class="gp-huddle-cols">
+            <div class="gp-huddle-col"><span>Huddle</span>${huddleDots}</div>
+            <div class="gp-huddle-col"><span>Break</span>${huddleDots}</div>
+          </div>
+        </div>
+        <div class="gp-notes-box">
+          <div class="t">Shift notes / callouts</div>
+          <div class="b">${escAttr(notes || '')}</div>
+        </div>
+        <div class="gp-notes-box" style="min-height:72px">
+          <div class="t">Lead / floater plan</div>
+          <div class="b"></div>
+        </div>
+      </aside>
+
+      <div class="gp-boards">
+        ${boardHtml || '<div class="gp-board"><div class="gp-board-title">NO PERIODS — ADD SHIFT PERIODS FIRST</div></div>'}
+      </div>
+
+      <footer class="gp-footer">
+        <div class="gp-footer-box">
+          <div class="t">Pre-rush / equipment</div>
+          <div class="b"></div>
+        </div>
+        <div class="gp-footer-box">
+          <div class="t">Focus / peak plan</div>
+          <div class="b"></div>
+        </div>
+      </footer>
+    </div>
+  `;
+}
+
+function printSetupGameplan() {
+  const dateKey = document.getElementById('setupDay')?.value || (weekStart && getDateKey(weekStart));
+  if (!dateKey) {
+    alert('Pick a day first.');
+    return;
+  }
+  const host = document.getElementById('gameplanPrint');
+  if (!host) {
+    window.print();
+    return;
+  }
+  // Ensure setup data is current
+  if (document.getElementById('view-setup')?.classList.contains('active')) {
+    // keep current selectors
+  } else {
+    switchView('setup');
+  }
+  host.innerHTML = buildGameplanPrintHtml(dateKey);
+  document.body.classList.add('printing-gameplan');
+  const cleanup = () => {
+    document.body.classList.remove('printing-gameplan');
+    window.removeEventListener('afterprint', cleanup);
+  };
+  window.addEventListener('afterprint', cleanup);
+  // Give layout a tick to paint, then print
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => window.print());
+  });
 }
 
 /** Big visual pop when a station pad gets someone */
