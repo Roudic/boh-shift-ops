@@ -2045,27 +2045,74 @@
     .gp-line {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 2px;
-      margin-bottom: 5px;
-      min-height: 18px;
+      gap: 1px;
+      margin-bottom: 6px;
+      min-height: 22px;
     }
     .gp-line-label {
       font-size: 7.5px; font-weight: 800; letter-spacing: .06em;
       text-transform: uppercase; color: #F03A5F;
-      border-bottom: 1px dotted rgba(240,58,95,.55);
+      border-bottom: 1px dotted rgba(240,58,95,.65);
       padding-bottom: 1px;
     }
     .gp-line-name {
-      font-size: 9.5px; font-weight: 700; color: #F8FAFC;
-      min-height: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-      padding: 1px 0 2px;
+      font-size: 11px; font-weight: 800; color: #FFFFFF !important;
+      min-height: 14px;
+      border-bottom: 1px solid rgba(255,255,255,.22);
+      padding: 2px 0 3px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      letter-spacing: -.01em;
     }
-    .gp-line-name.empty { color: rgba(255,255,255,.25); }
+    .gp-line-name.empty {
+      color: rgba(255,255,255,.2) !important;
+      min-height: 14px;
+    }
     .gp-line-time {
-      font-size: 7.5px; font-weight: 700; color: #94A3B8;
+      font-size: 8px; font-weight: 700; color: #A5F3FC !important;
+      margin-top: 1px;
     }
+    /* Checklist on print sheet */
+    .gp-checklist {
+      background: #0E2A3D;
+      border-radius: 10px;
+      color: #E8F1F7;
+      padding: 8px 10px 10px;
+    }
+    .gp-checklist .t {
+      font-size: 9px; font-weight: 800; letter-spacing: .08em;
+      text-transform: uppercase; opacity: .8; margin-bottom: 6px;
+    }
+    .gp-check-row {
+      display: flex; align-items: flex-start; gap: 6px;
+      font-size: 8.5px; font-weight: 600; line-height: 1.25;
+      margin-bottom: 4px; color: #E2E8F0;
+    }
+    .gp-check-box {
+      width: 11px; height: 11px; border-radius: 2px; flex-shrink: 0;
+      border: 1.5px solid #E2E8F0; margin-top: 1px;
+      display: grid; place-items: center;
+      font-size: 8px; font-weight: 900; line-height: 1;
+      color: transparent;
+    }
+    .gp-check-row.done .gp-check-box {
+      background: #10B981; border-color: #10B981; color: #fff;
+    }
+    .gp-check-row.done span { text-decoration: line-through; opacity: .75; }
+    .gp-team-list {
+      background: #0E2A3D; border-radius: 10px; color: #E8F1F7;
+      padding: 8px 10px; font-size: 9px;
+    }
+    .gp-team-list .t {
+      font-size: 9px; font-weight: 800; letter-spacing: .08em;
+      text-transform: uppercase; opacity: .8; margin-bottom: 6px;
+    }
+    .gp-team-row {
+      display: flex; justify-content: space-between; gap: 6px;
+      padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,.08);
+      font-weight: 700;
+    }
+    .gp-team-row .n { color: #fff; }
+    .gp-team-row .tm { color: #A5F3FC; font-size: 8px; white-space: nowrap; }
     .gp-centerline {
       display: flex; flex-direction: column; align-items: center; gap: 4px;
       padding-top: 4px;
@@ -9328,23 +9375,29 @@ function gameplanPeriodIcon(period) {
 
 function gameplanPersonOnLine(segs) {
   if (!segs?.length) return { name: '', time: '', multi: false };
+  const resolveName = (personId) => {
+    const p = staff.find(s => s.id === personId);
+    return p?.name || String(personId || '').replace(/^p_?/, '') || 'Unknown';
+  };
   if (segs.length === 1) {
-    const p = staff.find(s => s.id === segs[0].personId);
-    const t0 = segs[0].start ? compactTime12(segs[0].start) : '';
-    const t1 = segs[0].end ? compactTime12(segs[0].end) : '';
+    const seg = segs[0];
+    const t0 = seg.start ? (formatTime12(seg.start) || compactTime12(seg.start)) : '';
+    const t1 = seg.end ? (formatTime12(seg.end) || compactTime12(seg.end)) : '';
     return {
-      name: p?.name || '—',
-      time: t0 && t1 ? `${t0}–${t1}` : '',
+      name: resolveName(seg.personId),
+      time: t0 && t1 ? `${t0} – ${t1}` : (t0 || t1 || ''),
       multi: false
     };
   }
-  // Handoff: show both short
+  // Handoff: full names + windows
   const parts = segs.map(seg => {
-    const p = staff.find(s => s.id === seg.personId);
+    const nm = resolveName(seg.personId);
+    const t0 = seg.start ? compactTime12(seg.start) : '';
     const t1 = seg.end ? compactTime12(seg.end) : '';
-    return `${(p?.name || '?').split(' ')[0]}${t1 ? '→' + t1 : ''}`;
+    const win = t0 && t1 ? ` ${t0}–${t1}` : '';
+    return nm + win;
   });
-  return { name: parts.join(' · '), time: 'handoff', multi: true };
+  return { name: parts.join('  →  '), time: 'handoff', multi: true };
 }
 
 function buildGameplanStationLines(dateKey, period) {
@@ -9370,15 +9423,68 @@ function buildGameplanStationLines(dateKey, period) {
 
 function gameplanLinesHtml(lines) {
   if (!lines.length) {
-    return `<div class="gp-line"><div class="gp-line-label">—</div><div class="gp-line-name empty"> </div></div>`;
+    return `<div class="gp-line"><div class="gp-line-label">—</div><div class="gp-line-name empty">&nbsp;</div></div>`;
   }
-  return lines.map(ln => `
+  return lines.map(ln => {
+    // Put name + time on the station line so staff is always visible
+    const nameBit = ln.empty ? '' : escAttr(ln.name || '—');
+    const timeBit = (!ln.empty && ln.time && ln.time !== 'handoff')
+      ? ` <span class="gp-line-time">(${escAttr(ln.time)})</span>`
+      : (ln.time === 'handoff' ? ' <span class="gp-line-time">(handoff)</span>' : '');
+    return `
     <div class="gp-line">
       <div class="gp-line-label">${escAttr(ln.label)}</div>
-      <div class="gp-line-name${ln.empty ? ' empty' : ''}">${ln.empty ? '' : escAttr(ln.name)}</div>
-      ${ln.time && !ln.empty ? `<div class="gp-line-time">${escAttr(ln.time)}</div>` : ''}
+      <div class="gp-line-name${ln.empty ? ' empty' : ''}">${nameBit}${timeBit}</div>
+    </div>`;
+  }).join('');
+}
+
+function buildGameplanChecklistHtml(setup) {
+  const cl = setup?.checklist || {};
+  return `
+    <div class="gp-checklist">
+      <div class="t">Pre-rush checklist</div>
+      ${CHECKLIST_ITEMS.map((item, i) => `
+        <div class="gp-check-row${cl[i] ? ' done' : ''}">
+          <div class="gp-check-box">${cl[i] ? '✓' : ''}</div>
+          <span>${escAttr(item)}</span>
+        </div>
+      `).join('')}
     </div>
-  `).join('');
+  `;
+}
+
+function buildGameplanTeamListHtml(dateKey, periodId) {
+  const setup = getSetup(dateKey, periodId);
+  const rows = [];
+  Object.keys(setup.assignments || {}).forEach(slotId => {
+    getSlotSegments(setup, slotId).forEach(seg => {
+      const p = staff.find(s => s.id === seg.personId);
+      const label = findSlotLabel(getSetupLayout(shifts.find(x => x.id === periodId), setup), slotId);
+      const t0 = seg.start ? compactTime12(seg.start) : '';
+      const t1 = seg.end ? compactTime12(seg.end) : '';
+      rows.push({
+        name: p?.name || 'Unknown',
+        slot: label || slotId,
+        time: t0 && t1 ? `${t0}–${t1}` : ''
+      });
+    });
+  });
+  rows.sort((a, b) => a.name.localeCompare(b.name));
+  if (!rows.length) {
+    return `<div class="gp-team-list"><div class="t">Assigned staff</div><div style="opacity:.5;font-size:9px">No assignments yet</div></div>`;
+  }
+  return `
+    <div class="gp-team-list">
+      <div class="t">Assigned staff (${rows.length})</div>
+      ${rows.map(r => `
+        <div class="gp-team-row">
+          <span class="n">${escAttr(r.name)} <span style="opacity:.65;font-weight:600">· ${escAttr(r.slot)}</span></span>
+          <span class="tm">${escAttr(r.time)}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
 }
 
 function buildGameplanPrintHtml(dateKey) {
@@ -9403,11 +9509,9 @@ function buildGameplanPrintHtml(dateKey) {
     }));
   });
 
-  const notes = (() => {
-    // Prefer currently selected period notes, else first board notes
-    const curId = document.getElementById('setupShift')?.value || useBoards[0]?.id;
-    return (curId && getSetup(dateKey, curId).notes) || '';
-  })();
+  const curId = document.getElementById('setupShift')?.value || useBoards[0]?.id;
+  const curSetup = curId ? getSetup(dateKey, curId) : { checklist: {}, notes: '' };
+  const notes = curSetup.notes || '';
 
   const boardHtml = useBoards.slice(0, 3).map(p => {
     const cols = buildGameplanStationLines(dateKey, p);
@@ -9444,6 +9548,8 @@ function buildGameplanPrintHtml(dateKey) {
   }).join('');
 
   const huddleDots = Array.from({ length: 12 }, () => '<div class="gp-dot"></div>').join('');
+  const checklistHtml = buildGameplanChecklistHtml(curSetup);
+  const teamListHtml = curId ? buildGameplanTeamListHtml(dateKey, curId) : '';
 
   return `
     <div class="gp-page">
@@ -9465,13 +9571,11 @@ function buildGameplanPrintHtml(dateKey) {
             <div class="gp-huddle-col"><span>Break</span>${huddleDots}</div>
           </div>
         </div>
+        ${checklistHtml}
+        ${teamListHtml}
         <div class="gp-notes-box">
           <div class="t">Shift notes / callouts</div>
           <div class="b">${escAttr(notes || '')}</div>
-        </div>
-        <div class="gp-notes-box" style="min-height:72px">
-          <div class="t">Lead / floater plan</div>
-          <div class="b"></div>
         </div>
       </aside>
 
