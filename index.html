@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>BOH Shift Ops — Schedule &amp; Setup</title>
@@ -4414,6 +4414,273 @@
         transform: none !important;
       }
     }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE — Mobile & Tablet (desktop unchanged ≥769px)
+       Breakpoints: 768px tablet, 480px phone
+       ═══════════════════════════════════════════════════ */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 120;
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+      background: rgba(10, 12, 18, .94);
+      border-top: 1px solid rgba(255,255,255,.1);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      box-shadow: 0 -8px 28px rgba(0,0,0,.35);
+    }
+    .mobile-bottom-nav .mob-nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; min-height: 52px; padding: 6px 4px;
+      border: none; border-radius: 12px; background: transparent;
+      font-family: inherit; font-size: 10px; font-weight: 700; color: var(--muted);
+      cursor: pointer; transition: color .15s, background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-bottom-nav .mob-nav-item svg { flex-shrink: 0; }
+    .mobile-bottom-nav .mob-nav-item.active {
+      color: #fff; background: rgba(240,58,95,.16);
+      box-shadow: 0 0 0 1px rgba(240,58,95,.35) inset;
+    }
+    .mobile-more-btn { display: none; }
+    .mobile-more-btn .ham-ico {
+      display: inline-flex; flex-direction: column; gap: 3px; width: 16px;
+    }
+    .mobile-more-btn .ham-ico span {
+      display: block; height: 2px; border-radius: 2px; background: currentColor;
+    }
+    .mobile-actions-overlay {
+      display: none; position: fixed; inset: 0; z-index: 175;
+      background: rgba(0,0,0,.45); backdrop-filter: blur(2px);
+      opacity: 0; pointer-events: none; transition: opacity .2s ease;
+    }
+    .mobile-actions-overlay.open { opacity: 1; pointer-events: auto; }
+    .header-actions-menu {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+
+    .scroll-hint-label {
+      display: none;
+      position: absolute; right: 10px; top: 8px; z-index: 2;
+      font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+      color: var(--muted); pointer-events: none;
+      padding: 4px 8px; border-radius: 999px;
+      background: rgba(20,24,36,.9); border: 1px solid rgba(255,255,255,.1);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+      }
+      body.mobile-actions-open { overflow: hidden; }
+      .header-inner {
+        padding: 8px 12px; gap: 8px;
+        flex-wrap: wrap; align-items: center;
+      }
+      .header-inner > .tabs { display: none; }
+      .brand-sub { font-size: 10px; }
+      .header-actions {
+        width: 100%; order: 3;
+        flex-wrap: nowrap; justify-content: space-between; gap: 6px;
+      }
+      .week-nav button {
+        min-width: 44px; min-height: 44px; padding: 8px 12px; font-size: 16px;
+      }
+      .week-label {
+        min-width: 0; flex: 1; font-size: 12px; padding: 8px 6px;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .mobile-more-btn {
+        display: inline-flex !important; align-items: center; gap: 6px;
+        min-height: 44px; min-width: 44px; padding: 8px 12px; flex-shrink: 0;
+      }
+      .mobile-actions-overlay { display: block; }
+      .header-actions-menu {
+        display: flex;
+        position: fixed; top: 0; right: 0; bottom: 0;
+        width: min(320px, 90vw); z-index: 180;
+        flex-direction: column; align-items: stretch; flex-wrap: nowrap;
+        padding: 0; gap: 0;
+        background: rgba(14, 17, 26, .97);
+        border-left: 1px solid rgba(255,255,255,.12);
+        box-shadow: -18px 0 50px rgba(0,0,0,.45);
+        transform: translateX(105%);
+        transition: transform .22s cubic-bezier(.2,.8,.2,1);
+        overflow: hidden;
+        backdrop-filter: blur(18px);
+      }
+      .header-actions-menu.open { transform: translateX(0); }
+      .mobile-actions-head {
+        display: flex; align-items: center; justify-content: space-between; gap: 10px;
+        padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.1); flex-shrink: 0;
+      }
+      .mobile-actions-head h3 { font-size: 15px; font-weight: 800; margin: 0; }
+      .mobile-actions-body {
+        flex: 1; overflow-y: auto; padding: 12px;
+        display: flex; flex-direction: column; gap: 8px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .header-actions-menu .btn,
+      .header-actions-menu .cloud-badge,
+      .header-actions-menu label.btn {
+        width: 100%; justify-content: center; min-height: 44px;
+        font-size: 14px; padding: 10px 14px;
+      }
+      .header-actions-menu .cloud-badge { justify-content: center; }
+      .mobile-bottom-nav { display: flex; gap: 4px; }
+
+      .main { padding: 1rem 12px 1.5rem; }
+      .panel-head { padding: 12px 14px; flex-wrap: wrap; gap: 8px; }
+      .panel-body { padding: 12px 14px; }
+
+      .btn, .tab, .icon-btn, .assign-opt, .skills-cell-btn, .lead-add-row {
+        min-height: 44px;
+      }
+      .btn-sm { min-height: 44px; padding: 10px 14px; font-size: 13px; }
+      .icon-btn { min-width: 44px; padding: 10px; font-size: 16px; }
+      .color-swatch { width: 44px; height: 44px; }
+
+      .field-row { grid-template-columns: 1fr; }
+      .time-picker { grid-template-columns: 1fr 1fr 1fr; }
+      .import-summary { grid-template-columns: 1fr; }
+      .tpl-shift-meta { grid-template-columns: 1fr; }
+
+      .classic-hero {
+        padding: 16px; border-radius: 18px; margin-bottom: 14px;
+      }
+      .classic-hero h2 { font-size: 1.2rem; }
+      .classic-hero-actions { width: 100%; }
+      .classic-hero-actions .btn { flex: 1 1 calc(50% - 5px); justify-content: center; min-height: 44px; }
+      .classic-hint-pills { gap: 6px; }
+      .classic-hint-pills span { font-size: 10px; padding: 6px 10px; }
+
+      .hs-toolbar { padding: 10px 12px; gap: 8px; }
+      .hs-toolbar .btn { min-height: 44px; }
+
+      .table-wrap,
+      .skills-matrix-wrap,
+      .lead-board-wrap,
+      .lead-sched-wrap,
+      .ssched-scroll {
+        position: relative;
+      }
+      .scroll-hint-label { display: block; transition: opacity .2s; }
+      .table-wrap.scroll-hint::after,
+      .skills-matrix-wrap.scroll-hint::after,
+      .lead-board-wrap.scroll-hint::after,
+      .lead-sched-wrap.scroll-hint::after,
+      .ssched-scroll.scroll-hint::after {
+        content: '';
+        position: absolute; top: 0; right: 0; bottom: 0; width: 32px; pointer-events: none;
+        background: linear-gradient(90deg, transparent, rgba(11,14,22,.88));
+        z-index: 5; transition: opacity .2s;
+      }
+      .scroll-hint.scrolled::after,
+      .scroll-hint.scrolled .scroll-hint-label { opacity: 0; }
+
+      .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .stat { padding: 12px 14px; }
+      .stat-val { font-size: 22px; }
+
+      .modal-bg {
+        padding: 0; align-items: stretch; justify-content: stretch;
+      }
+      .modal {
+        max-width: none; width: 100%; min-height: 100%;
+        max-height: none; border-radius: 0; margin: 0;
+      }
+      .modal.wide { max-width: none; }
+      .modal-head { padding: 14px 16px; }
+      .modal-body { padding: 14px 16px; }
+      .modal-foot, .modal-foot-stack { padding: 12px 16px; }
+      .modal-foot .btn { min-height: 48px; font-size: 14px; }
+
+      .ss-hero { padding: 16px; margin-bottom: 1rem; }
+      .ss-hero h2 { font-size: 1.15rem; }
+      .ss-controls { gap: 8px; margin-top: 14px; padding-top: 12px; }
+      .ss-controls .field { min-width: calc(50% - 4px); flex: 1 1 calc(50% - 4px); }
+      .ss-controls .btn { min-height: 44px; }
+      .ss-progress-wrap { min-width: 0; flex: 1 1 100%; }
+      .ss-slots { grid-template-columns: 1fr; gap: 8px; padding: 10px; }
+      .ss-pool-body .ss-chip { min-width: 0; width: 100%; max-width: none; }
+      .skills-cell-btn { min-width: 56px; height: 44px; font-size: 12px; }
+
+      #view-setup .ss-hero,
+      #view-setup .ss-stage-hero {
+        transform: none !important;
+        margin-bottom: 1rem;
+      }
+      #view-setup .ss-gp-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      #view-setup .ss-gp-col .ss-slot { min-height: 96px !important; }
+      #view-setup .ss-gp-col .ss-slot-hit { min-height: 96px; }
+
+      .labor-day-grid { grid-template-columns: repeat(3, 1fr); }
+      .lead-top-grid { gap: 10px; }
+      .lead-roster-list, .lead-add-list { max-height: min(50vh, 320px); }
+
+      .sched-tools-drawer { width: min(340px, 94vw); }
+      .sched-tools-btn { min-height: 44px; }
+
+      .ssched-scroll { max-height: min(58vh, 560px); }
+      .ssched-inner { --ssched-name-w: 132px; --ssched-pxh: 44px; }
+
+      .hs-ctx-menu {
+        min-width: 180px;
+      }
+      .hs-ctx-menu .hs-ctx-item {
+        min-height: 44px; padding: 10px 14px; font-size: 14px;
+      }
+
+      .cell-actions { flex-direction: column; }
+      .cell-setup-btn { min-height: 44px; font-size: 12px; }
+      .day-sort-btn { width: 44px; height: 44px; font-size: 14px; }
+
+      input, select, textarea { font-size: 16px; padding: 10px 12px; }
+      select { padding-right: 36px; }
+    }
+
+    @media (max-width: 480px) {
+      .brand-sub { display: none; }
+      .brand-title { font-size: 15px; }
+      .header-inner { padding: 8px 10px; }
+      .main { padding: 0.75rem 10px 1.25rem; }
+
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat-val { font-size: 20px; }
+
+      .classic-hero-actions .btn { flex: 1 1 100%; }
+      .classic-hint-pills span { flex: 1 1 calc(50% - 4px); text-align: center; }
+
+      .ss-controls .field { min-width: 100%; flex: 1 1 100%; }
+      .ss-metric { min-width: calc(50% - 5px); flex: 1 1 calc(50% - 5px); }
+
+      #view-setup .ss-gp-grid { grid-template-columns: 1fr; }
+      #view-setup .ss-gp-center { display: none; }
+
+      .labor-day-grid { grid-template-columns: repeat(2, 1fr); }
+      .tpl-time-picker { grid-template-columns: 1fr 1fr 1fr; }
+
+      .week-label { font-size: 11px; }
+      .mobile-bottom-nav .mob-nav-item { font-size: 9px; min-height: 48px; }
+      .mobile-bottom-nav .mob-nav-item svg { width: 20px; height: 20px; }
+
+      table.roster td.name-cell { font-size: 12px; padding: 10px 12px; }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-actions-head { display: none; }
+      .mobile-actions-body { display: contents; }
+      .mobile-actions-overlay { display: none !important; }
+      .header-actions-menu {
+        position: static; transform: none !important;
+        width: auto; background: transparent; border: none;
+        box-shadow: none; overflow: visible; backdrop-filter: none;
+        flex-direction: row; flex-wrap: wrap; padding: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -4457,18 +4724,50 @@
         <button onclick="nextWeek()" title="Next week">&#8250;</button>
       </div>
       <div class="week-label" id="weekLabel"></div>
-      <button type="button" class="cloud-badge" id="cloudBadge" onclick="openCloudModal()" title="Cloud database settings">
-        <span class="dot-live"></span>
-        <span id="cloudBadgeText">Local only</span>
+      <button type="button" class="btn btn-sm mobile-more-btn" id="mobileMoreBtn" onclick="toggleMobileActions()" aria-label="More options" aria-expanded="false" aria-controls="headerActionsMenu">
+        <span class="ham-ico" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="mobile-more-label">More</span>
       </button>
-      <a class="btn btn-sm" href="./guide/" target="_blank" rel="noopener" title="Shift leader guide: schedule the week, set up stations, print gameplan">Help · Leaders</a>
-      <button class="btn btn-sm" id="exportBtn" onclick="exportWeekZip()" title="ZIP: week schedule PDF + daily staffing PDFs + JSON backup">Export ZIP</button>
-      <label class="btn btn-sm btn-primary" style="cursor:pointer">Import Roster &amp; Availabilities<input type="file" accept="*/*" hidden onchange="openUnifiedImport(event)"></label>
-      <label class="btn btn-sm" style="cursor:pointer">Backup JSON<input type="file" accept=".json" hidden onchange="importData(event)"></label>
-      <button class="btn btn-sm btn-danger" onclick="resetAll()" title="Reset all data">Reset</button>
+      <div class="mobile-actions-overlay" id="mobileActionsOverlay" onclick="closeMobileActions()"></div>
+      <div class="header-actions-menu" id="headerActionsMenu" aria-hidden="true">
+        <div class="mobile-actions-head">
+          <h3>Actions &amp; settings</h3>
+          <button type="button" class="icon-btn" onclick="closeMobileActions()" title="Close">&#10005;</button>
+        </div>
+        <div class="mobile-actions-body">
+          <button type="button" class="cloud-badge" id="cloudBadge" onclick="openCloudModal(); closeMobileActions();" title="Cloud database settings">
+            <span class="dot-live"></span>
+            <span id="cloudBadgeText">Local only</span>
+          </button>
+          <a class="btn btn-sm" href="./guide/" target="_blank" rel="noopener" title="Shift leader guide: schedule the week, set up stations, print gameplan">Help · Leaders</a>
+          <button class="btn btn-sm" id="exportBtn" onclick="exportWeekZip(); closeMobileActions();" title="ZIP: week schedule PDF + daily staffing PDFs + JSON backup">Export ZIP</button>
+          <label class="btn btn-sm btn-primary" style="cursor:pointer">Import Roster &amp; Availabilities<input type="file" accept="*/*" hidden onchange="openUnifiedImport(event)"></label>
+          <label class="btn btn-sm" style="cursor:pointer">Backup JSON<input type="file" accept=".json" hidden onchange="importData(event)"></label>
+          <button class="btn btn-sm btn-danger" onclick="resetAll(); closeMobileActions();" title="Reset all data">Reset</button>
+        </div>
+      </div>
     </div>
   </div>
 </header>
+
+<nav class="mobile-bottom-nav" aria-label="Main navigation">
+  <button type="button" class="mob-nav-item active" data-view="schedule" onclick="switchView('schedule')">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    Schedule
+  </button>
+  <button type="button" class="mob-nav-item" data-view="setup" onclick="switchView('setup')">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    Setup
+  </button>
+  <button type="button" class="mob-nav-item" data-view="skills" onclick="switchView('skills')">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6L12 2z"/></svg>
+    Skills
+  </button>
+  <button type="button" class="mob-nav-item" data-view="leaders" onclick="switchView('leaders')">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a4 4 0 100-8 4 4 0 000 8z"/><path d="M4 20c1.5-3 4.5-5 8-5s6.5 2 8 5"/></svg>
+    Leaders
+  </button>
+</nav>
 
 <!-- Cloud / Database settings -->
 <div class="modal-bg" id="cloudModal" onclick="if(event.target===this)closeCloudModal()">
@@ -4676,7 +4975,7 @@
             <span class="hs-clip-hint" id="clipHint" style="display:none"></span>
             <button class="btn btn-sm btn-ghost" id="clearClipBtn" style="display:none" onclick="clearClipboard()">Exit paste mode</button>
           </div>
-          <div class="table-wrap" id="weekScheduleWrap">
+          <div class="table-wrap scroll-hint" id="weekScheduleWrap">
             <table class="roster">
               <thead>
                 <tr>
@@ -4859,7 +5158,7 @@
         <input type="text" id="skillsSearch" placeholder="Search team…" oninput="renderSkillsMatrix()" style="max-width:220px;margin:0">
       </div>
       <div class="panel-body" style="padding:0;overflow:auto">
-        <div id="skillsMatrix" class="skills-matrix-wrap"></div>
+        <div id="skillsMatrix" class="skills-matrix-wrap scroll-hint"></div>
       </div>
     </div>
     <p style="font-size:12px;color:var(--muted);margin-top:12px;line-height:1.45">
@@ -4905,7 +5204,7 @@
           <span style="font-size:11px;color:var(--muted);font-weight:600">From the Schedule tab · auto-filled when you assign leads</span>
         </div>
         <div class="panel-body" style="padding:0;overflow:auto">
-          <div id="leaderScheduleGrid" class="lead-sched-wrap"></div>
+          <div id="leaderScheduleGrid" class="lead-sched-wrap scroll-hint"></div>
         </div>
       </div>
     </div>
@@ -4916,7 +5215,7 @@
         <span style="font-size:11px;color:var(--muted);font-weight:600">Breakfast · Lunch · Dinner · Mon–Sat</span>
       </div>
       <div class="panel-body" style="padding:0;overflow:auto">
-        <div id="leadershipBoard" class="lead-board-wrap"></div>
+        <div id="leadershipBoard" class="lead-board-wrap scroll-hint"></div>
       </div>
     </div>
     <p style="font-size:12px;color:var(--muted);margin-top:12px;line-height:1.45">
@@ -10363,8 +10662,10 @@ async function readFileToRowsGeneric(file) {
 function switchView(v) {
   document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.view === v));
+  document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === v));
   const target = document.getElementById('view-' + v);
   if (target) target.classList.add('active');
+  closeMobileActions();
   // Leave SmartView state as-is, but never leave Schedule painted under Setup
   if (v !== 'schedule') {
     closeSchedTools();
@@ -10991,6 +11292,51 @@ function toggleSchedTools() {
   const drawer = document.getElementById('schedToolsDrawer');
   if (drawer?.classList.contains('open')) closeSchedTools();
   else openSchedTools();
+}
+
+// ── Mobile header actions drawer ──
+function openMobileActions() {
+  document.getElementById('headerActionsMenu')?.classList.add('open');
+  document.getElementById('mobileActionsOverlay')?.classList.add('open');
+  document.getElementById('headerActionsMenu')?.setAttribute('aria-hidden', 'false');
+  document.getElementById('mobileMoreBtn')?.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('mobile-actions-open');
+}
+function closeMobileActions() {
+  document.getElementById('headerActionsMenu')?.classList.remove('open');
+  document.getElementById('mobileActionsOverlay')?.classList.remove('open');
+  document.getElementById('headerActionsMenu')?.setAttribute('aria-hidden', 'true');
+  document.getElementById('mobileMoreBtn')?.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('mobile-actions-open');
+}
+function toggleMobileActions() {
+  const menu = document.getElementById('headerActionsMenu');
+  if (menu?.classList.contains('open')) closeMobileActions();
+  else openMobileActions();
+}
+
+function initScrollHints() {
+  const sel = '.table-wrap, .skills-matrix-wrap, .lead-board-wrap, .lead-sched-wrap, .ssched-scroll';
+  document.querySelectorAll(sel).forEach(el => {
+    if (el.dataset.scrollHintBound) return;
+    el.dataset.scrollHintBound = '1';
+    el.classList.add('scroll-hint');
+    const onScroll = () => el.classList.toggle('scrolled', el.scrollLeft > 10);
+    el.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  });
+}
+
+function initResponsiveHeader() {
+  const menu = document.getElementById('headerActionsMenu');
+  if (!menu) return;
+  const sync = () => {
+    const mobile = window.matchMedia('(max-width: 768px)').matches;
+    if (!mobile) closeMobileActions();
+    menu.setAttribute('aria-hidden', mobile && !menu.classList.contains('open') ? 'true' : 'false');
+  };
+  sync();
+  window.matchMedia('(max-width: 768px)').addEventListener('change', sync);
 }
 
 // ── Period checklists (each period owns its own custom list) ──
@@ -14592,6 +14938,7 @@ function renderAll() {
   if (document.getElementById('view-setup')?.classList.contains('active')) renderSetup();
   if (document.getElementById('view-skills')?.classList.contains('active')) renderSkillsMatrix();
   if (document.getElementById('view-leaders')?.classList.contains('active')) renderLeadershipAll();
+  initScrollHints();
 }
 
 // ── Floating 3D (UE-style) — schedule cards + setup stations/chips ──
@@ -14777,10 +15124,17 @@ async function bootApp() {
   initClassicCardDrag();
   initGlass3d();
   document.addEventListener('keydown', onScheduleKeydown);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.getElementById('headerActionsMenu')?.classList.contains('open')) {
+      closeMobileActions();
+    }
+  });
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#hsCtxMenu')) closeCtxMenu();
   });
+  initResponsiveHeader();
   renderAll();
+  initScrollHints();
   setCloudStatus('local');
   // After first paint, pull/push cloud DB if connected
   bootstrapCloud();
