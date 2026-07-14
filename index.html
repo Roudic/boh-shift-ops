@@ -4442,6 +4442,8 @@
       color: #fff; background: rgba(240,58,95,.16);
       box-shadow: 0 0 0 1px rgba(240,58,95,.35) inset;
     }
+
+    .mobile-sched-list { display: none; }
     .mobile-more-btn { display: none; }
     .mobile-more-btn .ham-ico {
       display: inline-flex; flex-direction: column; gap: 3px; width: 16px;
@@ -4640,6 +4642,120 @@
 
       input, select, textarea { font-size: 16px; padding: 10px 12px; }
       select { padding-right: 36px; }
+
+      /* Mobile: list-first schedule (3D cards, one day at a time) */
+      .mobile-sched-list { display: block; }
+      #weekScheduleWrap,
+      #schedulePanel.smart-mode #weekScheduleWrap,
+      .smart-schedule { display: none !important; }
+
+      .classic-hero .classic-hint-pills,
+      .classic-hero > div > p,
+      #periodColorLegend { display: none; }
+      .classic-hero { padding: 12px 14px; margin-bottom: 8px; border-radius: 16px; }
+      .classic-hero h2 { font-size: 1rem; margin-bottom: 0; }
+      .classic-hero-actions { display: none; }
+
+      .labor-panel { display: none; }
+      .stats { margin-top: 8px; }
+
+      .hs-toolbar .paint-mode-hint,
+      .hs-toolbar #copyShiftBtn,
+      .hs-toolbar #copyToBtn,
+      .hs-toolbar #pasteShiftBtn,
+      .hs-toolbar #clipHint,
+      .hs-toolbar #clearClipBtn { display: none !important; }
+
+      .mob-sched-head {
+        display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+        margin-bottom: 8px; flex-wrap: wrap;
+      }
+      .mob-sched-title { font-size: 1.1rem; font-weight: 800; margin: 0; }
+      .mob-sched-meta { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+      .mob-day-picks {
+        display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 12px;
+        -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory;
+      }
+      .mob-day-pick {
+        flex: 0 0 auto; scroll-snap-align: start; min-width: 76px; min-height: 52px;
+        padding: 8px 10px; border-radius: 14px; border: 1px solid rgba(255,255,255,.12);
+        background: rgba(255,255,255,.05); font-family: inherit; text-align: center;
+        cursor: pointer; transition: border-color .15s, background .15s, transform .15s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mob-day-pick.active {
+        color: #fff; background: rgba(240,58,95,.18);
+        border-color: rgba(240,58,95,.42);
+        box-shadow: 0 10px 24px rgba(240,58,95,.12);
+        transform: translateY(-2px);
+      }
+      .mob-day-pick-dow { font-size: 12px; font-weight: 800; }
+      .mob-day-pick-date { font-size: 10px; color: var(--muted); margin-top: 2px; }
+      .mob-day-pick.today .mob-day-pick-dow { color: var(--red); }
+      .mob-day-pick-count { font-size: 9px; font-weight: 700; color: var(--muted); margin-top: 4px; }
+
+      .mob-sched-rows { display: flex; flex-direction: column; gap: 12px; }
+      .mob-sched-section { margin-top: 18px; }
+      .mob-list-section-head {
+        font-size: 11px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .07em; color: var(--muted); margin-bottom: 10px; padding-left: 2px;
+      }
+      .mob-sched-empty {
+        text-align: center; padding: 2rem 1rem; color: var(--muted);
+        font-size: 13px; border-radius: 16px; border: 1px dashed var(--border);
+      }
+
+      .mob-3d-card {
+        --cv-rx: 5deg; --cv-ry: -3deg; --cv-lift: 8px; --cv-z: 14px;
+        perspective: 900px; padding: 2px 4px 10px;
+      }
+      .mob-3d-card-inner {
+        display: flex; align-items: stretch; gap: 10px; padding: 14px 14px 12px;
+        border-radius: 20px; border: 1px solid rgba(255,255,255,.38);
+        background:
+          linear-gradient(165deg, rgba(255,255,255,.24) 0%, rgba(255,255,255,.05) 45%, transparent 72%),
+          rgba(18, 24, 40, .52);
+        backdrop-filter: blur(16px) saturate(1.45);
+        -webkit-backdrop-filter: blur(16px) saturate(1.45);
+        transform: translate3d(0, calc(var(--cv-lift) * -1), var(--cv-z)) rotateX(var(--cv-rx)) rotateY(var(--cv-ry));
+        transform-style: preserve-3d;
+        box-shadow: 0 1px 0 rgba(255,255,255,.45) inset, 0 14px 32px rgba(0,0,0,.3);
+        animation: cvFloat 5.8s ease-in-out infinite;
+      }
+      .mob-3d-card.off .mob-3d-card-inner {
+        opacity: .7; --cv-lift: 4px; --cv-z: 8px;
+        background: rgba(0,0,0,.25);
+      }
+      .mob-3d-card-main { flex: 1; min-width: 0; }
+      .mob-3d-card-name { font-size: 15px; font-weight: 800; line-height: 1.2; }
+      .mob-3d-card-times { font-size: 17px; font-weight: 800; letter-spacing: -.02em; margin-top: 4px; }
+      .mob-3d-card-meta { font-size: 11px; color: rgba(248,250,252,.72); margin-top: 5px; line-height: 1.35; }
+      .mob-3d-card-band {
+        display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .06em; padding: 3px 8px; border-radius: 999px; margin-top: 6px;
+        background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+      }
+      .mob-3d-card-actions {
+        display: flex; flex-direction: column; gap: 6px; justify-content: center; flex-shrink: 0;
+      }
+      .mob-3d-card-actions .btn { min-height: 40px; padding: 8px 10px; font-size: 11px; white-space: nowrap; }
+
+      html.reduce-3d .mob-3d-card-inner {
+        animation: cvFloat 5.8s ease-in-out infinite !important;
+        transform: translate3d(0, -6px, 12px) rotateX(4deg) rotateY(-2deg) !important;
+      }
+
+      /* Mobile setup: flat station list (still 3D slots) */
+      #view-setup .ss-hero-sub { display: none; }
+      #view-setup .ss-gp-board-head .ss-gp-hint { display: none; }
+      #view-setup .ss-gp-board-head { margin-bottom: 10px; }
+      #view-setup .ss-gp-board-title span { display: block; font-size: 11px; margin-top: 4px; }
+      .mob-setup-list { display: flex; flex-direction: column; gap: 18px; }
+      .mob-setup-list .ss-slot { margin-bottom: 0; width: 100%; max-width: 100%; }
+      #view-setup .ss-layout { flex-direction: column; }
+      #view-setup .ss-sidebar { width: 100%; max-width: none; order: 2; }
+      #view-setup .ss-board { order: 1; }
     }
 
     @media (max-width: 480px) {
@@ -4975,6 +5091,8 @@
             <span class="hs-clip-hint" id="clipHint" style="display:none"></span>
             <button class="btn btn-sm btn-ghost" id="clearClipBtn" style="display:none" onclick="clearClipboard()">Exit paste mode</button>
           </div>
+          <div class="mobile-sched-list" id="mobileSchedList" aria-label="Day schedule list"></div>
+
           <div class="table-wrap scroll-hint" id="weekScheduleWrap">
             <table class="roster">
               <thead>
@@ -5963,6 +6081,7 @@ let editingTemplateId = null;
 let templateDraft = { name: '', notes: '', periodSettings: [] };
 let rosterDaySort = { dayIndex: null, dir: 'asc' };
 let rosterFilter = 'all';
+let mobileSchedDayIndex = null;
 let schedulePublished = false;
 let clipboardShift = null;
 let pasteMode = false;
@@ -11332,8 +11451,13 @@ function initResponsiveHeader() {
   if (!menu) return;
   const sync = () => {
     const mobile = window.matchMedia('(max-width: 768px)').matches;
-    if (!mobile) closeMobileActions();
+    if (!mobile) {
+      closeMobileActions();
+    } else if (scheduleViewMode === 'smart') {
+      closeSmartSchedule();
+    }
     menu.setAttribute('aria-hidden', mobile && !menu.classList.contains('open') ? 'true' : 'false');
+    renderMobileScheduleList();
   };
   sync();
   window.matchMedia('(max-width: 768px)').addEventListener('change', sync);
@@ -11882,6 +12006,165 @@ function renderPeriodColorLegend() {
   if (el) el.innerHTML = periodLegendHtml();
 }
 
+function getMobileSchedDayIndex() {
+  const dates = getWeekDates(weekStart);
+  if (mobileSchedDayIndex !== null && mobileSchedDayIndex >= 0 && mobileSchedDayIndex < dates.length) {
+    return mobileSchedDayIndex;
+  }
+  const todayKey = getDateKey(new Date());
+  const idx = dates.findIndex(d => getDateKey(d) === todayKey);
+  return idx >= 0 ? idx : 0;
+}
+
+function setMobileSchedDay(di) {
+  mobileSchedDayIndex = di;
+  renderMobileScheduleList();
+}
+
+function mobScheduleCardHtml(p, entry, dk, di, rowIdx, bi) {
+  const conflict = scheduleConflict(p.id, dk, entry.start, entry.end);
+  const periodStyle = shiftStyleFromPeriods(entry.start, entry.end);
+  const coveredPeriods = periodsForTimes(entry.start, entry.end);
+  const roleLabel = entry.fromLeadership
+    ? 'Leadership'
+    : (coveredPeriods.length
+      ? coveredPeriods.map(per => per.name).join(' · ')
+      : (p.role || 'Shift'));
+  const hrs = shiftHours(entry);
+  const tStart = formatTime12(entry.start) || entry.start || '?';
+  const tEnd = formatTime12(entry.end) || entry.end || '?';
+  const sid = entry.id;
+  const floatDelay = ((rowIdx * 0.17 + di * 0.11 + bi * 0.2) % 4.2).toFixed(2);
+  const poseRx = (5 + ((rowIdx * 3 + bi * 5) % 6)).toFixed(1);
+  const poseRy = (-8 + ((rowIdx * 2 + bi * 4) % 8)).toFixed(1);
+  const setupBtn = coveredPeriods[0]
+    ? `<button type="button" class="btn btn-sm" onclick="goToSetup('${dk}','${coveredPeriods[0].id}',event)">Setup</button>`
+    : '';
+  const tintStyle = periodStyle.className.includes('breakfast') ? 'border-color:rgba(250,204,21,.45)'
+    : periodStyle.className.includes('lunch') ? 'border-color:rgba(59,130,246,.45)'
+    : periodStyle.className.includes('afternoon') ? 'border-color:rgba(244,114,182,.45)'
+    : periodStyle.className.includes('late') ? 'border-color:rgba(167,139,250,.45)' : '';
+  return `<div class="mob-3d-card" style="animation-delay:-${floatDelay}s;--cv-rx:${poseRx}deg;--cv-ry:${poseRy}deg">
+    <div class="mob-3d-card-inner" style="${tintStyle}">
+      <div class="mob-3d-card-main">
+        <div class="mob-3d-card-name">${escAttr(p.name)}${conflict ? ' <span title="'+escAttr(conflict)+'">⚠</span>' : ''}</div>
+        <div class="mob-3d-card-times">${escAttr(tStart)} – ${escAttr(tEnd)}</div>
+        <div class="mob-3d-card-meta">${escAttr(roleLabel)} · ${hrs}h</div>
+        <span class="mob-3d-card-band">${escAttr(periodStyle.bandLabel)}</span>
+      </div>
+      <div class="mob-3d-card-actions">
+        <button type="button" class="btn btn-sm btn-primary" onclick="openAssign('${p.id}','${dk}',${di},'${sid}')">Edit</button>
+        ${setupBtn}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderMobileScheduleList() {
+  const el = document.getElementById('mobileSchedList');
+  if (!el) return;
+  const mobile = window.matchMedia('(max-width: 768px)').matches;
+  if (!mobile) {
+    el.innerHTML = '';
+    return;
+  }
+  const dates = getWeekDates(weekStart);
+  const di = getMobileSchedDayIndex();
+  const d = dates[di];
+  const dk = getDateKey(d);
+  const today = d.toDateString() === new Date().toDateString();
+  const visible = getRosterStaffOrder();
+
+  const dayPicks = dates.map((dd, i) => {
+    const isToday = dd.toDateString() === new Date().toDateString();
+    const active = i === di ? ' active' : '';
+    const todayCls = isToday ? ' today' : '';
+    const scheduled = countScheduledOnDay(getDateKey(dd));
+    return `<button type="button" class="mob-day-pick${active}${todayCls}" onclick="setMobileSchedDay(${i})">
+      <div class="mob-day-pick-dow">${DAYS[i]}</div>
+      <div class="mob-day-pick-date">${dd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+      <div class="mob-day-pick-count">${scheduled} on</div>
+    </button>`;
+  }).join('');
+
+  const plan = getLaborDayPlan(dk);
+  const daySummary = plan.dayparts.slice(0, 4).map(dp => `${dp.short} ${dp.peopleSched}`).join(' · ');
+
+  const scheduled = [];
+  const offList = [];
+  const openList = [];
+
+  visible.forEach((p, rowIdx) => {
+    const dayBlocks = getScheduleShifts(p.id, dk);
+    if (dayBlocks.length) {
+      scheduled.push({ p, dayBlocks, rowIdx });
+    } else if (isRotationOffDay(p.id, dk)) {
+      offList.push({ p, rowIdx });
+    } else {
+      openList.push({ p, rowIdx });
+    }
+  });
+
+  scheduled.sort((a, b) => {
+    const am = shiftStartMinutes(a.dayBlocks[0]?.start);
+    const bm = shiftStartMinutes(b.dayBlocks[0]?.start);
+    return am - bm;
+  });
+
+  let rows = scheduled.map(({ p, dayBlocks, rowIdx }) =>
+    dayBlocks.map((entry, bi) => mobScheduleCardHtml(p, entry, dk, di, rowIdx, bi)).join('')
+  ).join('');
+
+  if (!rows) {
+    rows = '<div class="mob-sched-empty">Nobody scheduled this day — tap <strong>+ Add</strong> below</div>';
+  }
+
+  const offRows = offList.map(({ p, rowIdx }) => {
+    const floatDelay = ((rowIdx * 0.13) % 3).toFixed(2);
+    return `<div class="mob-3d-card off" style="animation-delay:-${floatDelay}s">
+      <div class="mob-3d-card-inner">
+        <div class="mob-3d-card-main">
+          <div class="mob-3d-card-name">${escAttr(p.name)}</div>
+          <div class="mob-3d-card-times" style="font-size:14px;letter-spacing:.08em">OFF</div>
+          <div class="mob-3d-card-meta">Rotation off day</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const openRows = openList.slice(0, 12).map(({ p, rowIdx }) => {
+    const av = getAvailability(p.id, dk);
+    const avLabel = av ? availLabel(av) : '';
+    const floatDelay = ((rowIdx * 0.11) % 3).toFixed(2);
+    return `<div class="mob-3d-card" style="animation-delay:-${floatDelay}s;--cv-lift:5px;--cv-z:10px">
+      <div class="mob-3d-card-inner" style="opacity:.88">
+        <div class="mob-3d-card-main">
+          <div class="mob-3d-card-name">${escAttr(p.name)}</div>
+          <div class="mob-3d-card-meta">${avLabel ? escAttr(avLabel) + ' · ' : ''}Not scheduled</div>
+        </div>
+        <div class="mob-3d-card-actions">
+          <button type="button" class="btn btn-sm btn-primary" onclick="openAssign('${p.id}','${dk}',${di})">+ Add</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const moreOpen = openList.length > 12
+    ? `<div class="mob-sched-empty" style="padding:1rem;font-size:12px">+${openList.length - 12} more not shown — use filter above</div>`
+    : '';
+
+  el.innerHTML = `
+    <div class="mob-sched-head">
+      <h3 class="mob-sched-title">${DAYS[di]}${today ? ' · Today' : ''}</h3>
+      <span class="mob-sched-meta">${daySummary || ''}</span>
+    </div>
+    <div class="mob-day-picks">${dayPicks}</div>
+    <div class="mob-sched-rows">${rows}</div>
+    ${offList.length ? `<div class="mob-sched-section"><div class="mob-list-section-head">Off (${offList.length})</div><div class="mob-sched-rows">${offRows}</div></div>` : ''}
+    ${openList.length ? `<div class="mob-sched-section"><div class="mob-list-section-head">Available (${openList.length})</div><div class="mob-sched-rows">${openRows}${moreOpen}</div></div>` : ''}
+  `;
+}
+
 function renderRoster() {
   renderPeriodColorLegend();
   const tbody = document.getElementById('rosterBody');
@@ -11890,11 +12173,13 @@ function renderRoster() {
   if (!staff.length) {
     tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Import HotSchedules availability or add team members</td></tr>';
     renderRosterFooter();
+    renderMobileScheduleList();
     return;
   }
   if (!visible.length) {
     tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No employees match this filter</td></tr>';
     renderRosterFooter();
+    renderMobileScheduleList();
     return;
   }
   tbody.innerHTML = visible.map((p, rowIdx) => {
@@ -11998,6 +12283,7 @@ function renderRoster() {
     </tr>`;
   }).join('');
   renderRosterFooter();
+  renderMobileScheduleList();
 }
 
 function calcHours(pid) {
@@ -12764,6 +13050,40 @@ function buildSetupGameplanBoardHtml(layout, setup, shift) {
   return { html, filled, required, totalSegs };
 }
 
+function buildMobileSetupListHtml(layout, setup, shift) {
+  let filled = 0, required = 0, totalSegs = 0;
+  let sections = '';
+  layout.forEach((g, gi) => {
+    const gName = g.name || g.group || 'Stations';
+    const color = ssGroupColor(gName);
+    const slots = (g.slots || []);
+    if (!slots.length) return;
+    const cards = slots.map((slot, si) => {
+      required++;
+      const segs = getSlotSegments(setup, slot.id);
+      if (segs.length) filled++;
+      totalSegs += segs.length;
+      return setupSlotCardHtml(slot, gName, color, gi, si, setup);
+    }).join('');
+    sections += `<div class="mob-list-section">
+      <div class="mob-list-section-head">${escAttr(gName)} <span style="font-weight:600;text-transform:none;letter-spacing:0">(${slots.length})</span></div>
+      <div class="mob-sched-rows">${cards}</div>
+    </div>`;
+  });
+  const icon = gameplanPeriodIcon(shift);
+  const titleName = (shift?.name || 'Period').toUpperCase();
+  const win = shift ? `${formatTime12(shift.start)} – ${formatTime12(shift.end)}` : '';
+  const html = `<div class="ss-gp-board mob-setup-board">
+    <div class="ss-gp-board-head">
+      <div class="ss-gp-board-title">${icon} ${escAttr(titleName)}
+        <span>${escAttr(win)} · station list</span>
+      </div>
+    </div>
+    <div class="mob-setup-list">${sections || '<div class="empty-state">No positions — Edit Positions</div>'}</div>
+  </div>`;
+  return { html, filled, required, totalSegs };
+}
+
 function renderSetup() {
   populateSetupSelectors();
   const dateKey = document.getElementById('setupDay').value;
@@ -12791,7 +13111,10 @@ function renderSetup() {
       <button class="btn btn-sm" style="margin-top:12px" onclick="layoutSeedPreset(150); save(); renderSetup();">Load 150 starter</button>
     </div>`;
   } else {
-    const board = buildSetupGameplanBoardHtml(layout, setup, shift);
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const board = isMobile
+      ? buildMobileSetupListHtml(layout, setup, shift)
+      : buildSetupGameplanBoardHtml(layout, setup, shift);
     groupsEl.innerHTML = board.html;
     filled = board.filled;
     required = board.required;
@@ -14921,6 +15244,9 @@ function renderAll() {
   updateWeekLabel();
   const filterSel = document.getElementById('rosterFilter');
   if (filterSel) filterSel.value = rosterFilter;
+  if (window.matchMedia('(max-width: 768px)').matches && scheduleViewMode === 'smart') {
+    closeSmartSchedule();
+  }
   updatePublishUi();
   updateClipboardUi();
   renderScheduleTemplates(); renderStaffingRefPanel(); renderShifts(); renderStaff();
@@ -15087,6 +15413,7 @@ function initGlass3d() {
   // Schedule roster + setup board surfaces
   const hosts = [
     document.getElementById('weekScheduleWrap'),
+    document.getElementById('mobileSchedList'),
     document.getElementById('view-setup')
   ].filter(Boolean);
   hosts.forEach(host => {
