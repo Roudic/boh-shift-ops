@@ -1273,6 +1273,30 @@
     }
     .lead-add-row:hover { background: var(--surface-2); }
     .lead-add-row input { width: auto; accent-color: var(--red); }
+    .ss-pool-pick-list {
+      max-height: min(58vh, 420px); overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ss-pool-pick-row {
+      display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+      padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--input-bg); color: var(--text); cursor: pointer;
+      font-weight: 700; font-size: 15px; min-height: 56px;
+      transition: background .15s, border-color .15s, transform .12s;
+    }
+    .ss-pool-pick-row:hover, .ss-pool-pick-row:active {
+      background: var(--surface-2); border-color: rgba(56,189,248,.45);
+    }
+    .ss-pool-pick-row:active { transform: scale(.98); }
+    .ss-pool-pick-avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      display: grid; place-items: center; font-size: 13px; font-weight: 800;
+      background: rgba(56,189,248,.18); color: #7DD3FC;
+    }
+    .ss-pool-pick-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .ss-pool-pick-name { font-size: 15px; font-weight: 800; line-height: 1.2; }
+    .ss-pool-pick-times { font-size: 12px; font-weight: 600; color: var(--muted); }
+    .ss-pool-pick-chevron { color: var(--muted); font-size: 18px; flex-shrink: 0; }
     .lead-sched-wrap { overflow: auto; max-height: 360px; }
     .lead-sched-table {
       width: 100%; border-collapse: collapse; min-width: 640px; font-size: 11px;
@@ -4622,6 +4646,8 @@
       .labor-day-grid { grid-template-columns: repeat(3, 1fr); }
       .lead-top-grid { gap: 10px; }
       .lead-roster-list, .lead-add-list { max-height: min(50vh, 320px); }
+      .ss-pool-pick-list { max-height: min(62vh, 520px); }
+      .ss-pool-pick-row { min-height: 60px; font-size: 16px; }
 
       .sched-tools-drawer { width: min(340px, 94vw); }
       .sched-tools-btn { min-height: 44px; }
@@ -5573,6 +5599,27 @@
       <button type="button" class="btn btn-danger" id="slotAssignRemoveBtn" style="display:none" onclick="removeSlotSegment()">Remove</button>
       <button type="button" class="btn" onclick="closeSlotAssignModal()">Cancel</button>
       <button type="button" class="btn btn-primary" onclick="saveSlotAssign()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile / tablet: pick from team pool, then set times -->
+<div class="modal-bg" id="setupPoolPickModal" onclick="if(event.target===this)closeSetupPoolPickModal()">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
+    <div class="modal-head">
+      <div>
+        <h3 id="setupPoolPickTitle">Team pool</h3>
+        <div style="font-size:12px;color:var(--muted)" id="setupPoolPickSub">Tap a name, then set times</div>
+      </div>
+      <button type="button" class="icon-btn" onclick="closeSetupPoolPickModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="search" id="setupPoolPickSearch" placeholder="Search team…" autocomplete="off"
+        oninput="renderSetupPoolPickList()" style="margin-bottom:12px">
+      <div id="setupPoolPickList" class="ss-pool-pick-list"></div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn" onclick="closeSetupPoolPickModal()">Cancel</button>
     </div>
   </div>
 </div>
@@ -12760,11 +12807,125 @@ function countStationFits(person, template) {
   return slots.filter(slot => matchStation(slot, person)).length;
 }
 
+/** Phones + tablets: station-first add uses a team-pool popup instead of scrolling the sidebar. */
+function isCompactSetupUI() {
+  return window.matchMedia('(max-width: 1100px)').matches
+    || window.matchMedia('(pointer: coarse)').matches;
+}
+
+let pendingPoolPickSlotId = null;
+
+/** Floor team still available in the pool (leaders excluded, already-assigned excluded). */
+function listSetupPoolPeople(dateKey, shiftId) {
+  const dk = dateKey || document.getElementById('setupDay')?.value;
+  const sid = shiftId || document.getElementById('setupShift')?.value;
+  if (!dk || !sid) return [];
+  const shift = shifts.find(s => s.id === sid);
+  const setup = getSetup(dk, sid);
+  const onShift = getOnShiftStaff(dk, sid);
+  const assignedIds = allAssignedPersonIds(setup);
+  const dayLeaders = getDayLeadershipRoster(dk, shift);
+  const leaderIds = new Set(dayLeaders.filter(x => x.personId).map(x => x.personId));
+  return onShift
+    .filter(p => !leaderIds.has(p.id) && !assignedIds.has(p.id))
+    .map(p => {
+      const e = getScheduleEntry(p.id, dk);
+      return { person: p, start: e?.start || '', end: e?.end || '' };
+    })
+    .sort((a, b) => {
+      const ae = timeToMinutes(a.end || '23:59');
+      const be = timeToMinutes(b.end || '23:59');
+      if (ae !== be) return ae - be;
+      const as = timeToMinutes(a.start || '00:00');
+      const bs = timeToMinutes(b.start || '00:00');
+      if (as !== bs) return as - bs;
+      return (a.person.name || '').localeCompare(b.person.name || '');
+    });
+}
+
+function openSetupPoolPickModal(slotId) {
+  const dateKey = document.getElementById('setupDay')?.value;
+  const shiftId = document.getElementById('setupShift')?.value;
+  if (!dateKey || !shiftId || !slotId) return;
+  if (typeof clearAllGlassTilt === 'function') clearAllGlassTilt();
+  if (typeof clearFxParticles === 'function') clearFxParticles();
+  const shift = shifts.find(s => s.id === shiftId);
+  const setup = getSetup(dateKey, shiftId);
+  const layout = getSetupLayout(shift, setup);
+  const label = findSlotLabel(layout, slotId) || 'Position';
+  pendingPoolPickSlotId = slotId;
+  const title = document.getElementById('setupPoolPickTitle');
+  const sub = document.getElementById('setupPoolPickSub');
+  if (title) title.textContent = 'Team pool';
+  if (sub) sub.textContent = `${label} · tap a name, then set times`;
+  const search = document.getElementById('setupPoolPickSearch');
+  if (search) search.value = '';
+  renderSetupPoolPickList();
+  document.getElementById('setupPoolPickModal')?.classList.add('open');
+  setTimeout(() => search?.focus?.({ preventScroll: true }), 80);
+}
+
+function closeSetupPoolPickModal() {
+  document.getElementById('setupPoolPickModal')?.classList.remove('open');
+  pendingPoolPickSlotId = null;
+}
+
+function renderSetupPoolPickList() {
+  const el = document.getElementById('setupPoolPickList');
+  if (!el) return;
+  const dateKey = document.getElementById('setupDay')?.value;
+  const shiftId = document.getElementById('setupShift')?.value;
+  const q = (document.getElementById('setupPoolPickSearch')?.value || '').trim().toLowerCase();
+  const pool = listSetupPoolPeople(dateKey, shiftId)
+    .filter(({ person: p }) => !q
+      || (p.name || '').toLowerCase().includes(q)
+      || (p.role || '').toLowerCase().includes(q));
+  if (!pool.length) {
+    const anyOnShift = getOnShiftStaff(dateKey, shiftId).length;
+    el.innerHTML = `<div class="empty-state" style="padding:1.25rem;font-size:13px;line-height:1.45">
+      ${q
+        ? 'No names match that search.'
+        : (anyOnShift
+          ? 'Everyone is already on a station. Remove someone first, or edit an existing assignment.'
+          : 'Nobody is on this block yet — add hours on the Schedule tab first.')}
+    </div>`;
+    return;
+  }
+  el.innerHTML = pool.map(({ person: p, start, end }) => {
+    const initials = (p.name || '?').split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const tIn = start ? (formatTime12(start) || start) : '';
+    const tOut = end ? (formatTime12(end) || end) : '';
+    const times = (tIn && tOut) ? `${tIn} → ${tOut}` : 'Scheduled this block';
+    return `<button type="button" class="ss-pool-pick-row" onclick="pickSetupPoolPerson('${p.id}')">
+      <span class="ss-pool-pick-avatar">${escAttr(initials)}</span>
+      <span class="ss-pool-pick-meta">
+        <span class="ss-pool-pick-name">${escAttr(p.name)}</span>
+        <span class="ss-pool-pick-times">${escAttr(times)}</span>
+      </span>
+      <span class="ss-pool-pick-chevron" aria-hidden="true">›</span>
+    </button>`;
+  }).join('');
+}
+
+function pickSetupPoolPerson(personId) {
+  const slotId = pendingPoolPickSlotId;
+  if (!slotId || !personId) return;
+  closeSetupPoolPickModal();
+  setupSelectedPersonId = null;
+  openHandoffAssign(slotId, null, personId);
+}
+
 function openHandoffAssign(slotId, segmentId, personId) {
   // Freeze effects so nothing jumps under the cursor
   if (typeof clearAllGlassTilt === 'function') clearAllGlassTilt();
   if (typeof clearFxParticles === 'function') clearFxParticles();
   setupScrollPaused = true; // pause sparkles briefly while opening
+  // Mobile/tablet: adding with no person yet → team pool popup first
+  if (!segmentId && !personId && isCompactSetupUI()) {
+    openSetupPoolPickModal(slotId);
+    setTimeout(() => { setupScrollPaused = false; }, 400);
+    return;
+  }
   openSlotAssignModal(slotId, segmentId || null, personId || null);
   setTimeout(() => { setupScrollPaused = false; }, 400);
 }
@@ -12891,7 +13052,9 @@ function initSetupDragDrop() {
       e.stopPropagation();
       const pid = setupSelectedPersonId;
       setupSelectedPersonId = null;
-      openHandoffAssign(addSeg.dataset.slotId, null, pid);
+      // Compact: open team-pool popup → then times. Desktop / already-selected: go straight to assign.
+      if (!pid && isCompactSetupUI()) openSetupPoolPickModal(addSeg.dataset.slotId);
+      else openHandoffAssign(addSeg.dataset.slotId, null, pid);
       return;
     }
     const seg = e.target.closest('[data-action="edit-seg"]');
@@ -12962,6 +13125,13 @@ function initSetupDragDrop() {
       openSlotAssignModal(slot.dataset.slotId, null, setupSelectedPersonId);
       setupSelectedPersonId = null;
       renderSetup();
+      return;
+    }
+    // Mobile/tablet: tap an open station (no one selected) → team pool popup
+    if (slot && isCompactSetupUI() && !e.target.closest('[data-action="edit-seg"], [data-action="remove-seg"], .ss-seg')) {
+      const setup = getSetup(document.getElementById('setupDay')?.value, document.getElementById('setupShift')?.value);
+      const segs = getSlotSegments(setup, slot.dataset.slotId);
+      if (!segs.length) openSetupPoolPickModal(slot.dataset.slotId);
     }
   });
 
@@ -13092,10 +13262,11 @@ function setupSlotCardHtml(slot, gName, color, gi, si, setup) {
       <button type="button" class="ss-seg-x" data-action="remove-seg" data-slot-id="${slot.id}" data-seg-id="${seg.id}" title="Remove">&#10005;</button>
     </div>`;
   }).join('');
+  const compact = isCompactSetupUI();
   const empty = !segs.length
-    ? '<span class="ss-slot-placeholder">Drop person · or + handover</span>'
+    ? `<span class="ss-slot-placeholder">${compact ? 'Tap + Add person' : 'Drop person · or + handover'}</span>`
     : '';
-  const clickTarget = setupSelectedPersonId ? ' click-target' : '';
+  const clickTarget = (setupSelectedPersonId || (compact && !segs.length)) ? ' click-target' : '';
   const delay = ((gi * 0.35 + si * 0.18) % 4).toFixed(2);
   const poseRx = (6 + ((gi * 3 + si * 5) % 8)).toFixed(1);
   const poseRy = (-8 + ((gi * 2 + si * 4) % 10)).toFixed(1);
@@ -13104,6 +13275,7 @@ function setupSlotCardHtml(slot, gName, color, gi, si, setup) {
     : (segs.length > 1
       ? `<span class="ss-status-badge multi">${segs.length} on</span>`
       : '<span class="ss-status-badge ok">✓ Filled</span>');
+  const addLabel = compact ? '+ Add person' : '+ Add / handover';
   return `<div class="ss-slot ${cls}${clickTarget}" data-drop-zone="station" data-slot-id="${slot.id}"
     style="--ss-delay:-${delay}s;--ss-rx:${poseRx}deg;--ss-ry:${poseRy}deg">
     <div class="ss-slot-fx" aria-hidden="true"></div>
@@ -13120,7 +13292,7 @@ function setupSlotCardHtml(slot, gName, color, gi, si, setup) {
       <div class="ss-slot-drop">
         ${segHtml || empty}
         ${handovers.map(h => `<div class="ss-handover-note">${escAttr(h)}</div>`).join('')}
-        <button type="button" class="ss-add-seg" data-action="add-seg" data-slot-id="${slot.id}">+ Add / handover</button>
+        <button type="button" class="ss-add-seg" data-action="add-seg" data-slot-id="${slot.id}">${addLabel}</button>
       </div>
     </div>
   </div>`;
@@ -13307,10 +13479,13 @@ function renderSetup() {
 
   // Floor pool excludes leaders (they run the period — not station pool)
   const floorOnShift = onShift.filter(p => !leaderIds.has(p.id));
+  const compactSetup = isCompactSetupUI();
   document.getElementById('setupSubtitle').textContent = floorOnShift.length
     ? (selectedName
-      ? `Selected: ${selectedName} — click a position (can stack for 3p handover).`
-      : `Drag people onto positions. Leaders stay in the header (not in the pool).`)
+      ? `Selected: ${selectedName} — tap a position (can stack for 3p handover).`
+      : (compactSetup
+        ? `Tap + Add person on a station → pick from the team pool → set times.`
+        : `Drag people onto positions. Leaders stay in the header (not in the pool).`))
     : (onShift.length
       ? `Only leaders are on this block — assign floor team on Schedule, or pick leads under Leaders.`
       : `Nobody scheduled for ${shift?.name || 'this block'} — set times on the Schedule tab first.`);
