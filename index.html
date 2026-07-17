@@ -4891,14 +4891,18 @@
     <div class="modal-head">
       <div>
         <h3>Cloud database</h3>
-        <div style="font-size:12px;color:var(--muted)">Supabase sync · works across phones &amp; PCs</div>
+        <div style="font-size:12px;color:var(--muted)">Same schedule on every phone &amp; PC</div>
       </div>
       <button type="button" class="icon-btn" onclick="closeCloudModal()">&#10005;</button>
     </div>
     <div class="modal-body">
       <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.45">
-        Data always saves in this browser (localStorage). Connect <strong>Supabase</strong> (free) to also store it in a real database online.
+        Each browser keeps its own copy until it is linked to the store cloud.
+        One phone can say <strong>Cloud</strong> while another says <strong>Local only</strong> — that means the second device was never connected yet.
       </p>
+      <div id="cloudLocalHint" style="display:none;font-size:12px;line-height:1.5;padding:10px 12px;border-radius:8px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.35);color:var(--amber);margin-bottom:12px">
+        This device is local-only. On a phone that already shows <strong>Cloud</strong>, open this panel → <strong>Copy link for other devices</strong>, then open that link here. Or paste the store URL + anon key below once.
+      </div>
       <div class="field">
         <label class="field-label">Supabase project URL</label>
         <input id="cloudUrl" placeholder="https://xxxx.supabase.co" autocomplete="off">
@@ -4912,14 +4916,15 @@
         <input id="cloudStoreId" value="default" placeholder="default">
       </div>
       <ol style="font-size:12px;color:var(--muted);margin:0 0 12px 18px;line-height:1.55">
-        <li>Create a free project at <a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a></li>
-        <li>SQL Editor → paste &amp; run <code>supabase-schema.sql</code> from this project folder</li>
-        <li>Project Settings → API → copy Project URL + anon public key here</li>
-        <li>Save &amp; test · then Push / Pull anytime</li>
+        <li><strong>Already connected elsewhere?</strong> Use <em>Copy link for other devices</em> on that browser, open it here.</li>
+        <li>Or paste Project URL + anon key (Supabase → Settings → API), then Save.</li>
+        <li>First-time store setup: run <code>supabase-schema.sql</code>, then Push once.</li>
+        <li>After that: Pull on new devices · Push after big edits (auto-push is on when linked).</li>
       </ol>
       <div id="cloudStatusBox" style="font-size:12px;font-weight:600;padding:10px 12px;border-radius:8px;background:var(--input-bg);border:1px solid var(--border);margin-bottom:10px;color:var(--muted)">Not connected</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px">
         <button type="button" class="btn btn-sm btn-primary" onclick="saveCloudConfig()">Save connection</button>
+        <button type="button" class="btn btn-sm" id="cloudShareLinkBtn" onclick="copyCloudConnectLink()" title="Copy a one-tap link that connects another phone/PC to this same cloud">Copy link for other devices</button>
         <button type="button" class="btn btn-sm" onclick="cloudPull()">Pull from DB</button>
         <button type="button" class="btn btn-sm" onclick="cloudPush()">Push to DB</button>
         <button type="button" class="btn btn-sm" onclick="cloudTest()">Test connection</button>
@@ -10261,6 +10266,12 @@ function deleteTemplate(id) {
 
 // ── Persistence (localStorage + optional Supabase cloud DB) ──
 const CLOUD_CFG_KEY = 'boh-cloud-config';
+const CLOUD_OPT_OUT_KEY = 'boh-cloud-opt-out';
+/** Vestavia store defaults — anon key comes from localStorage, connect link, or data/cloud-config.json */
+const DEFAULT_STORE_CLOUD = {
+  url: 'https://oikrcoccaepgtvdswuuo.supabase.co',
+  storeId: 'default'
+};
 let cloudClient = null;
 let cloudConfig = null; // { url, anonKey, storeId }
 let cloudStatus = 'local'; // local | online | syncing | error
@@ -10366,22 +10377,120 @@ function applyAppState(d) {
   return true;
 }
 
-function loadCloudConfig() {
+function normalizeCloudConfig(cfg) {
+  if (!cfg?.url || !cfg?.anonKey) return null;
+  return {
+    url: String(cfg.url).trim().replace(/\/$/, ''),
+    anonKey: String(cfg.anonKey).trim(),
+    storeId: (cfg.storeId || DEFAULT_STORE_CLOUD.storeId || 'default').trim() || 'default'
+  };
+}
+
+function persistCloudConfig(cfg) {
+  const normalized = normalizeCloudConfig(cfg);
+  if (!normalized) return null;
+  try {
+    localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify(normalized));
+    localStorage.removeItem(CLOUD_OPT_OUT_KEY);
+  } catch (_) {}
+  return normalized;
+}
+
+function loadCloudConfigFromStorage() {
   try {
     const raw = localStorage.getItem(CLOUD_CFG_KEY);
     if (!raw) return null;
-    const cfg = JSON.parse(raw);
-    if (cfg?.url && cfg?.anonKey) return {
-      url: String(cfg.url).trim().replace(/\/$/, ''),
-      anonKey: String(cfg.anonKey).trim(),
-      storeId: (cfg.storeId || 'default').trim() || 'default'
-    };
+    return normalizeCloudConfig(JSON.parse(raw));
   } catch (_) {}
   return null;
 }
 
-function initCloudClient() {
-  cloudConfig = loadCloudConfig();
+function loadCloudConfig() {
+  return loadCloudConfigFromStorage();
+}
+
+function cloudConfigOptedOut() {
+  try { return localStorage.getItem(CLOUD_OPT_OUT_KEY) === '1'; } catch (_) { return false; }
+}
+
+function encodeCloudConnectToken(cfg) {
+  const normalized = normalizeCloudConfig(cfg);
+  if (!normalized) return '';
+  const json = JSON.stringify(normalized);
+  const b64 = btoa(unescape(encodeURIComponent(json)));
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function decodeCloudConnectToken(token) {
+  if (!token) return null;
+  try {
+    let b64 = String(token).replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    const json = decodeURIComponent(escape(atob(b64)));
+    return normalizeCloudConfig(JSON.parse(json));
+  } catch (_) {
+    return null;
+  }
+}
+
+/** One-tap link from a connected device → opens app and links cloud on the new browser. */
+function applyCloudConfigFromUrl() {
+  try {
+    const hash = (location.hash || '').replace(/^#/, '');
+    const params = new URLSearchParams(location.search || '');
+    let token = params.get('cloudconnect') || params.get('cloud');
+    if (!token && hash) {
+      const hp = new URLSearchParams(hash.includes('=') ? hash : '');
+      token = hp.get('cloudconnect') || hp.get('cloud');
+      if (!token && hash.startsWith('cloudconnect=')) token = hash.slice('cloudconnect='.length);
+      if (!token && hash.startsWith('cloud=')) token = hash.slice('cloud='.length);
+    }
+    if (!token) return null;
+    const cfg = decodeCloudConnectToken(token);
+    if (!cfg) return null;
+    persistCloudConfig(cfg);
+    // Strip token from address bar so it isn't re-applied / shared by accident
+    try {
+      const clean = location.pathname + (location.search
+        ? '?' + Array.from(new URLSearchParams(location.search))
+            .filter(([k]) => k !== 'cloudconnect' && k !== 'cloud')
+            .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+            .join('&')
+        : '');
+      history.replaceState(null, '', clean || location.pathname);
+    } catch (_) {}
+    return cfg;
+  } catch (_) {
+    return null;
+  }
+}
+
+async function loadCloudConfigFromRepoFile() {
+  if (cloudConfigOptedOut()) return null;
+  try {
+    const res = await fetch('./data/cloud-config.json', { cache: 'no-store' });
+    if (!res.ok) return null;
+    return normalizeCloudConfig(await res.json());
+  } catch (_) {
+    return null;
+  }
+}
+
+async function resolveCloudConfig() {
+  const fromUrl = applyCloudConfigFromUrl();
+  if (fromUrl) return fromUrl;
+  const fromStorage = loadCloudConfigFromStorage();
+  if (fromStorage) return fromStorage;
+  const fromFile = await loadCloudConfigFromRepoFile();
+  if (fromFile) {
+    persistCloudConfig(fromFile);
+    return fromFile;
+  }
+  return null;
+}
+
+function initCloudClient(cfg) {
+  cloudConfig = cfg ? normalizeCloudConfig(cfg) : loadCloudConfigFromStorage();
   cloudClient = null;
   if (!cloudConfig) {
     setCloudStatus('local');
@@ -10408,6 +10517,8 @@ function setCloudStatus(status, detail) {
   const badge = document.getElementById('cloudBadge');
   const text = document.getElementById('cloudBadgeText');
   const box = document.getElementById('cloudStatusBox');
+  const hint = document.getElementById('cloudLocalHint');
+  const shareBtn = document.getElementById('cloudShareLinkBtn');
   if (badge) {
     badge.classList.remove('online', 'syncing', 'error');
     if (status === 'online') badge.classList.add('online');
@@ -10421,19 +10532,21 @@ function setCloudStatus(status, detail) {
     error: 'Cloud error'
   };
   if (text) text.textContent = labels[status] || status;
+  if (hint) hint.style.display = status === 'local' ? 'block' : 'none';
+  if (shareBtn) shareBtn.style.display = (status === 'online' || status === 'syncing') && cloudConfig ? '' : 'none';
   if (box) {
-    if (status === 'local') box.textContent = detail || 'Not connected — saves only in this browser.';
-    else if (status === 'online') box.textContent = detail || `Connected to ${cloudConfig?.url || 'Supabase'}. Store: ${cloudConfig?.storeId || 'default'}. Auto-push on save.`;
+    if (status === 'local') box.textContent = detail || 'Not connected on this device — saves only in this browser until you link cloud.';
+    else if (status === 'online') box.textContent = detail || `Connected to ${cloudConfig?.url || 'Supabase'}. Store: ${cloudConfig?.storeId || 'default'}. Auto-push on save. Use “Copy link for other devices” so phones don’t stay Local only.`;
     else if (status === 'syncing') box.textContent = detail || 'Talking to database…';
     else box.textContent = detail || 'Connection error — check URL/key and that supabase-schema.sql was run.';
   }
 }
 
 function openCloudModal() {
-  const cfg = loadCloudConfig() || {};
-  document.getElementById('cloudUrl').value = cfg.url || '';
+  const cfg = loadCloudConfigFromStorage() || cloudConfig || {};
+  document.getElementById('cloudUrl').value = cfg.url || DEFAULT_STORE_CLOUD.url;
   document.getElementById('cloudAnonKey').value = cfg.anonKey || '';
-  document.getElementById('cloudStoreId').value = cfg.storeId || 'default';
+  document.getElementById('cloudStoreId').value = cfg.storeId || DEFAULT_STORE_CLOUD.storeId;
   setCloudStatus(cloudStatus);
   document.getElementById('cloudModal').classList.add('open');
 }
@@ -10442,37 +10555,77 @@ function closeCloudModal() {
   document.getElementById('cloudModal')?.classList.remove('open');
 }
 
+function buildCloudConnectLink(cfg) {
+  const normalized = normalizeCloudConfig(cfg || cloudConfig || loadCloudConfigFromStorage());
+  if (!normalized) return '';
+  const token = encodeCloudConnectToken(normalized);
+  const base = `${location.origin}${location.pathname || '/'}`;
+  return `${base}#cloudconnect=${token}`;
+}
+
+async function copyCloudConnectLink() {
+  const cfg = cloudConfig || loadCloudConfigFromStorage();
+  if (!normalizeCloudConfig(cfg)) {
+    alert('Connect this device first (Save connection), then copy the link for other phones.');
+    return;
+  }
+  const link = buildCloudConnectLink(cfg);
+  try {
+    if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(link);
+    else {
+      const ta = document.createElement('textarea');
+      ta.value = link;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    setCloudStatus(cloudStatus === 'local' ? 'online' : cloudStatus,
+      'Connect link copied. Open it on the other phone/PC — it will link the same cloud and Pull.');
+    alert('Link copied.\n\nOpen it on the other phone or PC. That browser will connect to the same cloud store (no need to paste keys again).');
+  } catch (e) {
+    prompt('Copy this link and open it on the other device:', link);
+  }
+}
+
 function saveCloudConfig() {
-  const url = document.getElementById('cloudUrl').value.trim().replace(/\/$/, '');
+  const url = document.getElementById('cloudUrl').value.trim().replace(/\/$/, '') || DEFAULT_STORE_CLOUD.url;
   const anonKey = document.getElementById('cloudAnonKey').value.trim();
-  const storeId = (document.getElementById('cloudStoreId').value.trim() || 'default');
+  const storeId = (document.getElementById('cloudStoreId').value.trim() || DEFAULT_STORE_CLOUD.storeId);
   if (!url || !anonKey) {
-    alert('Paste both Supabase Project URL and anon public key.');
+    alert('Paste both Supabase Project URL and anon public key.\n\nTip: if another device is already on Cloud, use “Copy link for other devices” there instead.');
     return;
   }
   if (!url.includes('supabase.co') && !url.includes('localhost')) {
     if (!confirm('URL does not look like a Supabase project. Save anyway?')) return;
   }
-  localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify({ url, anonKey, storeId }));
-  initCloudClient();
+  persistCloudConfig({ url, anonKey, storeId });
+  initCloudClient({ url, anonKey, storeId });
   if (cloudClient) {
     setCloudStatus('online', 'Saved. Testing connection…');
     cloudTest().then(ok => {
-      if (ok) cloudPush();
+      if (ok) cloudPull({ silent: true }).then(pulled => {
+        if (!pulled) cloudPush();
+      });
     });
   }
 }
 
 function clearCloudConfig() {
-  if (!confirm('Disconnect cloud database? Data stays in this browser.')) return;
-  localStorage.removeItem(CLOUD_CFG_KEY);
+  if (!confirm('Disconnect cloud on this device only?\n\nData stays in this browser. Other phones keep their own cloud link.')) return;
+  try {
+    localStorage.removeItem(CLOUD_CFG_KEY);
+    localStorage.setItem(CLOUD_OPT_OUT_KEY, '1');
+  } catch (_) {}
   cloudClient = null;
   cloudConfig = null;
   cloudLastSync = null;
   setCloudStatus('local');
-  document.getElementById('cloudUrl').value = '';
+  document.getElementById('cloudUrl').value = DEFAULT_STORE_CLOUD.url;
   document.getElementById('cloudAnonKey').value = '';
-  document.getElementById('cloudStoreId').value = 'default';
+  document.getElementById('cloudStoreId').value = DEFAULT_STORE_CLOUD.storeId;
 }
 
 async function cloudTest() {
@@ -10582,8 +10735,11 @@ function load() {
 async function bootstrapCloud() {
   if (cloudBootstrapped) return;
   cloudBootstrapped = true;
-  initCloudClient();
-  if (!cloudClient) return;
+  const cfg = await resolveCloudConfig();
+  if (!initCloudClient(cfg) || !cloudClient) {
+    setCloudStatus('local');
+    return;
+  }
   // Prefer cloud if row has data
   try {
     setCloudStatus('syncing', 'Checking cloud…');
@@ -15462,8 +15618,13 @@ async function bootApp() {
   initResponsiveHeader();
   renderAll();
   initScrollHints();
-  setCloudStatus('local');
-  // After first paint, pull/push cloud DB if connected
+  // Keep badge honest until bootstrap resolves (storage / connect link / shared config)
+  if (loadCloudConfigFromStorage() || (location.hash || '').includes('cloud')) {
+    setCloudStatus('syncing', 'Connecting…');
+  } else {
+    setCloudStatus('local');
+  }
+  // After first paint, pull/push cloud DB if this browser is linked
   bootstrapCloud();
 }
 bootApp();
