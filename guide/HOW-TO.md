@@ -137,12 +137,11 @@ Nobody’s schedule overlaps that period. Go back to **Schedule** and add hours 
 
 ## Cloud (short)
 
-- **Cloud vs Local only** is per phone/browser. Linking once on one device does **not** auto-link the others.  
-- On a device that already shows **Cloud** → badge → **Copy link for other devices** → open that link on the Local phone (connects + loads store data).  
-- Or paste URL + anon key once on that device → **Save connection**.  
-- After big changes → **Push to DB** (auto-push runs when linked).  
-- Not on cloud → **Export** and share the file  
+- Open the live app — it **auto-connects** to the store cloud on every phone/PC.  
+- Badge should say **Cloud** (not Local only). Refresh once if it doesn’t.  
+- Edits auto-push while connected · use **Pull** if someone else just changed the board.  
 - Last push wins — pull before a long edit if others are working  
+- Backup option: **Export** ZIP/JSON  
 
 Full IT setup (SQL, keys) is only needed once for the store — see older cloud notes in the repo if you’re connecting a brand-new project.
 
