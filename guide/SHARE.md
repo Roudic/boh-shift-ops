@@ -37,10 +37,11 @@ That’s the **shift leader guide**: how to schedule the week, assign leads, set
 
 ---
 
-### Cloud (store already connected)
+### Cloud (auto on every device)
 
-- If a phone says **Local only** while another says **Cloud**: on the Cloud phone open the badge → **Copy link for other devices** → open that link on the Local phone  
-- Then **Pull** on a new device · **Push** after big edits  
+- Open the live app — cloud connects automatically  
+- If a phone still says **Local only**, refresh once  
+- **Pull** if the board looks stale · edits auto-push when connected  
 - Supabase dashboard (admin only): https://supabase.com/dashboard  
 
 ---

@@ -26,16 +26,15 @@ Chick-fil-A Vestavia Hills BOH scheduling + shift setup app.
 
 ## Cloud database (quick)
 
-Cloud link is **per browser**. That is why one phone can show **Cloud** and another **Local only** until the second device is connected.
+The Vestavia store cloud key is built into the live app (`data/cloud-config.json` + defaults in `index.html`).  
+**Any phone or PC that opens the page auto-connects** and pulls the shared schedule. Edits auto-push while connected.
+
+First-time Supabase project setup (already done for this store):
 
 1. Run [`supabase-schema.sql`](./supabase-schema.sql) in Supabase SQL Editor  
-2. Copy Project URL + anon key (Settings → API)  
-3. Live app → cloud badge → paste → **Save connection**  
-4. On that same device → **Copy link for other devices** → open the link on every other phone/PC  
+2. Keep Project URL + anon key in `data/cloud-config.json`  
 
-Optional team-wide auto-connect: copy [`data/cloud-config.example.json`](./data/cloud-config.example.json) → `data/cloud-config.json`, paste the anon key, commit & deploy. New browsers then link on first load.
-
-This project URL form: `https://oikrcoccaepgtvdswuuo.supabase.co`
+This project URL: `https://oikrcoccaepgtvdswuuo.supabase.co`
 
 ## Local file
 

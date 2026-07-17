@@ -4897,11 +4897,11 @@
     </div>
     <div class="modal-body">
       <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.45">
-        Each browser keeps its own copy until it is linked to the store cloud.
-        One phone can say <strong>Cloud</strong> while another says <strong>Local only</strong> — that means the second device was never connected yet.
+        Vestavia store cloud is built into the app — any phone or PC that opens this page should auto-connect and load the shared schedule.
+        Edits auto-push when connected. Use <strong>Pull</strong> if another device just changed something.
       </p>
       <div id="cloudLocalHint" style="display:none;font-size:12px;line-height:1.5;padding:10px 12px;border-radius:8px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.35);color:var(--amber);margin-bottom:12px">
-        This device is local-only. On a phone that already shows <strong>Cloud</strong>, open this panel → <strong>Copy link for other devices</strong>, then open that link here. Or paste the store URL + anon key below once.
+        Still local-only — refresh the page to auto-connect, or tap <strong>Save connection</strong> below.
       </div>
       <div class="field">
         <label class="field-label">Supabase project URL</label>
@@ -4916,10 +4916,9 @@
         <input id="cloudStoreId" value="default" placeholder="default">
       </div>
       <ol style="font-size:12px;color:var(--muted);margin:0 0 12px 18px;line-height:1.55">
-        <li><strong>Already connected elsewhere?</strong> Use <em>Copy link for other devices</em> on that browser, open it here.</li>
-        <li>Or paste Project URL + anon key (Supabase → Settings → API), then Save.</li>
-        <li>First-time store setup: run <code>supabase-schema.sql</code>, then Push once.</li>
-        <li>After that: Pull on new devices · Push after big edits (auto-push is on when linked).</li>
+        <li>Open the live app — cloud should connect by itself.</li>
+        <li>Badge shows <strong>Cloud</strong> when linked · <strong>Pull</strong> / <strong>Push</strong> if you need a manual sync.</li>
+        <li>Advanced: override URL / anon key below only if you move to a different Supabase project.</li>
       </ol>
       <div id="cloudStatusBox" style="font-size:12px;font-weight:600;padding:10px 12px;border-radius:8px;background:var(--input-bg);border:1px solid var(--border);margin-bottom:10px;color:var(--muted)">Not connected</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -10267,9 +10266,10 @@ function deleteTemplate(id) {
 // ── Persistence (localStorage + optional Supabase cloud DB) ──
 const CLOUD_CFG_KEY = 'boh-cloud-config';
 const CLOUD_OPT_OUT_KEY = 'boh-cloud-opt-out';
-/** Vestavia store defaults — anon key comes from localStorage, connect link, or data/cloud-config.json */
+/** Vestavia store cloud — baked in so every phone/PC that opens the app auto-connects */
 const DEFAULT_STORE_CLOUD = {
   url: 'https://oikrcoccaepgtvdswuuo.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pa3Jjb2NjYWVwZ3R2ZHN3dXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NzI2NDEsImV4cCI6MjA5OTQ0ODY0MX0.NSfztiECitaxWEMbDtCC5PEgQbumollr3IM0BC9DzV0',
   storeId: 'default'
 };
 let cloudClient = null;
@@ -10409,10 +10409,6 @@ function loadCloudConfig() {
   return loadCloudConfigFromStorage();
 }
 
-function cloudConfigOptedOut() {
-  try { return localStorage.getItem(CLOUD_OPT_OUT_KEY) === '1'; } catch (_) { return false; }
-}
-
 function encodeCloudConnectToken(cfg) {
   const normalized = normalizeCloudConfig(cfg);
   if (!normalized) return '';
@@ -10466,7 +10462,6 @@ function applyCloudConfigFromUrl() {
 }
 
 async function loadCloudConfigFromRepoFile() {
-  if (cloudConfigOptedOut()) return null;
   try {
     const res = await fetch('./data/cloud-config.json', { cache: 'no-store' });
     if (!res.ok) return null;
@@ -10476,16 +10471,26 @@ async function loadCloudConfigFromRepoFile() {
   }
 }
 
+function builtInStoreCloudConfig() {
+  return normalizeCloudConfig(DEFAULT_STORE_CLOUD);
+}
+
+/** Every landing device uses store cloud (URL link → saved → repo file → built-in defaults). */
 async function resolveCloudConfig() {
   const fromUrl = applyCloudConfigFromUrl();
   if (fromUrl) return fromUrl;
+
+  const fromFile = await loadCloudConfigFromRepoFile();
+  const builtIn = builtInStoreCloudConfig();
+  const preferred = fromFile || builtIn;
+  if (preferred) {
+    // Refresh saved link so phones that were Local only pick up the store key
+    persistCloudConfig(preferred);
+    return preferred;
+  }
+
   const fromStorage = loadCloudConfigFromStorage();
   if (fromStorage) return fromStorage;
-  const fromFile = await loadCloudConfigFromRepoFile();
-  if (fromFile) {
-    persistCloudConfig(fromFile);
-    return fromFile;
-  }
   return null;
 }
 
@@ -10535,17 +10540,17 @@ function setCloudStatus(status, detail) {
   if (hint) hint.style.display = status === 'local' ? 'block' : 'none';
   if (shareBtn) shareBtn.style.display = (status === 'online' || status === 'syncing') && cloudConfig ? '' : 'none';
   if (box) {
-    if (status === 'local') box.textContent = detail || 'Not connected on this device — saves only in this browser until you link cloud.';
-    else if (status === 'online') box.textContent = detail || `Connected to ${cloudConfig?.url || 'Supabase'}. Store: ${cloudConfig?.storeId || 'default'}. Auto-push on save. Use “Copy link for other devices” so phones don’t stay Local only.`;
+    if (status === 'local') box.textContent = detail || 'Not connected — refresh to auto-link the Vestavia store cloud.';
+    else if (status === 'online') box.textContent = detail || `Connected to ${cloudConfig?.url || 'Supabase'}. Store: ${cloudConfig?.storeId || 'default'}. Auto-push on save.`;
     else if (status === 'syncing') box.textContent = detail || 'Talking to database…';
     else box.textContent = detail || 'Connection error — check URL/key and that supabase-schema.sql was run.';
   }
 }
 
 function openCloudModal() {
-  const cfg = loadCloudConfigFromStorage() || cloudConfig || {};
+  const cfg = loadCloudConfigFromStorage() || cloudConfig || builtInStoreCloudConfig() || {};
   document.getElementById('cloudUrl').value = cfg.url || DEFAULT_STORE_CLOUD.url;
-  document.getElementById('cloudAnonKey').value = cfg.anonKey || '';
+  document.getElementById('cloudAnonKey').value = cfg.anonKey || DEFAULT_STORE_CLOUD.anonKey || '';
   document.getElementById('cloudStoreId').value = cfg.storeId || DEFAULT_STORE_CLOUD.storeId;
   setCloudStatus(cloudStatus);
   document.getElementById('cloudModal').classList.add('open');
@@ -10614,17 +10619,17 @@ function saveCloudConfig() {
 }
 
 function clearCloudConfig() {
-  if (!confirm('Disconnect cloud on this device only?\n\nData stays in this browser. Other phones keep their own cloud link.')) return;
+  if (!confirm('Disconnect cloud for this session?\n\nData stays in this browser. Reloading the page will auto-connect again.')) return;
   try {
     localStorage.removeItem(CLOUD_CFG_KEY);
-    localStorage.setItem(CLOUD_OPT_OUT_KEY, '1');
+    localStorage.removeItem(CLOUD_OPT_OUT_KEY);
   } catch (_) {}
   cloudClient = null;
   cloudConfig = null;
   cloudLastSync = null;
-  setCloudStatus('local');
+  setCloudStatus('local', 'Disconnected for this session — reload to auto-connect again.');
   document.getElementById('cloudUrl').value = DEFAULT_STORE_CLOUD.url;
-  document.getElementById('cloudAnonKey').value = '';
+  document.getElementById('cloudAnonKey').value = DEFAULT_STORE_CLOUD.anonKey || '';
   document.getElementById('cloudStoreId').value = DEFAULT_STORE_CLOUD.storeId;
 }
 
@@ -15618,13 +15623,8 @@ async function bootApp() {
   initResponsiveHeader();
   renderAll();
   initScrollHints();
-  // Keep badge honest until bootstrap resolves (storage / connect link / shared config)
-  if (loadCloudConfigFromStorage() || (location.hash || '').includes('cloud')) {
-    setCloudStatus('syncing', 'Connecting…');
-  } else {
-    setCloudStatus('local');
-  }
-  // After first paint, pull/push cloud DB if this browser is linked
+  // Store cloud is built in — show connecting while bootstrap pulls shared data
+  setCloudStatus('syncing', 'Connecting…');
   bootstrapCloud();
 }
 bootApp();
