@@ -2302,7 +2302,7 @@
     .gameplan-print { display: none; }
 
     @media print {
-      @page { size: landscape; margin: 0.35in; }
+      @page { size: letter landscape; margin: 0.25in; }
       html, body {
         background: #fff !important;
         color: #0B1C2C !important;
@@ -2310,11 +2310,14 @@
         print-color-adjust: exact !important;
       }
       .header, .modal-bg, .bg-orbs, .ss-fx-star, .ss-fx-spark,
-      #view-schedule, .classic-hero, .stats, .labor-panel,
-      .sched-tools-drawer, .sched-tools-overlay { display: none !important; }
+      #view-schedule, #view-skills, #view-leaders, .classic-hero, .stats, .labor-panel,
+      .sched-tools-drawer, .sched-tools-overlay, .mobile-bottom-nav,
+      .hs-ctx-menu, .export-print-host { display: none !important; }
       .main { padding: 0 !important; max-width: none !important; margin: 0 !important; }
-      body.printing-gameplan #view-setup > *:not(#gameplanPrint) { display: none !important; }
+      /* Print host is moved onto <body> — hide everything else */
+      body.printing-gameplan > *:not(#gameplanPrint) { display: none !important; }
       body.printing-gameplan #gameplanPrint { display: block !important; }
+      body.printing-gameplan #view-setup > *:not(#gameplanPrint) { display: none !important; }
       body.printing-gameplan .view { display: block !important; }
       /* Fallback if print without gameplan class */
       body:not(.printing-gameplan) #view-setup .ss-controls .btn { display: none !important; }
@@ -2565,45 +2568,76 @@
       .gp-page { min-height: auto; }
       .gp-board { break-inside: avoid; }
 
-      /* Shift Setup multi-page print: BF+LN page 1, Afternoon+Dinner page 2 */
+      /* One landscape sheet per page — no mid-board cutoffs */
       body.printing-gameplan {
         background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
       body.printing-gameplan #gameplanPrint {
         display: block !important;
         position: static !important;
         left: auto !important;
         top: auto !important;
-        width: 100% !important;
+        width: auto !important;
         background: #fff !important;
         color: #0B1C2C !important;
       }
       body.printing-gameplan .export-sheet.export-gameplan {
-        width: 100% !important;
+        box-sizing: border-box !important;
+        width: 10.5in !important;
+        height: 8in !important;
+        max-width: 10.5in !important;
+        max-height: 8in !important;
         min-height: 0 !important;
-        max-width: 100% !important;
-        padding: 0.35in !important;
+        padding: 0.12in 0.14in !important;
+        margin: 0 !important;
+        overflow: hidden !important;
         box-shadow: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
         page-break-after: always;
         break-after: page;
         page-break-inside: avoid;
+        break-inside: avoid;
       }
       body.printing-gameplan .export-sheet.export-gameplan:last-child {
         page-break-after: auto;
         break-after: auto;
       }
-      body.printing-gameplan .ex-gp-line-name {
-        white-space: normal !important;
-        overflow: visible !important;
-        text-overflow: clip !important;
+      body.printing-gameplan .ex-gp-header { margin-bottom: 6px !important; }
+      body.printing-gameplan .ex-gp-body {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        align-items: stretch !important;
+      }
+      body.printing-gameplan .ex-gp-left,
+      body.printing-gameplan .ex-gp-boards {
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+      body.printing-gameplan .ex-gp-boards {
+        height: 100% !important;
       }
       body.printing-gameplan .ex-gp-period {
         page-break-inside: avoid;
         break-inside: avoid;
+        overflow: hidden !important;
+      }
+      body.printing-gameplan .ex-gp-line-name,
+      body.printing-gameplan .ex-gp-line-time,
+      body.printing-gameplan .ex-gp-team-row .n {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
       }
       @page {
-        size: landscape;
-        margin: 0.35in;
+        size: letter landscape;
+        margin: 0.25in;
       }
     }
 
@@ -2663,117 +2697,137 @@
       display: flex; flex-wrap: wrap; gap: 12px 20px;
     }
 
-    /* Daily staffing export gameplan — fit-safe, no ellipsis cutoff */
+    /* Daily staffing / Shift Setup gameplan — sized to fit one landscape sheet */
     .export-gameplan.export-sheet {
-      padding: 20px 24px;
+      padding: 14px 16px;
       min-height: 0;
+      box-sizing: border-box;
     }
     .ex-gp-header {
-      display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-shrink: 0;
     }
     .ex-gp-logo {
-      width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
       background: radial-gradient(circle at 35% 30%, #FF4D6D, #DD0033 55%, #9B0F28);
       color: #fff; display: grid; place-items: center; text-align: center;
-      font-weight: 900; font-size: 11px; line-height: 1.15; padding: 6px;
+      font-weight: 900; font-size: 10px; line-height: 1.1; padding: 4px;
     }
-    .ex-gp-logo small { display: block; font-size: 7px; font-weight: 700; opacity: .9; letter-spacing: .04em; }
+    .ex-gp-logo small { display: block; font-size: 6px; font-weight: 700; opacity: .9; letter-spacing: .04em; }
     .ex-gp-meta {
-      flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; min-width: 0;
     }
     .ex-gp-meta-box {
-      background: #0E2A3D; color: #E8F1F7; border-radius: 10px; padding: 8px 10px;
+      background: #0E2A3D; color: #E8F1F7; border-radius: 8px; padding: 6px 8px; min-width: 0;
     }
-    .ex-gp-meta-box .k { font-size: 8px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
-    .ex-gp-meta-box .v { font-size: 13px; font-weight: 800; margin-top: 2px; }
+    .ex-gp-meta-box .k { font-size: 7px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+    .ex-gp-meta-box .v {
+      font-size: 11px; font-weight: 800; margin-top: 1px; line-height: 1.2;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
     .ex-gp-body {
-      display: grid; grid-template-columns: 200px 1fr; gap: 12px; align-items: start;
+      display: grid; grid-template-columns: 158px minmax(0, 1fr); gap: 8px; align-items: stretch;
+      min-height: 0; flex: 1;
     }
-    .ex-gp-left { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .ex-gp-left {
+      display: flex; flex-direction: column; gap: 6px; min-width: 0; min-height: 0; overflow: hidden;
+    }
     .ex-gp-box {
-      background: #0E2A3D; border-radius: 10px; color: #E8F1F7; padding: 8px 10px;
+      background: #0E2A3D; border-radius: 8px; color: #E8F1F7; padding: 6px 8px;
+      min-width: 0; overflow: hidden;
     }
+    .ex-gp-box.ex-gp-roster { flex: 1; min-height: 0; overflow: hidden; }
     .ex-gp-box .t {
-      font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
-      opacity: .75; margin-bottom: 6px;
+      font-size: 8px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+      opacity: .75; margin-bottom: 4px;
     }
     .ex-gp-check-row {
-      display: flex; align-items: flex-start; gap: 6px; font-size: 10px; font-weight: 600;
-      margin-bottom: 4px; line-height: 1.3;
+      display: flex; align-items: flex-start; gap: 5px; font-size: 8px; font-weight: 600;
+      margin-bottom: 2px; line-height: 1.25;
     }
     .ex-gp-check-box {
-      width: 12px; height: 12px; border: 1.5px solid rgba(255,255,255,.45); border-radius: 3px;
-      flex-shrink: 0; margin-top: 1px; font-size: 9px; text-align: center; line-height: 10px;
+      width: 10px; height: 10px; border: 1.5px solid rgba(255,255,255,.45); border-radius: 2px;
+      flex-shrink: 0; margin-top: 1px; font-size: 8px; text-align: center; line-height: 8px;
     }
     .ex-gp-check-row.done { opacity: .65; text-decoration: line-through; }
     .ex-gp-team-row {
-      display: flex; justify-content: space-between; gap: 6px; font-size: 10px; font-weight: 700;
-      margin-bottom: 3px; line-height: 1.3;
+      display: flex; justify-content: space-between; align-items: baseline; gap: 6px;
+      font-size: 9px; font-weight: 700; margin-bottom: 2px; line-height: 1.2;
     }
-    .ex-gp-team-row .tm { opacity: .75; font-weight: 600; white-space: nowrap; }
+    .ex-gp-team-row .n {
+      min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .ex-gp-team-row .tm { opacity: .8; font-weight: 600; white-space: nowrap; flex-shrink: 0; font-size: 8px; }
     .ex-gp-notes {
-      font-size: 10px; font-weight: 600; line-height: 1.35; white-space: pre-wrap; min-height: 36px;
+      font-size: 8px; font-weight: 600; line-height: 1.25; white-space: pre-wrap;
+      max-height: 2.4em; overflow: hidden;
     }
-    .ex-gp-boards { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .ex-gp-boards {
+      display: flex; flex-direction: column; gap: 6px; min-width: 0; min-height: 0; overflow: hidden;
+    }
     .ex-gp-period {
-      background: #0E2A3D; border-radius: 14px; padding: 10px 12px 12px; color: #E8F1F7;
-      page-break-inside: avoid;
+      background: #0E2A3D; border-radius: 10px; padding: 6px 8px 8px; color: #E8F1F7;
+      flex: 1 1 0; min-height: 0; overflow: hidden;
+      display: flex; flex-direction: column;
     }
     .ex-gp-period-title {
-      text-align: center; font-size: 13px; font-weight: 900; letter-spacing: .08em;
-      margin-bottom: 8px; color: #fff;
+      text-align: center; font-size: 11px; font-weight: 900; letter-spacing: .06em;
+      margin-bottom: 4px; color: #fff; flex-shrink: 0;
     }
     .ex-gp-period-title span {
-      display: block; font-size: 10px; font-weight: 700; letter-spacing: .02em;
-      color: #A5F3FC; margin-top: 2px;
+      display: block; font-size: 9px; font-weight: 700; letter-spacing: .02em;
+      color: #A5F3FC; margin-top: 1px;
     }
     .ex-gp-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 0.7fr 1.15fr 1fr;
-      gap: 8px 10px;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.15fr) 22px minmax(0, 1.25fr) minmax(0, 1.15fr);
+      gap: 4px 6px;
       align-items: start;
+      flex: 1; min-height: 0;
     }
     .ex-gp-col-title {
-      font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+      font-size: 7.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
       color: #F03A5F; border-bottom: 1px dotted rgba(240,58,95,.65);
-      padding-bottom: 3px; margin-bottom: 6px; text-align: center;
+      padding-bottom: 2px; margin-bottom: 3px; text-align: center;
     }
     .ex-gp-raw-block {
-      margin-top: 12px; padding-top: 8px;
+      margin-top: 6px; padding-top: 4px;
       border-top: 1px dashed rgba(52,211,153,.45);
     }
     .ex-gp-raw-label {
-      font-size: 8px; font-weight: 800; letter-spacing: .08em;
+      font-size: 7px; font-weight: 800; letter-spacing: .08em;
       text-transform: uppercase; color: #6EE7B7;
-      text-align: center; margin-bottom: 6px;
+      text-align: center; margin-bottom: 3px;
     }
-    .ex-gp-line { margin-bottom: 8px; }
+    .ex-gp-line { margin-bottom: 4px; min-width: 0; }
     .ex-gp-line-label {
-      font-size: 8px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
-      color: #F03A5F; border-bottom: 1px dotted rgba(240,58,95,.5); padding-bottom: 1px; margin-bottom: 2px;
+      font-size: 7px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+      color: #F03A5F; border-bottom: 1px dotted rgba(240,58,95,.5); padding-bottom: 1px; margin-bottom: 1px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .ex-gp-line-name {
-      font-size: 12px; font-weight: 800; color: #FFFFFF;
-      line-height: 1.3; white-space: normal; word-break: break-word;
-      border-bottom: 1px solid rgba(255,255,255,.2); padding: 2px 0 4px; min-height: 16px;
+      font-size: 10px; font-weight: 800; color: #FFFFFF;
+      line-height: 1.15;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      word-break: normal; overflow-wrap: normal; hyphens: none;
+      border-bottom: 1px solid rgba(255,255,255,.2); padding: 1px 0 2px; min-height: 13px;
     }
-    .ex-gp-line-name.empty { color: rgba(255,255,255,.25); min-height: 16px; }
+    .ex-gp-line-name.empty { color: rgba(255,255,255,.25); min-height: 13px; }
     .ex-gp-line-time {
-      font-size: 10px; font-weight: 700; color: #A5F3FC; margin-top: 1px;
-      white-space: normal;
+      font-size: 8px; font-weight: 700; color: #A5F3FC; margin-top: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .ex-gp-center {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding-top: 18px; opacity: .85;
+      padding-top: 10px; opacity: .85; width: 22px;
     }
-    .ex-gp-center .bar { width: 100%; height: 3px; background: rgba(255,255,255,.35); border-radius: 2px; }
-    .ex-gp-center .stem { width: 3px; flex: 1; min-height: 40px; background: rgba(255,255,255,.35); border-radius: 2px; margin: 4px 0; }
+    .ex-gp-center .bar { width: 100%; height: 2px; background: rgba(255,255,255,.35); border-radius: 2px; }
+    .ex-gp-center .stem { width: 2px; flex: 1; min-height: 28px; background: rgba(255,255,255,.35); border-radius: 2px; margin: 3px 0; }
     .ex-gp-center .lbl {
-      font-size: 8px; font-weight: 800; letter-spacing: .12em; writing-mode: vertical-rl;
+      font-size: 6px; font-weight: 800; letter-spacing: .1em; writing-mode: vertical-rl;
       transform: rotate(180deg); color: rgba(255,255,255,.55);
     }
     .ex-gp-empty {
-      text-align: center; padding: 40px 20px; font-size: 14px; font-weight: 700; color: #64748B;
+      text-align: center; padding: 24px 16px; font-size: 13px; font-weight: 700; color: #64748B;
       border: 2px dashed #CBD5E1; border-radius: 12px; background: #F8FAFC;
     }
 
@@ -13672,23 +13726,37 @@ function gameplanPeriodIcon(period) {
   return '☀';
 }
 
+/** Short printable name so landscape columns don’t chop mid-word. */
+function printFriendlyName(name) {
+  const n = String(name || '').trim().replace(/\s+/g, ' ');
+  if (!n) return '';
+  if (n.length <= 18) return n;
+  const parts = n.split(' ');
+  if (parts.length >= 2) {
+    const firstLast = parts[0] + ' ' + parts[parts.length - 1];
+    if (firstLast.length <= 20) return firstLast;
+    return (parts[0][0] || '').toUpperCase() + '. ' + parts[parts.length - 1];
+  }
+  return n.slice(0, 16) + '…';
+}
+
 function gameplanPersonOnLine(segs) {
   if (!segs?.length) return { name: '', time: '', multi: false };
   const resolveName = (personId) => {
     const p = staff.find(s => s.id === personId);
-    return p?.name || String(personId || '').replace(/^p_?/, '') || 'Unknown';
+    return printFriendlyName(p?.name || String(personId || '').replace(/^p_?/, '') || 'Unknown');
   };
   if (segs.length === 1) {
     const seg = segs[0];
-    const t0 = seg.start ? (formatTime12(seg.start) || compactTime12(seg.start)) : '';
-    const t1 = seg.end ? (formatTime12(seg.end) || compactTime12(seg.end)) : '';
+    const t0 = seg.start ? compactTime12(seg.start) : '';
+    const t1 = seg.end ? compactTime12(seg.end) : '';
     return {
       name: resolveName(seg.personId),
-      time: t0 && t1 ? `${t0} – ${t1}` : (t0 || t1 || ''),
+      time: t0 && t1 ? `${t0}–${t1}` : (t0 || t1 || ''),
       multi: false
     };
   }
-  // Handoff: full names + windows
+  // Handoff: short names + compact windows
   const parts = segs.map(seg => {
     const nm = resolveName(seg.personId);
     const t0 = seg.start ? compactTime12(seg.start) : '';
@@ -13696,7 +13764,7 @@ function gameplanPersonOnLine(segs) {
     const win = t0 && t1 ? ` ${t0}–${t1}` : '';
     return nm + win;
   });
-  return { name: parts.join('  →  '), time: 'handoff', multi: true };
+  return { name: parts.join(' → '), time: 'handoff', multi: true };
 }
 
 function buildGameplanStationLines(dateKey, period) {
@@ -13988,15 +14056,32 @@ function printSetupGameplan() {
   if (!document.getElementById('view-setup')?.classList.contains('active')) {
     switchView('setup');
   }
+  // Park print host on <body> so chrome (nav, other tabs) cannot leak into the sheet
+  const homeParent = host.parentNode;
+  const homeNext = host.nextSibling;
+  if (host.parentNode !== document.body) document.body.appendChild(host);
+
   // Exactly two sheets when dayparts exist:
-  // Page 1 Breakfast+Lunch · Page 2 Afternoon+Dinner — each with combined side roster
+  // Page 1 Breakfast+Lunch · Page 2 Afternoon+Dinner — each fits one landscape page
   host.innerHTML = buildMultiPageStaffingPrintHtml(dateKey);
   document.body.classList.add('printing-gameplan');
+  let cleaned = false;
   const cleanup = () => {
+    if (cleaned) return;
+    cleaned = true;
     document.body.classList.remove('printing-gameplan');
+    host.innerHTML = '';
+    try {
+      if (homeParent) {
+        if (homeNext && homeNext.parentNode === homeParent) homeParent.insertBefore(host, homeNext);
+        else homeParent.appendChild(host);
+      }
+    } catch (_) {}
     window.removeEventListener('afterprint', cleanup);
   };
   window.addEventListener('afterprint', cleanup);
+  // Fallback if afterprint never fires (some mobile browsers)
+  setTimeout(cleanup, 60_000);
   requestAnimationFrame(() => {
     requestAnimationFrame(() => window.print());
   });
@@ -15293,18 +15378,15 @@ function buildExportRailHtml(dateKey, periods, pageLabel) {
   const roster = buildCombinedPageRosterRows(dateKey, list);
   let teamRows = '';
   if (!roster.length) {
-    teamRows = '<div style="opacity:.55;font-size:10px">No one scheduled for these dayparts</div>';
+    teamRows = '<div style="opacity:.55;font-size:9px">No one scheduled for these dayparts</div>';
   } else {
+    // Name + schedule window only — station detail lives on the board (avoids rail overflow)
     teamRows = roster.map(r => {
       const time = r.windows[0] || '';
-      const detail = r.stations[0]
-        ? r.stations[0]
-        : (r.dayparts.join('/') || '');
-      const line = r.name + (detail ? ' · ' + detail : '');
-      return '<div class="ex-gp-team-row"><span>' + escAttr(line) + '</span>' +
+      return '<div class="ex-gp-team-row"><span class="n">' + escAttr(printFriendlyName(r.name)) + '</span>' +
         (time ? '<span class="tm">' + escAttr(time) + '</span>' : '') + '</div>';
     }).join('');
-    teamRows += '<div style="margin-top:6px;font-size:9px;opacity:.65;font-weight:700">' +
+    teamRows += '<div style="margin-top:4px;font-size:8px;opacity:.65;font-weight:700">' +
       roster.length + ' on ' + escAttr(periodNames) + '</div>';
   }
 
@@ -15318,10 +15400,10 @@ function buildExportRailHtml(dateKey, periods, pageLabel) {
 
   return '<aside class="ex-gp-left">' +
       '<div class="ex-gp-box"><div class="t">' + escAttr(pageLabel || periodNames) + '</div>' +
-        '<div style="font-size:10px;font-weight:700;line-height:1.35;opacity:.9">' +
+        '<div style="font-size:9px;font-weight:700;line-height:1.25;opacity:.9">' +
           escAttr(periodNames) +
         '</div></div>' +
-      '<div class="ex-gp-box"><div class="t">' + escAttr(rosterTitle) + ' (' + roster.length + ')</div>' + teamRows + '</div>' +
+      '<div class="ex-gp-box ex-gp-roster"><div class="t">' + escAttr(rosterTitle) + ' (' + roster.length + ')</div>' + teamRows + '</div>' +
       '<div class="ex-gp-box"><div class="t">' + escAttr(clTitle) + '</div>' + checkRows + '</div>' +
       '<div class="ex-gp-box"><div class="t">Shift notes</div><div class="ex-gp-notes">' + escAttr(notes) + '</div></div>' +
     '</aside>';
@@ -15336,7 +15418,8 @@ function buildExportRailHtml(dateKey, periods, pageLabel) {
 function buildExportGameplanHtml(dateKey, opts) {
   opts = opts || {};
   const day = parseDateKey(dateKey);
-  const dayLabel = day.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+  // Compact label so the header meta boxes don’t wrap/overflow on landscape print
+  const dayLabel = day.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   const allBoards = getExportDayPeriods(dateKey);
   const useBoards = (opts.periods && opts.periods.length) ? opts.periods : allBoards;
   const pageLabel = opts.pageLabel || '';
