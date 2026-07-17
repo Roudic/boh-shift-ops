@@ -4142,6 +4142,12 @@
       background: rgba(56,189,248,.35) !important;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
     }
+    #view-setup .ss-add-seg.ss-add-seg-armed {
+      color: #fff !important;
+      border-color: rgba(251,191,36,.65) !important;
+      background: rgba(251,191,36,.28) !important;
+      box-shadow: 0 0 0 2px rgba(251,191,36,.25);
+    }
     #view-setup .ss-seg {
       position: relative;
       z-index: 8;
@@ -12908,6 +12914,39 @@ function isCompactSetupUI() {
 }
 
 let pendingPoolPickSlotId = null;
+/** Compact UI: first tap arms, second tap (same slot, <450ms) opens the team-pool popup. */
+let setupPoolArmed = { slotId: null, at: 0 };
+let setupTouchMoved = false;
+let setupTouchStart = null;
+
+function clearSetupPoolArm() {
+  setupPoolArmed = { slotId: null, at: 0 };
+  document.querySelectorAll('#view-setup .ss-add-seg-armed').forEach(btn => {
+    btn.classList.remove('ss-add-seg-armed');
+    if (btn.dataset.addLabel) btn.textContent = btn.dataset.addLabel;
+  });
+}
+
+/** Returns true on the confirming double-tap (or immediately on desktop). */
+function consumeSetupPoolDoubleTap(slotId, armEl) {
+  if (!isCompactSetupUI()) return true;
+  const now = Date.now();
+  if (setupPoolArmed.slotId === slotId && (now - setupPoolArmed.at) < 450) {
+    clearSetupPoolArm();
+    return true;
+  }
+  setupPoolArmed = { slotId, at: now };
+  if (armEl) {
+    if (!armEl.dataset.addLabel) armEl.dataset.addLabel = armEl.textContent;
+    armEl.textContent = 'Tap again';
+    armEl.classList.add('ss-add-seg-armed');
+    clearTimeout(armEl._armTimer);
+    armEl._armTimer = setTimeout(() => {
+      if (setupPoolArmed.slotId === slotId) clearSetupPoolArm();
+    }, 900);
+  }
+  return false;
+}
 
 /** Floor team still available in the pool (leaders excluded, already-assigned excluded). */
 function listSetupPoolPeople(dateKey, shiftId) {
@@ -13120,6 +13159,22 @@ function initSetupDragDrop() {
   if (!root || root.dataset.dndInit) return;
   root.dataset.dndInit = '1';
 
+  // Track scroll/drag so a finger swipe doesn’t open the team-pool popup
+  root.addEventListener('pointerdown', (e) => {
+    if (e.button != null && e.button !== 0) return;
+    setupTouchMoved = false;
+    setupTouchStart = { x: e.clientX, y: e.clientY };
+  }, true);
+  root.addEventListener('pointermove', (e) => {
+    if (!setupTouchStart || setupTouchMoved) return;
+    if (Math.abs(e.clientX - setupTouchStart.x) > 12 || Math.abs(e.clientY - setupTouchStart.y) > 12) {
+      setupTouchMoved = true;
+      clearSetupPoolArm();
+    }
+  }, { passive: true });
+  root.addEventListener('pointerup', () => { setupTouchStart = null; }, true);
+  root.addEventListener('pointercancel', () => { setupTouchStart = null; setupTouchMoved = true; }, true);
+
   // pointerdown = remove/unassign first, then handoff open + chip drag
   root.addEventListener('pointerdown', (e) => {
     if (e.button != null && e.button !== 0) return;
@@ -13142,17 +13197,19 @@ function initSetupDragDrop() {
 
     const addSeg = e.target.closest('[data-action="add-seg"]');
     if (addSeg) {
+      // Compact: wait for click + double-tap (scrolling must not open the pool)
+      if (isCompactSetupUI()) return;
       e.preventDefault();
       e.stopPropagation();
       const pid = setupSelectedPersonId;
       setupSelectedPersonId = null;
-      // Compact: open team-pool popup → then times. Desktop / already-selected: go straight to assign.
-      if (!pid && isCompactSetupUI()) openSetupPoolPickModal(addSeg.dataset.slotId);
-      else openHandoffAssign(addSeg.dataset.slotId, null, pid);
+      openHandoffAssign(addSeg.dataset.slotId, null, pid);
       return;
     }
     const seg = e.target.closest('[data-action="edit-seg"]');
     if (seg) {
+      // Compact: handle on click so a scroll over a person row doesn’t open edit
+      if (isCompactSetupUI()) return;
       e.preventDefault();
       e.stopPropagation();
       openHandoffAssign(seg.dataset.slotId, seg.dataset.segId, null);
@@ -13183,7 +13240,7 @@ function initSetupDragDrop() {
   }, true);
 
   root.addEventListener('click', (e) => {
-    if (setupChipDragSuppressClick || setupChipDrag?.moved) {
+    if (setupChipDragSuppressClick || setupChipDrag?.moved || setupTouchMoved) {
       e.preventDefault();
       e.stopPropagation();
       return;
@@ -13202,12 +13259,39 @@ function initSetupDragDrop() {
       e.stopPropagation();
       return;
     }
-    // Handoff open already handled on pointerdown — skip duplicate click
-    if (e.target.closest('[data-action="add-seg"], [data-action="edit-seg"]')) {
+
+    const addSeg = e.target.closest('[data-action="add-seg"]');
+    if (addSeg) {
       e.preventDefault();
       e.stopPropagation();
+      const pid = setupSelectedPersonId;
+      setupSelectedPersonId = null;
+      if (pid) {
+        clearSetupPoolArm();
+        openHandoffAssign(addSeg.dataset.slotId, null, pid);
+        return;
+      }
+      // Mobile/tablet: double-tap + Add to open team pool (avoids scroll accidents)
+      if (isCompactSetupUI()) {
+        if (!consumeSetupPoolDoubleTap(addSeg.dataset.slotId, addSeg)) return;
+        openSetupPoolPickModal(addSeg.dataset.slotId);
+        return;
+      }
+      openHandoffAssign(addSeg.dataset.slotId, null, null);
       return;
     }
+
+    const editSeg = e.target.closest('[data-action="edit-seg"]');
+    if (editSeg) {
+      e.preventDefault();
+      e.stopPropagation();
+      // Desktop already opened on pointerdown; compact opens here after a true tap
+      if (!isCompactSetupUI()) return;
+      clearSetupPoolArm();
+      openHandoffAssign(editSeg.dataset.slotId, editSeg.dataset.segId, null);
+      return;
+    }
+
     const chip = e.target.closest('.ss-chip[data-person-id]');
     const slot = e.target.closest('.ss-slot[data-slot-id]');
     if (chip && chip.closest('#staffPool')) {
@@ -13216,16 +13300,21 @@ function initSetupDragDrop() {
       return;
     }
     if (slot && setupSelectedPersonId) {
+      clearSetupPoolArm();
       openSlotAssignModal(slot.dataset.slotId, null, setupSelectedPersonId);
       setupSelectedPersonId = null;
       renderSetup();
       return;
     }
-    // Mobile/tablet: tap an open station (no one selected) → team pool popup
+    // Mobile/tablet: double-tap an open station to open team pool
     if (slot && isCompactSetupUI() && !e.target.closest('[data-action="edit-seg"], [data-action="remove-seg"], .ss-seg')) {
       const setup = getSetup(document.getElementById('setupDay')?.value, document.getElementById('setupShift')?.value);
       const segs = getSlotSegments(setup, slot.dataset.slotId);
-      if (!segs.length) openSetupPoolPickModal(slot.dataset.slotId);
+      if (!segs.length) {
+        const addBtn = slot.querySelector('[data-action="add-seg"]');
+        if (!consumeSetupPoolDoubleTap(slot.dataset.slotId, addBtn)) return;
+        openSetupPoolPickModal(slot.dataset.slotId);
+      }
     }
   });
 
@@ -13358,9 +13447,9 @@ function setupSlotCardHtml(slot, gName, color, gi, si, setup) {
   }).join('');
   const compact = isCompactSetupUI();
   const empty = !segs.length
-    ? `<span class="ss-slot-placeholder">${compact ? 'Tap + Add person' : 'Drop person · or + handover'}</span>`
+    ? `<span class="ss-slot-placeholder">${compact ? 'Double-tap + Add person' : 'Drop person · or + handover'}</span>`
     : '';
-  const clickTarget = (setupSelectedPersonId || (compact && !segs.length)) ? ' click-target' : '';
+  const clickTarget = setupSelectedPersonId ? ' click-target' : '';
   const delay = ((gi * 0.35 + si * 0.18) % 4).toFixed(2);
   const poseRx = (6 + ((gi * 3 + si * 5) % 8)).toFixed(1);
   const poseRy = (-8 + ((gi * 2 + si * 4) % 10)).toFixed(1);
@@ -13386,7 +13475,7 @@ function setupSlotCardHtml(slot, gName, color, gi, si, setup) {
       <div class="ss-slot-drop">
         ${segHtml || empty}
         ${handovers.map(h => `<div class="ss-handover-note">${escAttr(h)}</div>`).join('')}
-        <button type="button" class="ss-add-seg" data-action="add-seg" data-slot-id="${slot.id}">${addLabel}</button>
+        <button type="button" class="ss-add-seg" data-action="add-seg" data-slot-id="${slot.id}" data-add-label="${escAttr(addLabel)}" title="${compact ? 'Double-tap to open team pool' : 'Add person / handover'}">${addLabel}</button>
       </div>
     </div>
   </div>`;
@@ -13578,7 +13667,7 @@ function renderSetup() {
     ? (selectedName
       ? `Selected: ${selectedName} — tap a position (can stack for 3p handover).`
       : (compactSetup
-        ? `Tap + Add person on a station → pick from the team pool → set times.`
+        ? `Double-tap + Add person on a station → pick from the team pool → set times.`
         : `Drag people onto positions. Leaders stay in the header (not in the pool).`))
     : (onShift.length
       ? `Only leaders are on this block — assign floor team on Schedule, or pick leads under Leaders.`
