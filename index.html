@@ -12763,31 +12763,81 @@ function getAssignedPerson(setup, slotId) {
   return staff.find(s => s.id === segs[0].personId) || null;
 }
 
+/** Schedule block that overlaps this period (not just the day’s first shift). */
+function scheduleBlockForPeriod(personId, dateKey, period) {
+  const blocks = getScheduleShifts(personId, dateKey);
+  if (!blocks.length) return null;
+  if (!period?.start || !period?.end) return blocks[0];
+  return blocks.find(b => timesOverlap(b.start, b.end, period.start, period.end)) || blocks[0];
+}
+
+/**
+ * Default on-station window = person schedule clipped to the current period.
+ * Breakfast (e.g. 6–11) + person 7a–3p → 7a–11a
+ * Lunch (e.g. 11–2) + same person → 11a–2p (or until they leave if earlier)
+ */
 function segmentTimesForPerson(personId, dateKey, shiftId, slotId, setup) {
   const period = shifts.find(s => s.id === shiftId);
-  const entry = getScheduleEntry(personId, dateKey);
-  let start = entry?.start || period?.start || '05:00';
-  let end = entry?.end || period?.end || '15:00';
-  // Handover default: start after latest segment already on this slot
+  const entry = scheduleBlockForPeriod(personId, dateKey, period);
+
+  let start;
+  let end;
+
+  if (entry && period?.start && period?.end) {
+    const p0 = timeToMinutes(period.start);
+    const p1 = timeToMinutes(period.end);
+    const e0 = timeToMinutes(entry.start);
+    const e1 = timeToMinutes(entry.end);
+    start = minutesToTime24(Math.max(p0, e0));
+    end = minutesToTime24(Math.min(p1, e1));
+  } else if (entry) {
+    start = entry.start;
+    end = entry.end;
+  } else if (period?.start && period?.end) {
+    start = period.start;
+    end = period.end;
+  } else {
+    start = '05:00';
+    end = '15:00';
+  }
+
+  // Optional per-position cover window further clips the default (still within period)
+  if (period) {
+    const layout = ensureShiftLayout(period);
+    for (const g of layout) {
+      const slot = (g.slots || []).find(s => s.id === slotId);
+      if (slot?.start && slot?.end) {
+        const s0 = Math.max(timeToMinutes(start), timeToMinutes(slot.start));
+        const s1 = Math.min(timeToMinutes(end), timeToMinutes(slot.end));
+        if (s1 > s0) {
+          start = minutesToTime24(s0);
+          end = minutesToTime24(s1);
+        }
+      }
+    }
+  }
+
+  // Handover default: start after latest segment already on this slot (stay inside period/person end)
   const segs = getSlotSegments(setup, slotId).filter(s => s.personId !== personId);
   if (segs.length) {
     let latest = 0;
     segs.forEach(s => {
-      const e = timeToMinutes(s.end || period?.end || end);
+      const e = timeToMinutes(s.end || end);
       if (e > latest) latest = e;
     });
-    if (latest > 0) start = minutesToTime24(latest);
-  }
-  // Position default window if set
-  const layout = ensureShiftLayout(period);
-  for (const g of layout) {
-    const slot = (g.slots || []).find(s => s.id === slotId);
-    if (slot?.start && slot?.end) {
-      if (!entry) { start = slot.start; end = slot.end; }
+    if (latest > 0 && latest < timeToMinutes(end)) {
+      start = minutesToTime24(latest);
     }
   }
+
   if (timeToMinutes(end) <= timeToMinutes(start)) {
-    end = period?.end || minutesToTime24(Math.min(DAY_TL_END, timeToMinutes(start) + 4 * 60));
+    // Degenerate overlap — fall back to period window or a short block
+    if (period?.start && period?.end && timeToMinutes(period.end) > timeToMinutes(period.start)) {
+      start = period.start;
+      end = period.end;
+    } else {
+      end = minutesToTime24(Math.min(DAY_TL_END, timeToMinutes(start) + 4 * 60));
+    }
   }
   return { start, end };
 }
@@ -14435,7 +14485,10 @@ function openSlotAssignModal(slotId, segmentId, personId) {
   pendingSlotAssign = { slotId, segmentId: existing?.id || null, dateKey, shiftId };
 
   document.getElementById('slotAssignTitle').textContent = existing ? 'Edit assignment' : 'Assign position';
-  document.getElementById('slotAssignSub').textContent = `${label} · ${shift?.name || ''} · handovers allowed`;
+  const periodHint = shift
+    ? ` · ${formatTime12(shift.start)}–${formatTime12(shift.end)} clipped to their schedule`
+    : ' · handovers allowed';
+  document.getElementById('slotAssignSub').textContent = `${label} · ${shift?.name || ''}${periodHint}`;
 
   const sel = document.getElementById('slotAssignPerson');
   const preferred = personId || existing?.personId || setupSelectedPersonId || '';
@@ -14445,6 +14498,16 @@ function openSlotAssignModal(slotId, segmentId, personId) {
     const note = onOther ? ' (already on a station)' : '';
     return `<option value="${p.id}" ${p.id === preferred ? 'selected' : ''}>${escAttr(p.name)}${note}</option>`;
   }).join('') || '<option value="">No one on this block</option>';
+
+  // Changing person refreshes defaults to that period ∩ their schedule
+  sel.onchange = () => {
+    if (pendingSlotAssign?.segmentId) return; // editing existing — don’t wipe times
+    const pid = sel.value;
+    if (!pid || !pendingSlotAssign) return;
+    const t = segmentTimesForPerson(pid, pendingSlotAssign.dateKey, pendingSlotAssign.shiftId, pendingSlotAssign.slotId, setup);
+    setTimePicker('slotAssignStart', t.start);
+    setTimePicker('slotAssignEnd', t.end);
+  };
 
   let start, end;
   if (existing?.start && existing?.end) {
