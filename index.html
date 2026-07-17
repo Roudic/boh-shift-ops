@@ -4831,11 +4831,50 @@
       #view-setup .ss-gp-board-head .ss-gp-hint { display: none; }
       #view-setup .ss-gp-board-head { margin-bottom: 10px; }
       #view-setup .ss-gp-board-title span { display: block; font-size: 11px; margin-top: 4px; }
-      .mob-setup-list { display: flex; flex-direction: column; gap: 18px; }
+      .mob-setup-list { display: flex; flex-direction: column; gap: 22px; }
       .mob-setup-list .ss-slot { margin-bottom: 0; width: 100%; max-width: 100%; }
+      /* Big group names so Primary / Secondary / Machines are obvious while assigning */
+      #view-setup .mob-list-section-head {
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        color: #F8FAFC;
+        margin: 4px 0 12px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(240,58,95,.35);
+        background: linear-gradient(90deg, rgba(240,58,95,.22), rgba(240,58,95,.06));
+        line-height: 1.2;
+      }
+      #view-setup .mob-list-section-head span {
+        font-size: 14px;
+        font-weight: 700;
+        color: #FDA4AF;
+        margin-left: 6px;
+      }
       #view-setup .ss-layout { flex-direction: column; }
       #view-setup .ss-sidebar { width: 100%; max-width: none; order: 2; }
       #view-setup .ss-board { order: 1; }
+    }
+
+    /* Tablet / compact: larger gameplan column group titles */
+    @media (max-width: 1100px) {
+      #view-setup .ss-gp-col-title {
+        font-size: 15px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        padding: 8px 6px 8px;
+        margin-bottom: 6px;
+        color: #FDA4AF;
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+        border-bottom-color: rgba(240,58,95,.55);
+      }
+      #view-setup .ss-gp-col-count {
+        font-size: 13px;
+        color: #F8FAFC;
+      }
     }
 
     @media (max-width: 480px) {
@@ -4855,6 +4894,7 @@
 
       #view-setup .ss-gp-grid { grid-template-columns: 1fr; }
       #view-setup .ss-gp-center { display: none; }
+      #view-setup .mob-list-section-head { font-size: 18px; padding: 10px 12px; }
 
       .labor-day-grid { grid-template-columns: repeat(2, 1fr); }
       .tpl-time-picker { grid-template-columns: 1fr 1fr 1fr; }
