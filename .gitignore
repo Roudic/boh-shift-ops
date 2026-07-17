@@ -7,4 +7,6 @@ ref/
 _tmp_extract/
 **/anon_key.txt
 **/*secret*
+# Optional local override; commit data/cloud-config.json (anon key is public) to auto-link every device
+data/cloud-config.local.json
 

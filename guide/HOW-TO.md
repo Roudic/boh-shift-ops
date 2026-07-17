@@ -137,8 +137,10 @@ Nobody’s schedule overlaps that period. Go back to **Schedule** and add hours 
 
 ## Cloud (short)
 
-- Connected badge → **Pull from DB** when you open a new browser  
-- After big changes → **Push to DB**  
+- **Cloud vs Local only** is per phone/browser. Linking once on one device does **not** auto-link the others.  
+- On a device that already shows **Cloud** → badge → **Copy link for other devices** → open that link on the Local phone (connects + loads store data).  
+- Or paste URL + anon key once on that device → **Save connection**.  
+- After big changes → **Push to DB** (auto-push runs when linked).  
 - Not on cloud → **Export** and share the file  
 - Last push wins — pull before a long edit if others are working  
 
