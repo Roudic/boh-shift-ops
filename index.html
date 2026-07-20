@@ -2831,6 +2831,73 @@
       border: 2px dashed #CBD5E1; border-radius: 12px; background: #F8FAFC;
     }
 
+    /* ── Auth / login lock ── */
+    #loginScreen {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      align-items: center; justify-content: center; padding: 24px;
+      background:
+        radial-gradient(ellipse at 20% 10%, rgba(240,58,95,.22), transparent 50%),
+        radial-gradient(ellipse at 80% 90%, rgba(56,189,248,.12), transparent 45%),
+        #0B0E14;
+    }
+    body.auth-locked #loginScreen { display: flex; }
+    body.auth-locked .header,
+    body.auth-locked .mobile-bottom-nav,
+    body.auth-locked .main,
+    body.auth-locked .modal-bg { display: none !important; }
+    .login-card {
+      width: min(420px, 100%); background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 28px 24px 22px; box-shadow: var(--shadow);
+    }
+    .login-card h1 { font-size: 1.45rem; font-weight: 900; margin: 0 0 6px; letter-spacing: -.02em; }
+    .login-card .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; line-height: 1.4; }
+    .login-error {
+      display: none; margin-bottom: 12px; padding: 10px 12px; border-radius: 10px;
+      background: var(--red-light); color: #FDA4AF; font-size: 13px; font-weight: 700;
+    }
+    .login-error.show { display: block; }
+    .login-role-pill {
+      display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em;
+    }
+    .login-role-pill.admin { background: rgba(240,58,95,.18); color: #FDA4AF; }
+    .login-role-pill.manager { background: rgba(56,189,248,.16); color: #7DD3FC; }
+    .login-role-pill.member { background: rgba(52,211,153,.14); color: #6EE7B7; }
+    .auth-user-chip {
+      display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--input-bg); font-size: 12px; font-weight: 700;
+      color: var(--text); max-width: 200px;
+    }
+    .auth-user-chip .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dash-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 1rem; }
+    @media (max-width: 900px) { .dash-grid { grid-template-columns: 1fr; } }
+    .dash-day-card {
+      border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; background: var(--surface-2);
+      margin-bottom: 10px;
+    }
+    .dash-day-card h4 { margin: 0 0 8px; font-size: 14px; font-weight: 800; }
+    .dash-pos-row {
+      display: flex; justify-content: space-between; gap: 10px; padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06); font-size: 13px; font-weight: 700;
+    }
+    .dash-pos-row:last-child { border-bottom: none; }
+    .dash-pos-row .tm { color: #A5F3FC; font-weight: 600; white-space: nowrap; }
+    .pub-status {
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 800;
+    }
+    .pub-status.ok { background: rgba(52,211,153,.16); color: #6EE7B7; }
+    .pub-status.miss { background: rgba(251,191,36,.16); color: #FBBF24; }
+    .admin-user-row {
+      display: grid; grid-template-columns: 1.2fr .9fr 1fr auto; gap: 8px; align-items: center;
+      padding: 10px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px;
+      background: var(--input-bg);
+    }
+    @media (max-width: 700px) {
+      .admin-user-row { grid-template-columns: 1fr; }
+    }
+    .tab[hidden], .mob-nav-item[hidden] { display: none !important; }
+
     .cloud-badge {
       display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
       border-radius: 999px; font-size: 11px; font-weight: 700; border: 1px solid var(--border);
@@ -4925,9 +4992,34 @@
     }
   </style>
 </head>
-<body>
+<body class="auth-locked">
 <div class="bg-orbs" aria-hidden="true">
   <span></span><span></span><span></span><span></span>
+</div>
+
+<!-- Login (blocks app until signed in) -->
+<div id="loginScreen" aria-label="Sign in">
+  <div class="login-card">
+    <div class="brand" style="margin-bottom:16px">
+      <div class="brand-mark">BOH</div>
+      <div>
+        <div class="brand-title">Shift Ops</div>
+        <div class="brand-sub">Vestavia Hills · Sign in</div>
+      </div>
+    </div>
+    <h1>Welcome back</h1>
+    <p class="login-sub">Admin, managers, and team members each get the right tools. Link your roster name for a personal week board.</p>
+    <div class="login-error" id="loginError"></div>
+    <div class="field">
+      <label class="field-label">Username</label>
+      <input id="loginUsername" autocomplete="username" placeholder="Username" onkeydown="if(event.key==='Enter')attemptLogin()">
+    </div>
+    <div class="field">
+      <label class="field-label">Password</label>
+      <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password" onkeydown="if(event.key==='Enter')attemptLogin()">
+    </div>
+    <button type="button" class="btn btn-primary" style="width:100%;min-height:48px;margin-top:8px" onclick="attemptLogin()">Sign in</button>
+  </div>
 </div>
 
 <header class="header">
@@ -4941,21 +5033,27 @@
     </a>
 
     <div class="tabs">
-      <button class="tab active" data-view="schedule" onclick="switchView('schedule')">
+      <button class="tab" data-view="mydash" data-perm="mydash" onclick="switchView('mydash')">
+        My Week
+      </button>
+      <button class="tab active" data-view="schedule" data-perm="schedule" onclick="switchView('schedule')">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Schedule
       </button>
-      <button class="tab" data-view="setup" onclick="switchView('setup')">
+      <button class="tab" data-view="setup" data-perm="setup" onclick="switchView('setup')">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         Shift Setup
       </button>
-      <button class="tab" data-view="skills" onclick="switchView('skills')">
+      <button class="tab" data-view="skills" data-perm="skills" onclick="switchView('skills')">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6L12 2z"/></svg>
         Skills
       </button>
-      <button class="tab" data-view="leaders" onclick="switchView('leaders')">
+      <button class="tab" data-view="leaders" data-perm="leaders" onclick="switchView('leaders')">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a4 4 0 100-8 4 4 0 000 8z"/><path d="M4 20c1.5-3 4.5-5 8-5s6.5 2 8 5"/></svg>
         Leaders
+      </button>
+      <button class="tab" data-view="admin" data-perm="users" onclick="switchView('admin')">
+        Admin
       </button>
     </div>
 
@@ -4966,6 +5064,11 @@
         <button onclick="nextWeek()" title="Next week">&#8250;</button>
       </div>
       <div class="week-label" id="weekLabel"></div>
+      <div class="auth-user-chip" id="authUserChip" title="Signed-in user">
+        <span class="login-role-pill member" id="authRolePill">—</span>
+        <span class="nm" id="authUserName">Guest</span>
+      </div>
+      <button type="button" class="btn btn-sm" onclick="logoutUser()" title="Sign out">Sign out</button>
       <button type="button" class="btn btn-sm mobile-more-btn" id="mobileMoreBtn" onclick="toggleMobileActions()" aria-label="More options" aria-expanded="false" aria-controls="headerActionsMenu">
         <span class="ham-ico" aria-hidden="true"><span></span><span></span><span></span></span>
         <span class="mobile-more-label">More</span>
@@ -4977,15 +5080,17 @@
           <button type="button" class="icon-btn" onclick="closeMobileActions()" title="Close">&#10005;</button>
         </div>
         <div class="mobile-actions-body">
-          <button type="button" class="cloud-badge" id="cloudBadge" onclick="openCloudModal(); closeMobileActions();" title="Cloud database settings">
+          <button type="button" class="cloud-badge" id="cloudBadge" data-perm="cloud" onclick="openCloudModal(); closeMobileActions();" title="Cloud database settings">
             <span class="dot-live"></span>
             <span id="cloudBadgeText">Local only</span>
           </button>
+          <button type="button" class="btn btn-sm" onclick="openLinkStaffModal(); closeMobileActions();">Link my roster name</button>
           <a class="btn btn-sm" href="./guide/" target="_blank" rel="noopener" title="Shift leader guide: schedule the week, set up stations, print gameplan">Help · Leaders</a>
-          <button class="btn btn-sm" id="exportBtn" onclick="exportWeekZip(); closeMobileActions();" title="ZIP: week schedule PDF + daily staffing PDFs + JSON backup">Export ZIP</button>
-          <label class="btn btn-sm btn-primary" style="cursor:pointer">Import Roster &amp; Availabilities<input type="file" accept="*/*" hidden onchange="openUnifiedImport(event)"></label>
-          <label class="btn btn-sm" style="cursor:pointer">Backup JSON<input type="file" accept=".json" hidden onchange="importData(event)"></label>
-          <button class="btn btn-sm btn-danger" onclick="resetAll(); closeMobileActions();" title="Reset all data">Reset</button>
+          <button class="btn btn-sm" id="exportBtn" data-perm="export" onclick="exportWeekZip(); closeMobileActions();" title="ZIP: week schedule PDF + daily staffing PDFs + JSON backup">Export ZIP</button>
+          <label class="btn btn-sm btn-primary" data-perm="export" style="cursor:pointer">Import Roster &amp; Availabilities<input type="file" accept="*/*" hidden onchange="openUnifiedImport(event)"></label>
+          <label class="btn btn-sm" data-perm="export" style="cursor:pointer">Backup JSON<input type="file" accept=".json" hidden onchange="importData(event)"></label>
+          <button class="btn btn-sm btn-danger" data-perm="reset" onclick="resetAll(); closeMobileActions();" title="Reset all data">Reset</button>
+          <button class="btn btn-sm" onclick="logoutUser(); closeMobileActions();">Sign out</button>
         </div>
       </div>
     </div>
@@ -4993,22 +5098,24 @@
 </header>
 
 <nav class="mobile-bottom-nav" aria-label="Main navigation">
-  <button type="button" class="mob-nav-item active" data-view="schedule" onclick="switchView('schedule')">
+  <button type="button" class="mob-nav-item" data-view="mydash" data-perm="mydash" onclick="switchView('mydash')">My Week</button>
+  <button type="button" class="mob-nav-item active" data-view="schedule" data-perm="schedule" onclick="switchView('schedule')">
     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
     Schedule
   </button>
-  <button type="button" class="mob-nav-item" data-view="setup" onclick="switchView('setup')">
+  <button type="button" class="mob-nav-item" data-view="setup" data-perm="setup" onclick="switchView('setup')">
     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
     Setup
   </button>
-  <button type="button" class="mob-nav-item" data-view="skills" onclick="switchView('skills')">
+  <button type="button" class="mob-nav-item" data-view="skills" data-perm="skills" onclick="switchView('skills')">
     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6L12 2z"/></svg>
     Skills
   </button>
-  <button type="button" class="mob-nav-item" data-view="leaders" onclick="switchView('leaders')">
+  <button type="button" class="mob-nav-item" data-view="leaders" data-perm="leaders" onclick="switchView('leaders')">
     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a4 4 0 100-8 4 4 0 000 8z"/><path d="M4 20c1.5-3 4.5-5 8-5s6.5 2 8 5"/></svg>
     Leaders
   </button>
+  <button type="button" class="mob-nav-item" data-view="admin" data-perm="users" onclick="switchView('admin')">Admin</button>
 </nav>
 
 <!-- Cloud / Database settings -->
@@ -5288,6 +5395,20 @@
     </div>
   </div>
 
+  <!-- MY WEEK (personal dashboard) -->
+  <div id="view-mydash" class="view">
+    <div class="classic-hero" style="margin-bottom:1.25rem">
+      <div>
+        <h2 id="mydashTitle">My week</h2>
+        <p id="mydashSub">Your scheduled hours and station positions for this week.</p>
+      </div>
+      <div class="classic-hero-actions">
+        <button type="button" class="btn btn-sm" onclick="openLinkStaffModal()">Link roster name</button>
+      </div>
+    </div>
+    <div id="mydashBody"></div>
+  </div>
+
   <!-- SHIFT SETUP VIEW -->
   <div id="view-setup" class="view">
     <div class="ss-hero ss-stage-hero">
@@ -5334,6 +5455,8 @@
         <button class="btn" onclick="openLoadLayoutPreset()">Load Preset</button>
         <button class="btn" onclick="autoAssign()">Auto-Fill</button>
         <button class="btn" onclick="printSetupGameplan()" title="Print 2 pages: Breakfast+Lunch · Afternoon+Dinner with side rosters">Print</button>
+        <button class="btn btn-primary" id="setupPublishBtn" data-perm="publish" onclick="toggleSetupPublished()" title="Mark this period’s setup complete / published">Publish setup</button>
+        <span class="pub-status miss" id="setupPublishBadge">Not published</span>
         <button class="btn btn-ghost" style="color:#94A3B8;border-color:rgba(255,255,255,.2)" onclick="clearSetupAssignments()">Clear</button>
       </div>
     </div>
@@ -5471,6 +5594,34 @@
     </p>
   </div>
 
+  <!-- ADMIN: access + unpublished setups -->
+  <div id="view-admin" class="view">
+    <div class="classic-hero" style="margin-bottom:1.25rem">
+      <div>
+        <h2>Admin</h2>
+        <p>Control who can sign in, and see which dayparts still need a published setup.</p>
+      </div>
+      <div class="classic-hero-actions">
+        <button type="button" class="btn btn-sm btn-primary" onclick="openUserEditor()">+ Add user</button>
+      </div>
+    </div>
+    <div class="dash-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Unpublished setups <span class="badge" id="adminMissCount">0</span></h3>
+        </div>
+        <div class="panel-body" id="adminPublishBoard"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Users &amp; access <span class="badge" id="adminUserCount">0</span></h3>
+          <button type="button" class="btn btn-sm btn-primary" onclick="openUserEditor()">+ Add</button>
+        </div>
+        <div class="panel-body" id="adminUsersList"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Add leader picker modal -->
   <div class="modal-bg" id="addLeaderModal" onclick="if(event.target===this)closeAddLeaderPicker()">
     <div class="modal" onclick="event.stopPropagation()" style="max-width:440px">
@@ -5497,6 +5648,72 @@
   <div id="exportStaffingPrint" class="export-print-host" aria-hidden="true"></div>
 
 </main>
+
+<!-- Link signed-in user → roster person -->
+<div class="modal-bg" id="linkStaffModal" onclick="if(event.target===this)closeLinkStaffModal()">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:460px">
+    <div class="modal-head">
+      <div>
+        <h3>Who are you on the team?</h3>
+        <div style="font-size:12px;color:var(--muted)">Link your login to a roster name for My Week</div>
+      </div>
+      <button type="button" class="icon-btn" onclick="closeLinkStaffModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="search" id="linkStaffSearch" placeholder="Search team…" oninput="renderLinkStaffList()" style="margin-bottom:10px">
+      <div id="linkStaffList" class="ss-pool-pick-list"></div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn" onclick="closeLinkStaffModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin: create / edit user -->
+<div class="modal-bg" id="userEditorModal" onclick="if(event.target===this)closeUserEditor()">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
+    <div class="modal-head">
+      <h3 id="userEditorTitle">Add user</h3>
+      <button type="button" class="icon-btn" onclick="closeUserEditor()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="userEditorId">
+      <div class="field">
+        <label class="field-label">Display name</label>
+        <input id="userEditorDisplay" placeholder="Joshua">
+      </div>
+      <div class="field">
+        <label class="field-label">Username</label>
+        <input id="userEditorUsername" placeholder="Roudic" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="field-label">Password <span id="userEditorPwHint" style="font-weight:600;color:var(--muted)">(required)</span></label>
+        <input id="userEditorPassword" type="password" placeholder="Password" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label class="field-label">Access role</label>
+        <select id="userEditorRole">
+          <option value="member">Team member — My Week only</option>
+          <option value="manager">Manager — schedule + setup + publish</option>
+          <option value="admin">Admin — full control + users</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label">Linked roster person (optional)</label>
+        <select id="userEditorStaff"><option value="">— Not linked —</option></select>
+      </div>
+      <label class="lead-add-row" style="margin-top:8px">
+        <input type="checkbox" id="userEditorActive" checked>
+        <span>Account active</span>
+      </label>
+    </div>
+    <div class="modal-foot" style="flex-wrap:wrap">
+      <button type="button" class="btn btn-danger" id="userEditorDeleteBtn" style="display:none" onclick="deleteUserFromEditor()">Delete</button>
+      <button type="button" class="btn" onclick="closeUserEditor()">Cancel</button>
+      <button type="button" class="btn btn-primary" onclick="saveUserFromEditor()">Save user</button>
+    </div>
+  </div>
+</div>
 
 <!-- Schedule Template Modal (no click-outside close — avoids Windows time picker / alert dismiss closing it) -->
 <div class="modal-bg" id="templateModal">
@@ -6217,6 +6434,9 @@ const TEMPLATES = {
 };
 
 let shifts = [], staff = [], schedule = {}, shiftSetups = {}, availabilities = {}, rotationOffWeeks = {}, scheduleTemplates = [];
+/** App logins (synced via cloud). Session stays device-local. */
+let appUsers = [];
+let authSession = null; // { userId, username, role, displayName, staffId }
 /** Leadership assignments: leadership[dateKey] = { breakfast, lunch, dinner } → staffId or '' */
 let leadership = {};
 /** @deprecated migrated onto each period.checklistDef — kept only for load migration */
@@ -6642,10 +6862,14 @@ function setupKey(dateKey, shiftId) { return `${dateKey}_${shiftId}`; }
 function getSetup(dateKey, shiftId) {
   const k = setupKey(dateKey, shiftId);
   if (!shiftSetups[k]) {
-    shiftSetups[k] = { carCount: 150, period: 'lunch', assignments: {}, checklist: {}, sectionAssign: {}, notes: '' };
+    shiftSetups[k] = {
+      carCount: 150, period: 'lunch', assignments: {}, checklist: {}, sectionAssign: {}, notes: '',
+      published: false, publishedAt: null, publishedBy: null
+    };
   }
   if (!shiftSetups[k].checklist) shiftSetups[k].checklist = {};
   if (!shiftSetups[k].sectionAssign) shiftSetups[k].sectionAssign = {};
+  if (shiftSetups[k].published == null) shiftSetups[k].published = false;
   return shiftSetups[k];
 }
 
@@ -10428,11 +10652,12 @@ let cloudBootstrapped = false;
 
 function getAppState() {
   return {
-    version: 9,
+    version: 10,
     shifts, staff, schedule, shiftSetups, availabilities, rotationOffWeeks, scheduleTemplates, leadership, rosterDaySort,
     weekStart: weekStart ? getDateKey(weekStart) : null,
     setupContext, useStaffingRef, schedulePublished, rosterFilter,
-    dailySales, laborSettings
+    dailySales, laborSettings,
+    appUsers
   };
 }
 
@@ -10521,6 +10746,10 @@ function applyAppState(d) {
     weekStart = String(d.weekStart).includes('T') ? new Date(d.weekStart) : parseDateKey(d.weekStart);
     setWeekStart(weekStart);
   }
+  if (Array.isArray(d.appUsers)) {
+    appUsers = d.appUsers.map(normalizeAppUser).filter(Boolean);
+  }
+  ensureSeedAdminUser();
   return true;
 }
 
@@ -10909,15 +11138,22 @@ async function bootstrapCloud() {
     );
     const hasLocal = !!(staff.length || shifts.length || Object.keys(schedule).length);
     if (hasCloud) {
+      const cloudHadUsers = Array.isArray(cloudData.appUsers) && cloudData.appUsers.length > 0;
       applyAppState(cloudData);
+      const seededAdmin = ensureSeedAdminUser();
       localStorage.setItem('boh-shift-ops', JSON.stringify(getAppState()));
       cloudLastSync = new Date().toLocaleTimeString();
       setCloudStatus('online', `Loaded from cloud · ${data.updated_at || ''}`);
-      renderAll();
+      if (!cloudHadUsers || seededAdmin) scheduleCloudPush();
+      if (currentUser()) renderAll();
+      else applyAuthUi();
     } else if (hasLocal) {
+      ensureSeedAdminUser();
       await cloudPush();
     } else {
+      ensureSeedAdminUser();
       setCloudStatus('online', 'Connected · empty store');
+      if (appUsers.length) scheduleCloudPush();
     }
   } catch (e) {
     setCloudStatus('error', e.message || String(e));
@@ -11087,6 +11323,15 @@ async function readFileToRowsGeneric(file) {
 
 // ── Navigation ──
 function switchView(v) {
+  // Gate tabs by role
+  const tabBtn = document.querySelector(`.tab[data-view="${v}"]`);
+  const perm = tabBtn?.getAttribute('data-perm');
+  if (perm && !canAccess(perm) && v !== 'mydash') {
+    if (canAccess('mydash')) v = 'mydash';
+    else return;
+  }
+  if (v === 'mydash' && !canAccess('mydash')) return;
+
   document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.view === v));
   document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === v));
@@ -11110,6 +11355,14 @@ function switchView(v) {
   } else if (v === 'leaders') {
     stopFilledSlotSparkles();
     renderLeadershipAll();
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { window.scrollTo(0, 0); }
+  } else if (v === 'mydash') {
+    stopFilledSlotSparkles();
+    renderMyDash();
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { window.scrollTo(0, 0); }
+  } else if (v === 'admin') {
+    stopFilledSlotSparkles();
+    renderAdminDash();
     try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { window.scrollTo(0, 0); }
   } else {
     stopFilledSlotSparkles();
@@ -12065,6 +12318,10 @@ function setSectionAssigneeOnSetup(sectionId, staffId) {
 
 function goToSetup(dateKey, shiftId, e) {
   if (e) e.stopPropagation();
+  if (!canAccess('setup')) {
+    alert('Managers and admins can open Shift Setup.');
+    return;
+  }
   setupContext = { dateKey, shiftId };
   switchView('setup');
 }
@@ -13824,6 +14081,7 @@ function renderSetup() {
   applyTeamPoolCollapsed();
   initSetupDragDrop();
   startFilledSlotSparkles();
+  updateSetupPublishUi();
 }
 
 // ── Team pool collapse (more room for checklist) ──
@@ -15846,9 +16104,15 @@ function importData(e) {
   r.readAsText(f); e.target.value='';
 }
 function resetAll() {
-  if (!confirm('Reset everything? All team, schedules, availabilities, and shift setups will be deleted.')) return;
+  if (!canAccess('reset')) { alert('Admin only.'); return; }
+  if (!confirm('Reset schedule data?\n\nTeam, schedules, availabilities, and shift setups will be cleared.\nLogins and access roles are kept.')) return;
+  const keepUsers = JSON.parse(JSON.stringify(appUsers || []));
   localStorage.removeItem('boh-shift-ops');
-  initShiftsOnly(); save(); renderAll();
+  initShiftsOnly();
+  appUsers = keepUsers;
+  ensureSeedAdminUser();
+  save();
+  renderAll();
 }
 
 function renderAll() {
@@ -15872,9 +16136,12 @@ function renderAll() {
     if (weekBtn) weekBtn.style.display = 'inline-flex';
     renderSmartSchedule();
   }
+  applyAuthUi();
   if (document.getElementById('view-setup')?.classList.contains('active')) renderSetup();
   if (document.getElementById('view-skills')?.classList.contains('active')) renderSkillsMatrix();
   if (document.getElementById('view-leaders')?.classList.contains('active')) renderLeadershipAll();
+  if (document.getElementById('view-mydash')?.classList.contains('active')) renderMyDash();
+  if (document.getElementById('view-admin')?.classList.contains('active')) renderAdminDash();
   initScrollHints();
 }
 
@@ -16038,6 +16305,531 @@ function initGlass3d() {
   window.addEventListener('blur', clearAllGlassTilt);
 }
 
+// ── Auth / roles / dashboards ──
+const AUTH_SESSION_KEY = 'boh-auth-session';
+const AUTH_PW_SALT = 'boh-v1:';
+/** SHA-256('boh-v1:5917049') — Admin Joshua / username Roudic */
+const SEED_ADMIN_HASH = '6d72ad729b250a4cd984c5fa37368406df71ff5429786efc0582188945daec02';
+const ROLE_PERMS = {
+  admin: { mydash: true, schedule: true, setup: true, skills: true, leaders: true, publish: true, users: true, cloud: true, export: true, reset: true },
+  manager: { mydash: true, schedule: true, setup: true, skills: true, leaders: true, publish: true, users: false, cloud: true, export: true, reset: false },
+  member: { mydash: true, schedule: false, setup: false, skills: false, leaders: false, publish: false, users: false, cloud: false, export: false, reset: false }
+};
+
+async function hashPassword(pw) {
+  const data = new TextEncoder().encode(AUTH_PW_SALT + String(pw || ''));
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function normalizeAppUser(u) {
+  if (!u || typeof u !== 'object') return null;
+  const username = String(u.username || '').trim();
+  if (!username || !u.passwordHash) return null;
+  const role = ['admin', 'manager', 'member'].includes(u.role) ? u.role : 'member';
+  return {
+    id: u.id || ('u_' + Math.random().toString(36).slice(2, 9)),
+    username,
+    displayName: String(u.displayName || username).trim() || username,
+    role,
+    passwordHash: String(u.passwordHash),
+    staffId: u.staffId || null,
+    active: u.active !== false,
+    createdAt: u.createdAt || new Date().toISOString()
+  };
+}
+
+function ensureSeedAdminUser() {
+  if (!Array.isArray(appUsers)) appUsers = [];
+  const hasAdmin = appUsers.some(u => String(u.username).toLowerCase() === 'roudic');
+  if (hasAdmin) return false;
+  appUsers.unshift({
+    id: 'u_admin_roudic',
+    username: 'Roudic',
+    displayName: 'Joshua',
+    role: 'admin',
+    passwordHash: SEED_ADMIN_HASH,
+    staffId: null,
+    active: true,
+    createdAt: new Date().toISOString()
+  });
+  return true;
+}
+
+function loadAuthSession() {
+  try {
+    const raw = localStorage.getItem(AUTH_SESSION_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (!s?.userId) return null;
+    return s;
+  } catch (_) { return null; }
+}
+
+function persistAuthSession(session) {
+  authSession = session;
+  try {
+    if (session) localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session));
+    else localStorage.removeItem(AUTH_SESSION_KEY);
+  } catch (_) {}
+}
+
+function currentUser() {
+  if (!authSession?.userId) return null;
+  return appUsers.find(u => u.id === authSession.userId && u.active !== false) || null;
+}
+
+function currentRole() {
+  return currentUser()?.role || authSession?.role || null;
+}
+
+function canAccess(perm) {
+  const role = currentRole();
+  if (!role) return false;
+  return !!(ROLE_PERMS[role] && ROLE_PERMS[role][perm]);
+}
+
+function refreshAuthSessionFromUser(user) {
+  if (!user) { persistAuthSession(null); return; }
+  persistAuthSession({
+    userId: user.id,
+    username: user.username,
+    displayName: user.displayName,
+    role: user.role,
+    staffId: user.staffId || null
+  });
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById('loginError');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.classList.toggle('show', !!msg);
+}
+
+function setAuthLocked(locked) {
+  document.body.classList.toggle('auth-locked', !!locked);
+}
+
+function applyAuthUi() {
+  const user = currentUser();
+  const signedIn = !!user;
+  setAuthLocked(!signedIn);
+
+  const nameEl = document.getElementById('authUserName');
+  const pill = document.getElementById('authRolePill');
+  if (nameEl) nameEl.textContent = user ? (user.displayName || user.username) : 'Guest';
+  if (pill) {
+    const role = user?.role || 'member';
+    pill.className = 'login-role-pill ' + role;
+    pill.textContent = role;
+  }
+
+  document.querySelectorAll('[data-perm]').forEach(el => {
+    const perm = el.getAttribute('data-perm');
+    const ok = signedIn && canAccess(perm);
+    if (el.matches('.tab, .mob-nav-item')) {
+      el.hidden = !ok;
+    } else {
+      el.style.display = ok ? '' : 'none';
+    }
+  });
+
+  // Members land on My Week (avoid switchView here — it re-enters render paths)
+  if (signedIn && user.role === 'member') {
+    const active = document.querySelector('.view.active');
+    if (!active || active.id !== 'view-mydash') {
+      document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === 'view-mydash'));
+      document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.view === 'mydash'));
+      document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === 'mydash'));
+    }
+  } else if (signedIn) {
+    const active = document.querySelector('.view.active');
+    const viewId = active?.id?.replace(/^view-/, '') || 'schedule';
+    const tabBtn = document.querySelector(`.tab[data-view="${viewId}"]`);
+    const perm = tabBtn?.getAttribute('data-perm');
+    if (perm && !canAccess(perm)) {
+      const fallback = canAccess('schedule') ? 'schedule' : 'mydash';
+      document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === 'view-' + fallback));
+      document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.view === fallback));
+      document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === fallback));
+    }
+  }
+}
+
+async function attemptLogin() {
+  showLoginError('');
+  ensureSeedAdminUser();
+  const username = (document.getElementById('loginUsername')?.value || '').trim();
+  const password = document.getElementById('loginPassword')?.value || '';
+  if (!username || !password) {
+    showLoginError('Enter username and password.');
+    return;
+  }
+  const user = appUsers.find(u => u.active !== false && String(u.username).toLowerCase() === username.toLowerCase());
+  if (!user) {
+    showLoginError('No account found for that username.');
+    return;
+  }
+  const hash = await hashPassword(password);
+  if (hash !== user.passwordHash) {
+    showLoginError('Incorrect password.');
+    return;
+  }
+  refreshAuthSessionFromUser(user);
+  const pw = document.getElementById('loginPassword');
+  if (pw) pw.value = '';
+  applyAuthUi();
+  renderAll();
+  if (!user.staffId) openLinkStaffModal({ required: user.role === 'member' });
+  else if (user.role === 'member') switchView('mydash');
+}
+
+function logoutUser() {
+  persistAuthSession(null);
+  applyAuthUi();
+  showLoginError('');
+  const u = document.getElementById('loginUsername');
+  const p = document.getElementById('loginPassword');
+  if (u) u.value = '';
+  if (p) p.value = '';
+}
+
+function openLinkStaffModal(opts) {
+  opts = opts || {};
+  const modal = document.getElementById('linkStaffModal');
+  if (!modal) return;
+  const search = document.getElementById('linkStaffSearch');
+  if (search) search.value = '';
+  renderLinkStaffList();
+  modal.classList.add('open');
+  modal.dataset.required = opts.required ? '1' : '0';
+}
+
+function closeLinkStaffModal() {
+  const modal = document.getElementById('linkStaffModal');
+  if (!modal) return;
+  if (modal.dataset.required === '1' && currentUser() && !currentUser().staffId) {
+    alert('Pick your name on the team so My Week can show your shifts.');
+    return;
+  }
+  modal.classList.remove('open');
+}
+
+function renderLinkStaffList() {
+  const el = document.getElementById('linkStaffList');
+  if (!el) return;
+  const q = (document.getElementById('linkStaffSearch')?.value || '').trim().toLowerCase();
+  const list = [...staff]
+    .filter(p => !q || (p.name || '').toLowerCase().includes(q))
+    .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  if (!list.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:1rem;font-size:13px">No team members yet — an admin/manager should add the roster on Schedule first.</div>';
+    return;
+  }
+  const linked = currentUser()?.staffId || '';
+  el.innerHTML = list.map(p => `
+    <button type="button" class="ss-pool-pick-row" onclick="linkStaffToCurrentUser('${p.id}')">
+      <span class="ss-pool-pick-meta">
+        <span class="ss-pool-pick-name">${escAttr(p.name)}${p.id === linked ? ' · linked' : ''}</span>
+        <span class="ss-pool-pick-times">${escAttr(p.role || 'Team member')}</span>
+      </span>
+      <span class="ss-pool-pick-chevron">›</span>
+    </button>
+  `).join('');
+}
+
+function linkStaffToCurrentUser(staffId) {
+  const user = currentUser();
+  if (!user) return;
+  user.staffId = staffId || null;
+  refreshAuthSessionFromUser(user);
+  save();
+  const modal = document.getElementById('linkStaffModal');
+  if (modal) {
+    modal.dataset.required = '0';
+    modal.classList.remove('open');
+  }
+  applyAuthUi();
+  renderMyDash();
+  alert('Linked to ' + (staff.find(s => s.id === staffId)?.name || 'roster') + '.');
+}
+
+function openUserEditor(userId) {
+  if (!canAccess('users')) { alert('Admin only.'); return; }
+  const u = userId ? appUsers.find(x => x.id === userId) : null;
+  document.getElementById('userEditorTitle').textContent = u ? 'Edit user' : 'Add user';
+  document.getElementById('userEditorId').value = u?.id || '';
+  document.getElementById('userEditorDisplay').value = u?.displayName || '';
+  document.getElementById('userEditorUsername').value = u?.username || '';
+  document.getElementById('userEditorPassword').value = '';
+  document.getElementById('userEditorPwHint').textContent = u ? '(leave blank to keep)' : '(required)';
+  document.getElementById('userEditorRole').value = u?.role || 'member';
+  document.getElementById('userEditorActive').checked = u ? u.active !== false : true;
+  const staffSel = document.getElementById('userEditorStaff');
+  staffSel.innerHTML = '<option value="">— Not linked —</option>' +
+    [...staff].sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+      .map(p => `<option value="${p.id}"${u?.staffId === p.id ? ' selected' : ''}>${escAttr(p.name)}</option>`).join('');
+  const del = document.getElementById('userEditorDeleteBtn');
+  if (del) del.style.display = u && u.username.toLowerCase() !== 'roudic' ? 'inline-flex' : 'none';
+  document.getElementById('userEditorModal')?.classList.add('open');
+}
+
+function closeUserEditor() {
+  document.getElementById('userEditorModal')?.classList.remove('open');
+}
+
+async function saveUserFromEditor() {
+  if (!canAccess('users')) return;
+  const id = document.getElementById('userEditorId').value;
+  const displayName = (document.getElementById('userEditorDisplay').value || '').trim();
+  const username = (document.getElementById('userEditorUsername').value || '').trim();
+  const password = document.getElementById('userEditorPassword').value || '';
+  const role = document.getElementById('userEditorRole').value || 'member';
+  const staffId = document.getElementById('userEditorStaff').value || null;
+  const active = !!document.getElementById('userEditorActive').checked;
+  if (!username) { alert('Username is required.'); return; }
+  if (!id && !password) { alert('Password is required for new users.'); return; }
+  const dup = appUsers.find(u => u.id !== id && String(u.username).toLowerCase() === username.toLowerCase());
+  if (dup) { alert('That username is already taken.'); return; }
+
+  let passwordHash = null;
+  if (password) passwordHash = await hashPassword(password);
+
+  if (id) {
+    const u = appUsers.find(x => x.id === id);
+    if (!u) return;
+    // Keep seeded admin username locked
+    if (u.id === 'u_admin_roudic') {
+      u.displayName = displayName || u.displayName;
+      if (passwordHash) u.passwordHash = passwordHash;
+      u.staffId = staffId;
+      u.active = true;
+      u.role = 'admin';
+    } else {
+      u.displayName = displayName || username;
+      u.username = username;
+      u.role = role;
+      u.staffId = staffId;
+      u.active = active;
+      if (passwordHash) u.passwordHash = passwordHash;
+    }
+    if (authSession?.userId === u.id) refreshAuthSessionFromUser(u);
+  } else {
+    appUsers.push({
+      id: 'u_' + Date.now().toString(36),
+      username,
+      displayName: displayName || username,
+      role,
+      passwordHash,
+      staffId,
+      active,
+      createdAt: new Date().toISOString()
+    });
+  }
+  ensureSeedAdminUser();
+  save();
+  closeUserEditor();
+  renderAdminDash();
+  applyAuthUi();
+}
+
+function deleteUserFromEditor() {
+  if (!canAccess('users')) return;
+  const id = document.getElementById('userEditorId').value;
+  const u = appUsers.find(x => x.id === id);
+  if (!u || u.id === 'u_admin_roudic' || String(u.username).toLowerCase() === 'roudic') {
+    alert('The primary admin account can’t be deleted.');
+    return;
+  }
+  if (!confirm('Delete user ' + u.username + '?')) return;
+  appUsers = appUsers.filter(x => x.id !== id);
+  save();
+  closeUserEditor();
+  renderAdminDash();
+}
+
+function toggleSetupPublished() {
+  if (!canAccess('publish')) { alert('Managers and admins can publish setups.'); return; }
+  const dateKey = document.getElementById('setupDay')?.value;
+  const shiftId = document.getElementById('setupShift')?.value;
+  if (!dateKey || !shiftId) return;
+  const setup = getSetup(dateKey, shiftId);
+  const user = currentUser();
+  if (setup.published) {
+    if (!confirm('Unpublish this period setup?')) return;
+    setup.published = false;
+    setup.publishedAt = null;
+    setup.publishedBy = null;
+  } else {
+    setup.published = true;
+    setup.publishedAt = new Date().toISOString();
+    setup.publishedBy = user ? (user.displayName || user.username) : 'Unknown';
+  }
+  save();
+  updateSetupPublishUi();
+  if (document.getElementById('view-admin')?.classList.contains('active')) renderAdminDash();
+}
+
+function updateSetupPublishUi() {
+  const dateKey = document.getElementById('setupDay')?.value;
+  const shiftId = document.getElementById('setupShift')?.value;
+  const btn = document.getElementById('setupPublishBtn');
+  const badge = document.getElementById('setupPublishBadge');
+  if (!dateKey || !shiftId || !btn || !badge) return;
+  const setup = getSetup(dateKey, shiftId);
+  if (setup.published) {
+    btn.textContent = 'Unpublish';
+    badge.className = 'pub-status ok';
+    badge.textContent = 'Published' + (setup.publishedBy ? ' · ' + setup.publishedBy : '');
+  } else {
+    btn.textContent = 'Publish setup';
+    badge.className = 'pub-status miss';
+    badge.textContent = 'Not published';
+  }
+}
+
+function collectUnpublishedSetups() {
+  if (!weekStart) return [];
+  const dates = getWeekDates(weekStart);
+  const periods = [...shifts].sort((a, b) => a.start.localeCompare(b.start));
+  const rows = [];
+  dates.forEach(d => {
+    const dk = getDateKey(d);
+    periods.forEach(p => {
+      const setup = getSetup(dk, p.id);
+      const hasWork = Object.keys(setup.assignments || {}).some(sid => getSlotSegments(setup, sid).length)
+        || !!(setup.notes || '').trim();
+      const on = getOnShiftStaff(dk, p.id).length;
+      if (!setup.published) {
+        rows.push({
+          dateKey: dk,
+          dayLabel: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+          periodId: p.id,
+          periodName: p.name || 'Period',
+          onShift: on,
+          started: hasWork
+        });
+      }
+    });
+  });
+  return rows;
+}
+
+function renderAdminDash() {
+  if (!canAccess('users') && !canAccess('publish')) return;
+  ensureSeedAdminUser();
+  const miss = collectUnpublishedSetups();
+  const missEl = document.getElementById('adminPublishBoard');
+  const missCount = document.getElementById('adminMissCount');
+  if (missCount) missCount.textContent = String(miss.length);
+  if (missEl) {
+    if (!miss.length) {
+      missEl.innerHTML = '<div class="empty-state" style="padding:1rem;font-size:13px">All period setups for this week are published. Nice.</div>';
+    } else {
+      missEl.innerHTML = miss.map(r => `
+        <div class="dash-day-card">
+          <h4>${escAttr(r.dayLabel)} · ${escAttr(r.periodName)}</h4>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px">
+            ${r.started ? 'Setup started' : 'Not started'} · ${r.onShift} on block
+          </div>
+          <button type="button" class="btn btn-sm btn-primary" onclick="goToSetup('${r.dateKey}','${r.periodId}')">Open setup</button>
+        </div>
+      `).join('');
+    }
+  }
+
+  const listEl = document.getElementById('adminUsersList');
+  const userCount = document.getElementById('adminUserCount');
+  if (userCount) userCount.textContent = String(appUsers.length);
+  if (listEl) {
+    const sorted = [...appUsers].sort((a, b) => (a.displayName || '').localeCompare(b.displayName || ''));
+    listEl.innerHTML = sorted.map(u => {
+      const linked = staff.find(s => s.id === u.staffId)?.name || 'Not linked';
+      return `<div class="admin-user-row">
+        <div>
+          <div style="font-weight:800">${escAttr(u.displayName)}</div>
+          <div style="font-size:12px;color:var(--muted)">@${escAttr(u.username)}</div>
+        </div>
+        <div><span class="login-role-pill ${escAttr(u.role)}">${escAttr(u.role)}</span></div>
+        <div style="font-size:12px;font-weight:700">${escAttr(linked)}${u.active === false ? ' · inactive' : ''}</div>
+        <button type="button" class="btn btn-sm" onclick="openUserEditor('${u.id}')">Edit</button>
+      </div>`;
+    }).join('') || '<div class="empty-state" style="padding:1rem">No users</div>';
+  }
+}
+
+function renderMyDash() {
+  const body = document.getElementById('mydashBody');
+  const title = document.getElementById('mydashTitle');
+  const sub = document.getElementById('mydashSub');
+  if (!body) return;
+  const user = currentUser();
+  if (!user) {
+    body.innerHTML = '<div class="empty-state">Sign in to see your week.</div>';
+    return;
+  }
+  const person = user.staffId ? staff.find(s => s.id === user.staffId) : null;
+  if (title) title.textContent = person ? (person.name + ' · My week') : 'My week';
+  if (sub) {
+    sub.textContent = person
+      ? 'Scheduled hours and station positions for this week.'
+      : 'Link your roster name to see shifts and positions.';
+  }
+  if (!person) {
+    body.innerHTML = `<div class="empty-state" style="padding:2rem">
+      <p style="margin-bottom:12px">Your login isn’t linked to a team member yet.</p>
+      <button type="button" class="btn btn-primary" onclick="openLinkStaffModal()">Choose who I am</button>
+    </div>`;
+    return;
+  }
+  if (!weekStart) {
+    body.innerHTML = '<div class="empty-state">No week selected.</div>';
+    return;
+  }
+  const dates = getWeekDates(weekStart);
+  const periods = [...shifts].sort((a, b) => a.start.localeCompare(b.start));
+  let html = '';
+  dates.forEach(d => {
+    const dk = getDateKey(d);
+    const dayLabel = d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    const blocks = getScheduleShifts(person.id, dk);
+    const positions = [];
+    periods.forEach(p => {
+      const setup = getSetup(dk, p.id);
+      const layout = getSetupLayout(p, setup);
+      Object.keys(setup.assignments || {}).forEach(slotId => {
+        getSlotSegments(setup, slotId).forEach(seg => {
+          if (seg.personId !== person.id) return;
+          positions.push({
+            period: p.name || 'Period',
+            station: findSlotLabel(layout, slotId) || slotId,
+            start: seg.start,
+            end: seg.end,
+            published: !!setup.published
+          });
+        });
+      });
+    });
+    if (!blocks.length && !positions.length) return;
+    html += `<div class="dash-day-card"><h4>${escAttr(dayLabel)}</h4>`;
+    if (blocks.length) {
+      html += blocks.map(b =>
+        `<div class="dash-pos-row"><span>Scheduled</span><span class="tm">${escAttr(compactTime12(b.start))}–${escAttr(compactTime12(b.end))}</span></div>`
+      ).join('');
+    }
+    if (positions.length) {
+      html += positions.map(pos =>
+        `<div class="dash-pos-row"><span>${escAttr(pos.period)} · ${escAttr(pos.station)}${pos.published ? '' : ' · draft'}</span><span class="tm">${escAttr(compactTime12(pos.start))}–${escAttr(compactTime12(pos.end))}</span></div>`
+      ).join('');
+    } else if (blocks.length) {
+      html += `<div style="font-size:12px;color:var(--muted);margin-top:6px">No station assignments posted yet for this day.</div>`;
+    }
+    html += '</div>';
+  });
+  body.innerHTML = html || `<div class="empty-state" style="padding:2rem">Nothing scheduled for ${escAttr(person.name)} this week.</div>`;
+}
+
 // ── Boot ──
 async function bootApp() {
   let loaded = load();
@@ -16056,6 +16848,20 @@ async function bootApp() {
       }
     } catch (_) { /* file:// or offline — seed optional */ }
   }
+  ensureSeedAdminUser();
+  // Persist seed admin into local state if this was a fresh install
+  try {
+    const raw = localStorage.getItem('boh-shift-ops');
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (!parsed?.appUsers?.length) {
+      localStorage.setItem('boh-shift-ops', JSON.stringify(getAppState()));
+    }
+  } catch (_) {}
+
+  authSession = loadAuthSession();
+  // Drop stale session if user was removed
+  if (authSession && !currentUser()) persistAuthSession(null);
+
   if (!weekStart) setWeekStart(new Date());
   initTimeSelects();
   initSetupDragDrop();
@@ -16071,11 +16877,25 @@ async function bootApp() {
     if (!e.target.closest('#hsCtxMenu')) closeCtxMenu();
   });
   initResponsiveHeader();
-  renderAll();
-  initScrollHints();
-  // Store cloud is built in — show connecting while bootstrap pulls shared data
-  setCloudStatus('syncing', 'Connecting…');
-  bootstrapCloud();
+  applyAuthUi();
+  if (currentUser()) {
+    renderAll();
+    initScrollHints();
+    setCloudStatus('syncing', 'Connecting…');
+    bootstrapCloud().then(() => {
+      ensureSeedAdminUser();
+      applyAuthUi();
+      renderAll();
+    });
+  } else {
+    setAuthLocked(true);
+    // Still pull cloud in background so shared users/setups are ready after login
+    setCloudStatus('syncing', 'Connecting…');
+    bootstrapCloud().then(() => {
+      ensureSeedAdminUser();
+      try { localStorage.setItem('boh-shift-ops', JSON.stringify(getAppState())); } catch (_) {}
+    });
+  }
 }
 bootApp();
 </script>
