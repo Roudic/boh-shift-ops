@@ -5420,7 +5420,7 @@
     <div class="classic-hero" style="margin-bottom:1.25rem">
       <div>
         <h2 id="mydashTitle">My week</h2>
-        <p id="mydashSub">Your scheduled hours and station positions for this week.</p>
+        <p id="mydashSub">Your shifts, leadership, and station positions for this week.</p>
       </div>
       <div class="classic-hero-actions">
         <button type="button" class="btn btn-sm" onclick="openLinkStaffModal()">Link roster name</button>
@@ -16869,23 +16869,21 @@ function renderMyDash() {
         </div>`
       ).join('');
     }
-    if (blocks.length) {
-      dayCards += blocks.map(b => {
+    // Skip pure auto-leadership blocks (already shown above); keep regular / overlapping shifts
+    const schedBlocks = blocks.filter(b => !b.fromLeadership);
+    if (schedBlocks.length) {
+      dayCards += schedBlocks.map(b => {
         const leadIds = Array.isArray(b.leadershipRoles) ? b.leadershipRoles : (b.leadershipRole ? [b.leadershipRole] : []);
-        const isLeadBlock = !!(b.fromLeadership || leadIds.length);
-        let label = 'Scheduled';
-        if (isLeadBlock) {
-          const names = leadIds.map(id => LEADERSHIP_ROLES.find(r => r.id === id)?.short).filter(Boolean);
-          label = names.length ? `Leadership hours · ${names.join(' + ')}` : 'Leadership hours';
-        }
-        return `<div class="dash-pos-row${isLeadBlock ? ' dash-lead-row' : ''}"><span>${escAttr(label)}</span><span class="tm">${escAttr(compactTime12(b.start))}–${escAttr(compactTime12(b.end))}</span></div>`;
+        const names = leadIds.map(id => LEADERSHIP_ROLES.find(r => r.id === id)?.short).filter(Boolean);
+        const label = names.length ? `Scheduled (covers ${names.join(' + ')})` : 'Scheduled';
+        return `<div class="dash-pos-row"><span>${escAttr(label)}</span><span class="tm">${escAttr(compactTime12(b.start))}–${escAttr(compactTime12(b.end))}</span></div>`;
       }).join('');
     }
     if (positions.length) {
       dayCards += positions.map(pos =>
         `<div class="dash-pos-row"><span>${escAttr(pos.period)} · ${escAttr(pos.station)}${pos.published ? '' : ' · draft'}</span><span class="tm">${escAttr(compactTime12(pos.start))}–${escAttr(compactTime12(pos.end))}</span></div>`
       ).join('');
-    } else if (blocks.length || leadRoles.length) {
+    } else if (schedBlocks.length || leadRoles.length) {
       dayCards += `<div style="font-size:12px;color:var(--muted);margin-top:6px">No station assignments posted yet for this day.</div>`;
     }
     dayCards += '</div>';
