@@ -11138,11 +11138,13 @@ async function bootstrapCloud() {
     );
     const hasLocal = !!(staff.length || shifts.length || Object.keys(schedule).length);
     if (hasCloud) {
+      const cloudHadUsers = Array.isArray(cloudData.appUsers) && cloudData.appUsers.length > 0;
       applyAppState(cloudData);
-      ensureSeedAdminUser();
+      const seededAdmin = ensureSeedAdminUser();
       localStorage.setItem('boh-shift-ops', JSON.stringify(getAppState()));
       cloudLastSync = new Date().toLocaleTimeString();
       setCloudStatus('online', `Loaded from cloud · ${data.updated_at || ''}`);
+      if (!cloudHadUsers || seededAdmin) scheduleCloudPush();
       if (currentUser()) renderAll();
       else applyAuthUi();
     } else if (hasLocal) {
@@ -11151,6 +11153,7 @@ async function bootstrapCloud() {
     } else {
       ensureSeedAdminUser();
       setCloudStatus('online', 'Connected · empty store');
+      if (appUsers.length) scheduleCloudPush();
     }
   } catch (e) {
     setCloudStatus('error', e.message || String(e));
