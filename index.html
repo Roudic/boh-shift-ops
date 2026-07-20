@@ -2882,6 +2882,26 @@
     }
     .dash-pos-row:last-child { border-bottom: none; }
     .dash-pos-row .tm { color: #A5F3FC; font-weight: 600; white-space: nowrap; }
+    .dash-pos-row.dash-lead-row {
+      background: rgba(250, 204, 21, .06);
+      margin: 0 -6px; padding-left: 10px; padding-right: 6px; border-radius: 8px;
+      border-bottom-color: transparent;
+    }
+    .dash-lead-tag {
+      display: inline-flex; align-items: center; gap: 6px; font-weight: 800;
+    }
+    .dash-lead-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      box-shadow: 0 0 0 2px rgba(255,255,255,.08);
+    }
+    .dash-lead-summary {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;
+    }
+    .dash-lead-chip {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px;
+      border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2);
+      font-size: 12px; font-weight: 800;
+    }
     .pub-status {
       display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
       font-size: 11px; font-weight: 800;
@@ -16773,7 +16793,7 @@ function renderMyDash() {
   if (title) title.textContent = person ? (person.name + ' · My week') : 'My week';
   if (sub) {
     sub.textContent = person
-      ? 'Scheduled hours and station positions for this week.'
+      ? 'Your shifts, leadership, and station positions for this week.'
       : 'Link your roster name to see shifts and positions.';
   }
   if (!person) {
@@ -16789,10 +16809,38 @@ function renderMyDash() {
   }
   const dates = getWeekDates(weekStart);
   const periods = [...shifts].sort((a, b) => a.start.localeCompare(b.start));
+  const weekLeadDays = [];
+  dates.forEach(d => {
+    const dk = getDateKey(d);
+    const roles = staffLeadershipRolesOnDay(person.id, dk);
+    if (roles.length) {
+      weekLeadDays.push({
+        dateKey: dk,
+        dayShort: d.toLocaleDateString('en-US', { weekday: 'short' }),
+        roles
+      });
+    }
+  });
+
   let html = '';
+  if (weekLeadDays.length) {
+    html += `<div class="dash-lead-summary" aria-label="Leadership this week">`;
+    weekLeadDays.forEach(day => {
+      day.roles.forEach(r => {
+        html += `<span class="dash-lead-chip" style="border-color:${escAttr(r.color)};color:${escAttr(r.color)}" title="${escAttr(r.name)}">
+          <span class="dash-lead-dot" style="background:${escAttr(r.color)}"></span>
+          ${escAttr(day.dayShort)} · ${escAttr(r.short)}
+        </span>`;
+      });
+    });
+    html += `</div>`;
+  }
+
+  let dayCards = '';
   dates.forEach(d => {
     const dk = getDateKey(d);
     const dayLabel = d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    const leadRoles = staffLeadershipRolesOnDay(person.id, dk);
     const blocks = getScheduleShifts(person.id, dk);
     const positions = [];
     periods.forEach(p => {
@@ -16811,23 +16859,39 @@ function renderMyDash() {
         });
       });
     });
-    if (!blocks.length && !positions.length) return;
-    html += `<div class="dash-day-card"><h4>${escAttr(dayLabel)}</h4>`;
-    if (blocks.length) {
-      html += blocks.map(b =>
-        `<div class="dash-pos-row"><span>Scheduled</span><span class="tm">${escAttr(compactTime12(b.start))}–${escAttr(compactTime12(b.end))}</span></div>`
+    if (!blocks.length && !positions.length && !leadRoles.length) return;
+    dayCards += `<div class="dash-day-card"><h4>${escAttr(dayLabel)}${leadRoles.length ? ' · Lead' : ''}</h4>`;
+    if (leadRoles.length) {
+      dayCards += leadRoles.map(r =>
+        `<div class="dash-pos-row dash-lead-row" style="border-left:3px solid ${escAttr(r.color)}">
+          <span class="dash-lead-tag"><span class="dash-lead-dot" style="background:${escAttr(r.color)}"></span>Leadership · ${escAttr(r.name)}</span>
+          <span class="tm">${escAttr(compactTime12(r.start))}–${escAttr(compactTime12(r.end))}</span>
+        </div>`
       ).join('');
+    }
+    if (blocks.length) {
+      dayCards += blocks.map(b => {
+        const leadIds = Array.isArray(b.leadershipRoles) ? b.leadershipRoles : (b.leadershipRole ? [b.leadershipRole] : []);
+        const isLeadBlock = !!(b.fromLeadership || leadIds.length);
+        let label = 'Scheduled';
+        if (isLeadBlock) {
+          const names = leadIds.map(id => LEADERSHIP_ROLES.find(r => r.id === id)?.short).filter(Boolean);
+          label = names.length ? `Leadership hours · ${names.join(' + ')}` : 'Leadership hours';
+        }
+        return `<div class="dash-pos-row${isLeadBlock ? ' dash-lead-row' : ''}"><span>${escAttr(label)}</span><span class="tm">${escAttr(compactTime12(b.start))}–${escAttr(compactTime12(b.end))}</span></div>`;
+      }).join('');
     }
     if (positions.length) {
-      html += positions.map(pos =>
+      dayCards += positions.map(pos =>
         `<div class="dash-pos-row"><span>${escAttr(pos.period)} · ${escAttr(pos.station)}${pos.published ? '' : ' · draft'}</span><span class="tm">${escAttr(compactTime12(pos.start))}–${escAttr(compactTime12(pos.end))}</span></div>`
       ).join('');
-    } else if (blocks.length) {
-      html += `<div style="font-size:12px;color:var(--muted);margin-top:6px">No station assignments posted yet for this day.</div>`;
+    } else if (blocks.length || leadRoles.length) {
+      dayCards += `<div style="font-size:12px;color:var(--muted);margin-top:6px">No station assignments posted yet for this day.</div>`;
     }
-    html += '</div>';
+    dayCards += '</div>';
   });
-  body.innerHTML = html || `<div class="empty-state" style="padding:2rem">Nothing scheduled for ${escAttr(person.name)} this week.</div>`;
+  html += dayCards || `<div class="empty-state" style="padding:2rem">Nothing scheduled for ${escAttr(person.name)} this week.</div>`;
+  body.innerHTML = html;
 }
 
 // ── Boot ──
