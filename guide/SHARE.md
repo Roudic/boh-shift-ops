@@ -1,53 +1,56 @@
-# BOH Shift Ops — Share with shift leaders
+# BOH Shift Ops — Share card (new system)
 
-**Send this one link:**
-
+**Send this guide:**  
 ## https://roudic.github.io/boh-shift-ops/guide/
 
-That’s the **shift leader guide**: sign in, schedule the week, assign leads, set up stations, publish each period, print the 2-page gameplan, and use My Week for personal hours + leadership.
+**Team app bookmark (not the landing page):**  
+## https://roudic.github.io/boh-shift-ops/app.html
 
 ---
 
-### One-click destinations
+### What changed
+
+The old open board is gone. The new system has:
+
+- **Sign in** for everyone  
+- **Admin / Manager / Team member** roles  
+- **My Week** (hours + leadership + stations)  
+- **Publish setup** on each period  
+
+---
+
+### Links
 
 | Need | Link |
 |------|------|
-| **Leader guide (bookmark)** | https://roudic.github.io/boh-shift-ops/guide/ |
-| **Product page** | https://roudic.github.io/boh-shift-ops/ |
-| **Open the app** | https://roudic.github.io/boh-shift-ops/app.html |
-| **Full written how-to** | https://roudic.github.io/boh-shift-ops/guide/HOW-TO.md |
-| **GitHub** | https://github.com/Roudic/boh-shift-ops |
+| Leader guide | https://roudic.github.io/boh-shift-ops/guide/ |
+| Live app | https://roudic.github.io/boh-shift-ops/app.html |
+| Product landing | https://roudic.github.io/boh-shift-ops/ |
+| Written how-to | https://roudic.github.io/boh-shift-ops/guide/HOW-TO.md |
 
----
-
-### On this computer (local)
+### Local files
 
 | Need | Path |
 |------|------|
 | App | `app.html` |
-| Leader guide | `guide/index.html` |
-| Product landing | `index.html` |
+| Guide | `guide/index.html` |
+| Landing | `index.html` |
 
 ---
 
-### 30-second start for a new leader
+### 30-second start (new leader)
 
-1. Open the **app** → sign in (manager account from Admin)  
+1. Open **app.html** → sign in (Manager account)  
 2. **Link my roster name**  
-3. If cloud is connected → **Pull** if the board looks stale  
-4. Follow the guide: **Schedule → Leaders → Shift Setup → Publish → Print**  
-5. Check **My Week** for your own lead days  
+3. Schedule → Leaders → Shift Setup → **Publish setup** → Print  
+4. Check **My Week** for your own lead days  
 
 ---
 
-### Cloud (auto on every device)
+### Cloud
 
-- Open the live app — cloud connects automatically  
-- If a phone still says **Local only**, refresh once  
-- **Pull** if the board looks stale · edits auto-push when connected  
-- Admin adds managers/members under **Admin → Users**  
-- Supabase dashboard (admin only): https://supabase.com/dashboard  
+Live app auto-connects. Pull if stale. Admin creates logins under **Admin → Users**.
 
 ---
 
-**CFA Vestavia Hills · BOH**
+**CFA Vestavia Hills · BOH · new system**
