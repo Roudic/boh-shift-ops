@@ -4,7 +4,8 @@
 
 This guide is for **shift leaders**: how to build the week schedule, assign BF/LN/DN leads, set stations for a period, handovers, and print the 2-page gameplan.
 
-**Open the app:** [Live app](https://roudic.github.io/boh-shift-ops/) · or local `index.html`  
+**Open the app:** [Live app](https://roudic.github.io/boh-shift-ops/app.html) · or local `app.html`  
+**Product landing:** [BOH Shift Ops](https://roudic.github.io/boh-shift-ops/)  
 **Photo guide:** [guide/index.html](./index.html)  
 **Share hub:** [SHARE.md](./SHARE.md)
 

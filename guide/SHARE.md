@@ -13,7 +13,8 @@ That’s the **shift leader guide**: how to schedule the week, assign leads, set
 | Need | Link |
 |------|------|
 | **Leader guide (bookmark)** | https://roudic.github.io/boh-shift-ops/guide/ |
-| **Open the app** | https://roudic.github.io/boh-shift-ops/ |
+| **Product page** | https://roudic.github.io/boh-shift-ops/ |
+| **Open the app** | https://roudic.github.io/boh-shift-ops/app.html |
 | **Full written how-to** | https://roudic.github.io/boh-shift-ops/guide/HOW-TO.md |
 | **GitHub** | https://github.com/Roudic/boh-shift-ops |
 
