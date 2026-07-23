@@ -109,14 +109,24 @@
       padding: 20px 18px; border-bottom: 1px solid var(--border);
     }
     .step:last-child { border-bottom: none; }
-    @media (min-width: 760px) {
-      .step { grid-template-columns: 1.1fr .9fr; align-items: start; }
-      .step.reverse { grid-template-columns: .9fr 1.1fr; }
-      .step.reverse .pic { order: -1; }
+    .step .pic {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #0B0E16;
     }
     .step img {
-      width: 100%; border-radius: 12px; border: 1px solid var(--border);
-      background: #0B0E16; display: block;
+      width: 100%;
+      height: auto;
+      max-height: 520px;
+      object-fit: contain;
+      object-position: top center;
+      display: block;
+      background: #0B0E16;
+    }
+    @media (min-width: 760px) {
+      .step img { max-height: 560px; }
     }
     .badge {
       display: inline-block; font-size: 11px; font-weight: 800; color: #fff;
@@ -261,7 +271,7 @@
           </div>
         </div>
         <div class="pic">
-          <img src="./images/00-signin.jpg?v=20260723b" alt="BOH Shift Ops sign-in screen" width="900" height="860">
+          <img src="./images/00-signin.jpg?v=20260723c" alt="BOH Shift Ops sign-in screen" width="840" height="804">
         </div>
       </div>
 
@@ -280,7 +290,7 @@
           </div>
         </div>
         <div class="pic">
-          <img src="./images/08-admin.jpg?v=20260723b" alt="Admin users and unpublished setups" width="1400" height="420">
+          <img src="./images/08-admin.jpg?v=20260723c" alt="Admin users and unpublished setups" width="1100" height="246">
         </div>
       </div>
 
@@ -302,7 +312,7 @@
           </div>
         </div>
         <div class="pic">
-          <img src="./images/02-schedule.jpg?v=20260723b" alt="Current week schedule with shift cards" width="1400" height="900">
+          <img src="./images/02-schedule.jpg?v=20260723c" alt="Current week schedule with shift cards" width="1100" height="746">
         </div>
       </div>
 
@@ -326,7 +336,7 @@
           </ol>
         </div>
         <div class="pic">
-          <img src="./images/06-leaders.jpg?v=20260723b" alt="Leaders tab with BF LN DN assignments" width="1400" height="900">
+          <img src="./images/06-leaders.jpg?v=20260723c" alt="Leaders tab with BF LN DN assignments" width="1100" height="768">
         </div>
       </div>
 
@@ -353,7 +363,7 @@
           </div>
         </div>
         <div class="pic">
-          <img src="./images/04-setup.jpg?v=20260723b" alt="Shift Setup floor board with Publish" width="1400" height="900">
+          <img src="./images/04-setup.jpg?v=20260723c" alt="Shift Setup floor board with Publish" width="1100" height="832">
         </div>
       </div>
 
@@ -379,7 +389,7 @@
           </div>
         </div>
         <div class="pic">
-          <img src="./images/07-my-week.jpg?v=20260723b" alt="My Week with leadership chips and day cards" width="1400" height="800">
+          <img src="./images/07-my-week.jpg?v=20260723c" alt="My Week with leadership chips and day cards" width="1100" height="686">
         </div>
       </div>
 
@@ -396,7 +406,7 @@
           </ol>
         </div>
         <div class="pic">
-          <img src="./images/08-admin.jpg?v=20260723b" alt="Admin dashboard" width="1400" height="420">
+          <img src="./images/08-admin.jpg?v=20260723c" alt="Admin dashboard" width="1100" height="246">
         </div>
       </div>
 
@@ -412,7 +422,7 @@
           </ol>
         </div>
         <div class="pic">
-          <img src="./images/03-smartview.jpg?v=20260723b" alt="SmartView hour timeline" width="1400" height="900">
+          <img src="./images/03-smartview.jpg?v=20260723c" alt="SmartView hour timeline" width="1100" height="726">
         </div>
       </div>
     </div>
