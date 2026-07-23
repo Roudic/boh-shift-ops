@@ -51,7 +51,7 @@
       font-weight: 900; line-height: 1.12; margin-bottom: 10px;
       letter-spacing: -.02em;
     }
-    .hero p { opacity: .92; font-size: 15px; max-width: 40rem; font-weight: 600; }
+    .hero p { opacity: .92; font-size: 15px; max-width: 42rem; font-weight: 600; }
     .hero .pin {
       margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap;
     }
@@ -75,7 +75,6 @@
     }
     .btn.solid:hover { background: #FFF1F2; }
 
-    /* Jump nav */
     .toc {
       display: flex; flex-wrap: wrap; gap: 8px;
       margin: 0 0 22px; padding: 12px;
@@ -120,13 +119,12 @@
     a.card .title { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
     a.card .desc { font-size: 13px; color: var(--muted); font-weight: 600; }
 
-    /* Flow cards */
     .flow {
       display: grid; gap: 10px;
       grid-template-columns: 1fr;
     }
     @media (min-width: 720px) {
-      .flow { grid-template-columns: repeat(4, 1fr); }
+      .flow { grid-template-columns: repeat(5, 1fr); }
     }
     .flow .f {
       background: var(--card); border: 1px solid var(--border);
@@ -159,7 +157,7 @@
     }
     .step img {
       width: 100%; border-radius: 12px; border: 1px solid var(--border);
-      background: #F8FAFC; display: block;
+      background: #0B0E16; display: block;
     }
     .badge {
       display: inline-block; font-size: 11px; font-weight: 800; color: #fff;
@@ -168,6 +166,7 @@
     .badge.blue { background: var(--sky); }
     .badge.navy { background: var(--navy); }
     .badge.gold { background: #CA8A04; color: #fff; }
+    .badge.green { background: #059669; }
     .step h3 { font-size: 18px; font-weight: 800; margin-bottom: 6px; letter-spacing: -.01em; }
     .step .lead { font-size: 14px; color: var(--muted); font-weight: 600; margin-bottom: 10px; }
     .step ol, .step ul { margin-left: 18px; font-size: 13.5px; font-weight: 600; color: #334155; }
@@ -183,8 +182,8 @@
       color: #E8F1F7; border-radius: 16px; padding: 18px 20px; margin: 18px 0;
     }
     .callout h3 { font-size: 15px; font-weight: 800; margin-bottom: 8px; color: #fff; }
-    .callout ol { margin-left: 18px; font-size: 13px; font-weight: 600; opacity: .95; }
-    .callout ol li { margin: 5px 0; }
+    .callout ol, .callout ul { margin-left: 18px; font-size: 13px; font-weight: 600; opacity: .95; }
+    .callout ol li, .callout ul li { margin: 5px 0; }
     .callout .hl { color: #FDA4AF; font-weight: 800; }
 
     table.quick {
@@ -221,38 +220,59 @@
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="kicker">Shift leader playbook</div>
+      <div class="kicker">Shift leader playbook · updated</div>
       <h1>How to schedule the week &amp; set up a BOH shift</h1>
       <p>
-        Built for <strong>shift leaders</strong> at CFA Vestavia Hills BOH.
-        Use this when you’re building the week, assigning stations, running handovers, or printing the gameplan.
+        Built for <strong>managers and shift leaders</strong> at CFA Vestavia Hills BOH.
+        Sign in, build the week, name BF/LN/DN leads, publish each period setup, and print the gameplan.
+        Teammates use <strong>My Week</strong> to see their hours, leadership, and stations.
       </p>
       <div class="pin">
-        <span>Schedule the team</span>
-        <span>Assign stations</span>
-        <span>Handovers</span>
-        <span>Print gameplan</span>
+        <span>Sign in</span>
+        <span>Schedule</span>
+        <span>Leaders</span>
+        <span>Publish setup</span>
+        <span>My Week</span>
       </div>
       <div class="copy-row">
         <a class="btn solid" href="../app.html">Open the app</a>
         <a class="btn solid" href="https://roudic.github.io/boh-shift-ops/app.html">Open live app</a>
+        <a class="btn" href="https://roudic.github.io/boh-shift-ops/">Product page</a>
         <button type="button" onclick="copyLink(location.href, this)">Copy this guide link</button>
       </div>
     </header>
 
     <nav class="toc" aria-label="Jump to section">
+      <a href="#signin">Sign in</a>
       <a href="#flow">Shift flow</a>
       <a href="#schedule">1 · Schedule</a>
       <a href="#smart">2 · SmartView</a>
       <a href="#leaders">3 · Leaders</a>
-      <a href="#setup">4 · Shift Setup</a>
-      <a href="#print">5 · Print</a>
+      <a href="#setup">4 · Setup + Publish</a>
+      <a href="#mydash">5 · My Week</a>
+      <a href="#print">6 · Print</a>
       <a href="#rush">Before rush</a>
       <a href="#cheatsheet">Cheat sheet</a>
     </nav>
 
+    <!-- SIGN IN -->
+    <h2 class="section" id="signin">Before you build — sign in</h2>
+    <div class="callout">
+      <h3>Accounts &amp; access</h3>
+      <ul>
+        <li><span class="hl">Admin</span> — full control, users &amp; roles, unpublished setup board (Joshua / Roudic).</li>
+        <li><span class="hl">Manager</span> — Schedule, Shift Setup, Skills, Leaders, Publish.</li>
+        <li><span class="hl">Team member</span> — <strong>My Week</strong> only (hours, leadership, stations).</li>
+      </ul>
+      <ol>
+        <li>Open the <span class="hl">app</span> → enter the username/password your admin gave you.</li>
+        <li>Choose <span class="hl">who you are</span> on the roster (Link my roster name) so My Week works.</li>
+        <li>Cloud connects automatically on the live site — badge should say <span class="hl">Cloud</span>, not Local only.</li>
+      </ol>
+    </div>
+
     <!-- FLOW -->
-    <h2 class="section" id="flow">Your job as shift leader — 4 steps</h2>
+    <h2 class="section" id="flow">Your job as shift leader — 5 steps</h2>
     <div class="flow">
       <div class="f">
         <div class="n">1</div>
@@ -267,12 +287,17 @@
       <div class="f">
         <div class="n">3</div>
         <h3>Set the floor</h3>
-        <p>Open <strong>Shift Setup</strong> → drag people onto stations for that daypart.</p>
+        <p>Open <strong>Shift Setup</strong> → place people on stations for that daypart.</p>
       </div>
       <div class="f">
         <div class="n">4</div>
+        <h3>Publish</h3>
+        <p>Tap <strong>Publish setup</strong> when that period board is ready for the team.</p>
+      </div>
+      <div class="f">
+        <div class="n">5</div>
         <h3>Print &amp; run</h3>
-        <p><strong>Print</strong> the 2-page gameplan (BF+LN / Afternoon+Dinner) for the board.</p>
+        <p><strong>Print</strong> the 2-page gameplan for the board; leads check <strong>My Week</strong>.</p>
       </div>
     </div>
 
@@ -282,6 +307,7 @@
         <li><span class="hl">Schedule first</span> — if nobody is on the grid for that period, the Setup pool is empty.</li>
         <li><span class="hl">Then Setup</span> — stations only use people already scheduled on that block.</li>
         <li><span class="hl">Leaders stay out of the pool</span> — they show in the Setup header (BF / LN / DN chips).</li>
+        <li><span class="hl">Publish when ready</span> — Admin can see which dayparts still need publish.</li>
       </ol>
     </div>
 
@@ -291,12 +317,12 @@
       <a class="card primary" href="../app.html">
         <div class="label">This computer</div>
         <div class="title">Open BOH Shift Ops</div>
-        <div class="desc">Schedule · Shift Setup · Leaders · Skills · Print</div>
+        <div class="desc">Sign in · Schedule · Leaders · Setup · My Week</div>
       </a>
       <a class="card primary" href="https://roudic.github.io/boh-shift-ops/app.html">
         <div class="label">Any device</div>
         <div class="title">Live app (GitHub Pages)</div>
-        <div class="desc">Same tool in the browser — pull from cloud if connected</div>
+        <div class="desc">Same tool in the browser — auto cloud sync</div>
       </a>
       <a class="card" href="./HOW-TO.md">
         <div class="label">Written guide</div>
@@ -314,36 +340,34 @@
     <h2 class="section">How to use — step by step</h2>
     <div class="howto">
 
-      <!-- 1 SCHEDULE -->
       <div class="step" id="schedule">
         <div>
           <div class="badge">1 · Schedule</div>
           <h3>Build the week schedule</h3>
           <p class="lead">This is where people get hours. Do this before station setup.</p>
           <ol>
-            <li>Open the app → top tab <strong>Schedule</strong>.</li>
+            <li>Sign in → top tab <strong>Schedule</strong> (managers/admins).</li>
             <li>Use week arrows to pick Mon–Sat of the week you’re building.</li>
             <li><strong>ClassicView</strong> (default): each row is a person, each column is a day.
               <ul>
                 <li>Click an empty cell → set start / end → Save.</li>
-                <li>Or click <strong>+ Add shift</strong> on a day that already has hours (multi-shift same day).</li>
+                <li>Or click <strong>+ Add shift</strong> on a day that already has hours.</li>
                 <li><strong>Drag a shift card</strong> to another person or day to <em>move</em> it (not copy).</li>
                 <li>Use <strong>Edit</strong> on the card to change times; <strong>✕</strong> removes that block.</li>
               </ul>
             </li>
-            <li>Day headers show how many people are scheduled + BF/LN/DN lead chips.</li>
-            <li>When the week looks right, you’re ready for Shift Setup.</li>
+            <li>Day headers show headcount + BF/LN/DN lead chips.</li>
+            <li>When the week looks right, go to Leaders / Shift Setup.</li>
           </ol>
           <div class="tip">
             <strong>Leader tip:</strong> Paint coverage for Breakfast, Lunch, Afternoon, and Dinner windows so Setup pools are full when you assign stations.
           </div>
         </div>
         <div class="pic">
-          <img src="./images/02-classic-schedule.png" alt="Classic week schedule">
+          <img src="./images/02-classic-schedule.jpg" alt="Classic week schedule in BOH Shift Ops" width="1440" height="900">
         </div>
       </div>
 
-      <!-- 2 SMARTVIEW -->
       <div class="step reverse" id="smart">
         <div>
           <div class="badge blue">2 · SmartView</div>
@@ -354,7 +378,7 @@
             <li>Each row is a person; columns are days with hour marks (about 4:30a–11p).</li>
             <li><strong>Drag on empty track</strong> to paint a new shift.</li>
             <li><strong>Drag the bar</strong> to slide times; <strong>drag left/right edges</strong> to stretch start/end.</li>
-            <li>Drag a bar onto another person’s row to reassign (it <em>moves</em> — no duplicate).</li>
+            <li>Drag a bar onto another person’s row to reassign (it <em>moves</em>).</li>
             <li><strong>ClassicView</strong> or Esc exits back to the week grid.</li>
           </ol>
           <div class="tip">
@@ -362,19 +386,18 @@
           </div>
         </div>
         <div class="pic">
-          <img src="./images/03-smartview-guide.png" alt="SmartView timeline">
+          <img src="./images/03-smartview-guide.jpg" alt="SmartView timeline" width="1440" height="900">
         </div>
       </div>
 
-      <!-- 3 LEADERS -->
       <div class="step" id="leaders">
         <div>
           <div class="badge gold">3 · Leaders</div>
           <h3>Assign BF / LN / DN leaders</h3>
-          <p class="lead">Leaders run the period — they show on the Setup header, not in the station pool.</p>
+          <p class="lead">Leaders run the period — they show on the Setup header, not in the station pool. Their My Week also shows leadership windows.</p>
           <ol>
             <li>Open the <strong>Leaders</strong> tab.</li>
-            <li>Add leaders to the roster if needed.</li>
+            <li>Add leaders to the roster if needed (<strong>+ Add leader</strong>).</li>
             <li>For each day, assign:
               <ul>
                 <li><strong>Breakfast Lead</strong> ~ 4:30a–11:00a</li>
@@ -382,53 +405,68 @@
                 <li><strong>Dinner Lead</strong> ~ 3:00p–11:00p</li>
               </ul>
             </li>
-            <li>Assigning a lead can <strong>auto-add leadership hours</strong> on the schedule if they weren’t already on.</li>
-            <li>On <strong>Shift Setup</strong>, those names appear as chips under the title (gold outline when that lead overlaps the period you picked).</li>
+            <li>Assigning a lead can <strong>auto-add leadership hours</strong> on the schedule.</li>
+            <li>On <strong>Shift Setup</strong>, those names appear as chips under the title (highlighted when that lead overlaps the period you picked).</li>
+            <li>On <strong>My Week</strong>, a linked lead sees chips like <em>Mon · BF Lead</em> plus the leadership time window for each day.</li>
           </ol>
           <div class="tip">
-            <strong>Don’t put the lead on a station</strong> unless you really need them on the board — the pool deliberately hides day leaders so floor spots stay for the team.
+            <strong>Don’t put the lead on a station</strong> unless you really need them on the board — the pool hides day leaders so floor spots stay for the team.
           </div>
         </div>
         <div class="pic">
-          <img src="./images/01-app-home.png" alt="App navigation and home">
+          <img src="./images/06-leaders.jpg" alt="BOH leadership schedule tab" width="1440" height="900">
         </div>
       </div>
 
-      <!-- 4 SETUP -->
       <div class="step reverse" id="setup">
         <div>
-          <div class="badge navy">4 · Shift Setup</div>
-          <h3>Set stations for a period</h3>
+          <div class="badge navy">4 · Shift Setup + Publish</div>
+          <h3>Set stations, then publish the period</h3>
           <p class="lead">This is the floor board: who is on Primary, Machines, Breading, Fries, etc.</p>
           <ol>
             <li>Open <strong>Shift Setup</strong>.</li>
             <li>Pick <strong>Day</strong> and <strong>Period block</strong> (Breakfast, Lunch, Afternoon, Dinner…).</li>
-            <li>Team pool (right/side) lists people <strong>scheduled on that block</strong> — sorted by <em>out time</em> for handoffs.</li>
-            <li><strong>Drag a name onto a station pad</strong> → confirm start/end times → Save.</li>
-            <li>Or <strong>click a name</strong> (selects them), then <strong>click a station</strong>.</li>
-            <li>For a 3p handover on the same station:
-              <ul>
-                <li>First person already on the pad</li>
-                <li>Click <strong>+ Add person / handover</strong></li>
-                <li>Second person + times (e.g. 5a–3p then 3p–close)</li>
-              </ul>
-            </li>
-            <li>Click the <strong>✕</strong> on a person row to pull them off that station (back to pool).</li>
-            <li>Use each period’s own checklist on the side — not shared across periods.</li>
+            <li>Confirm the <strong>lead chip</strong> in the header for that window.</li>
+            <li>Team pool lists people <strong>scheduled on that block</strong> (sorted by out time).</li>
+            <li><strong>Phone / tablet:</strong> double-tap <strong>+ Add person</strong> on a station → pick from the pool → set times.</li>
+            <li><strong>Desktop:</strong> drag a name onto a station pad → set from/until → Save (or click name, then station).</li>
+            <li>For a handover on the same station: <strong>+ Add person / handover</strong> → second name + times.</li>
+            <li>Fill that period’s <strong>checklist</strong> and <strong>notes</strong>.</li>
+            <li>When the board is ready, click <strong>Publish setup</strong>. Badge flips to Published (with your name).</li>
           </ol>
           <div class="tip">
-            <strong>Empty pool?</strong> Nobody is scheduled for that period yet — go back to Schedule and add hours that overlap the period times.
+            <strong>Empty pool?</strong> Nobody is scheduled for that period yet — go back to Schedule first.
+            <br><strong>Admin:</strong> unpublished dayparts show on the Admin board until you publish them.
           </div>
         </div>
         <div class="pic">
-          <img src="./images/04-periods-positions.png" alt="Shift Setup stations">
+          <img src="./images/04-periods-positions.jpg" alt="Shift Setup stations board" width="1440" height="900">
         </div>
       </div>
 
-      <!-- 5 PRINT -->
-      <div class="step" id="print">
+      <div class="step" id="mydash">
         <div>
-          <div class="badge">5 · Print</div>
+          <div class="badge green">5 · My Week</div>
+          <h3>Personal week for every teammate (and every lead)</h3>
+          <p class="lead">Anyone signed in can open My Week after linking their roster name.</p>
+          <ol>
+            <li>Use <strong>Link my roster name</strong> (or the prompt after first login).</li>
+            <li>Open <strong>My Week</strong>.</li>
+            <li>You’ll see scheduled hours, <strong>leadership</strong> (BF / LN / DN) when you’re a lead that day, and posted station positions.</li>
+            <li>Draft station rows show as draft until that period is <strong>Published</strong>.</li>
+          </ol>
+          <div class="tip">
+            <strong>Team members</strong> only see My Week. Managers/admins see every tab — still use My Week to check your own lead days.
+          </div>
+        </div>
+        <div class="pic">
+          <img src="./images/07-my-week.jpg" alt="My Week personal dashboard with leadership" width="1440" height="900">
+        </div>
+      </div>
+
+      <div class="step reverse" id="print">
+        <div>
+          <div class="badge">6 · Print</div>
           <h3>Print the BOH gameplan (2 pages)</h3>
           <p class="lead">What you hang for the team — centerline stations + side roster.</p>
           <ol>
@@ -436,20 +474,18 @@
             <li>Click <strong>Print</strong>.</li>
             <li>You get <strong>exactly two landscape pages</strong> when both halves of the day exist:
               <ul>
-                <li><strong>Page 1 — Breakfast &amp; Lunch</strong><br>
-                  Station boards for early dayparts + combined side roster for those people</li>
-                <li><strong>Page 2 — Afternoon &amp; Dinner</strong><br>
-                  Station boards for late dayparts + combined side roster</li>
+                <li><strong>Page 1 — Breakfast &amp; Lunch</strong> · boards + combined side roster</li>
+                <li><strong>Page 2 — Afternoon &amp; Dinner</strong> · boards + combined side roster</li>
               </ul>
             </li>
             <li>Print or Save as PDF from the browser dialog.</li>
           </ol>
           <div class="tip">
-            <strong>ZIP export</strong> (top bar Export) uses the same 2-page staffing layout per day, plus a week schedule PDF.
+            <strong>ZIP export</strong> (More / Export ZIP) uses the same 2-page staffing layout per day, plus a week schedule PDF.
           </div>
         </div>
         <div class="pic">
-          <img src="./images/05-cloud-share.png" alt="Sharing and export">
+          <img src="./images/01-app-home.jpg" alt="App overview after sign-in" width="1440" height="900">
         </div>
       </div>
     </div>
@@ -459,12 +495,14 @@
     <div class="callout">
       <h3>Leader pre-shift checklist</h3>
       <ol>
+        <li>You’re <span class="hl">signed in</span> and cloud shows connected (if using the live app).</li>
         <li>Correct <span class="hl">day</span> selected on Shift Setup.</li>
         <li>Period matches the rush you’re prepping (Breakfast / Lunch / Afternoon / Dinner).</li>
         <li><span class="hl">Lead chip</span> in the header is the right person for that window.</li>
         <li>Primary / Machines / Breading / Fries have names (or a clear open slot you own).</li>
         <li>Handovers timed (who leaves, who takes over, what time).</li>
         <li>Period checklist scanned; notes box has any callouts.</li>
+        <li><span class="hl">Publish setup</span> clicked for this period.</li>
         <li>Print gameplan if the board copy is stale.</li>
       </ol>
     </div>
@@ -480,32 +518,52 @@
       </thead>
       <tbody>
         <tr>
+          <td>Sign in</td>
+          <td>Open app → username + password from Admin</td>
+        </tr>
+        <tr>
+          <td>Link my name</td>
+          <td>More → Link my roster name · or prompt after login</td>
+        </tr>
+        <tr>
+          <td>See my lead days</td>
+          <td>My Week — leadership chips + windows for BF/LN/DN</td>
+        </tr>
+        <tr>
           <td>Put someone on the week</td>
-          <td>Schedule → empty cell → set times · or SmartView paint on their row</td>
+          <td>Schedule → empty cell → set times · or SmartView paint</td>
         </tr>
         <tr>
           <td>Two shifts same day</td>
-          <td>On that day card → <strong>+ Shift</strong> · or paint a second block in SmartView</td>
+          <td>On that day card → <strong>+ Shift</strong> · or paint a second SmartView block</td>
         </tr>
         <tr>
           <td>Move a shift</td>
-          <td>Drag the card (Classic) or bar (SmartView) to the new person/day — it moves, doesn’t copy</td>
+          <td>Drag the card (Classic) or bar (SmartView) — moves, doesn’t copy</td>
         </tr>
         <tr>
           <td>Name BF / LN / DN lead</td>
-          <td>Leaders tab → pick person for that day · hours can auto-add to Schedule</td>
+          <td>Leaders tab → pick person for that day · hours can auto-add</td>
         </tr>
         <tr>
           <td>Fill stations for Lunch</td>
-          <td>Shift Setup → Day + Lunch period → drag pool → stations</td>
+          <td>Shift Setup → Day + Lunch → pool → stations</td>
+        </tr>
+        <tr>
+          <td>Add person on phone</td>
+          <td>Double-tap <strong>+ Add person</strong> on the station → pick name → times</td>
         </tr>
         <tr>
           <td>3:00 handover</td>
           <td>On the station → + Add person / handover → second name + times</td>
         </tr>
         <tr>
-          <td>Remove from a station</td>
-          <td>✕ on their row on the pad (returns them to the pool)</td>
+          <td>Mark period ready</td>
+          <td>Shift Setup → <strong>Publish setup</strong></td>
+        </tr>
+        <tr>
+          <td>See unpublished periods</td>
+          <td>Admin tab (admin only) → Unpublished setups</td>
         </tr>
         <tr>
           <td>Print board sheets</td>
@@ -520,12 +578,12 @@
           <td>Normal — leaders are header-only for that day</td>
         </tr>
         <tr>
-          <td>Skills / training flags</td>
-          <td>Skills tab → mark strong / watch / not trained per station</td>
+          <td>Add a manager / member</td>
+          <td>Admin → + Add user → role + optional roster link</td>
         </tr>
         <tr>
           <td>Share with another device</td>
-          <td>Cloud badge → Pull from DB (if connected) · or Export ZIP / JSON</td>
+          <td>Live app auto-connects · Pull if stale · or Export ZIP / JSON</td>
         </tr>
       </tbody>
     </table>
@@ -536,14 +594,16 @@
         <div>
           <div class="badge navy">Cloud</div>
           <h3>Stay in sync with the store</h3>
-          <p class="lead">You don’t need to set up Supabase every time — only pull/push once the store is connected.</p>
+          <p class="lead">The live app auto-connects to the Vestavia store cloud on every phone/PC.</p>
           <ol>
-            <li>Top bar cloud badge → if it says connected, click <strong>Pull from DB</strong> when you open the app on a new browser.</li>
-            <li>After big schedule/setup changes, <strong>Push to DB</strong> so the next leader gets your work.</li>
-            <li>If you’re not on cloud, use <strong>Export</strong> (ZIP or JSON) and share the file.</li>
+            <li>Open <strong>https://roudic.github.io/boh-shift-ops/app.html</strong> → sign in.</li>
+            <li>Badge should say <strong>Cloud</strong> (not Local only). Refresh once if it doesn’t.</li>
+            <li>Edits auto-push while connected · use <strong>Pull</strong> if someone else just changed the board.</li>
+            <li>Last push wins — pull before a long edit session if others are working.</li>
+            <li>Backup option: <strong>Export ZIP</strong> or Backup JSON.</li>
           </ol>
           <div class="tip">
-            Last push wins — pull before a long edit session if someone else may have updated the week.
+            Product landing (share with outsiders): <strong>https://roudic.github.io/boh-shift-ops/</strong> · team always bookmarks the <strong>app</strong> link above.
           </div>
         </div>
       </div>
@@ -552,6 +612,7 @@
     <footer>
       CFA Vestavia Hills · BOH ·
       <a href="../app.html">Open app</a> ·
+      <a href="https://roudic.github.io/boh-shift-ops/">Landing</a> ·
       <a href="./HOW-TO.md">Full write-up</a> ·
       <a href="./SHARE.md">Share links</a>
       <br><span style="opacity:.8">Bookmark this guide · send it to new shift leaders</span>
