@@ -1,15 +1,20 @@
 # BOH Shift Ops
 
-Chick-fil-A Vestavia Hills BOH scheduling + shift setup app.
+Back-of-house scheduling + shift setup for restaurant teams.  
+In use at Chick-fil-A Vestavia Hills — structured so it can grow into a product other stores can use.
 
 ## Share this (always handy)
+
+**Product landing:**  
+### https://roudic.github.io/boh-shift-ops/
 
 **Team hub (bookmark & send):**  
 ### https://roudic.github.io/boh-shift-ops/guide/
 
 | Link | URL |
 |------|-----|
-| Live app | https://roudic.github.io/boh-shift-ops/ |
+| Product landing | https://roudic.github.io/boh-shift-ops/ |
+| Live app | https://roudic.github.io/boh-shift-ops/app.html |
 | Share hub + photo demos | https://roudic.github.io/boh-shift-ops/guide/ |
 | Full how-to README | [guide/HOW-TO.md](./guide/HOW-TO.md) |
 | Short share card | [guide/SHARE.md](./guide/SHARE.md) |
@@ -18,6 +23,8 @@ Chick-fil-A Vestavia Hills BOH scheduling + shift setup app.
 
 ## What’s included
 
+- **Landing** — product page at `/` (`index.html`)  
+- **App** — schedule, shift setup, roles, My Week (`app.html`)  
 - **Schedule** — Classic week grid + SmartView hour timelines  
 - **Period blocks** — create / edit / delete your own  
 - **Shift Setup** — custom positions, multi-period layout link, handovers  
@@ -26,8 +33,8 @@ Chick-fil-A Vestavia Hills BOH scheduling + shift setup app.
 
 ## Cloud database (quick)
 
-The Vestavia store cloud key is built into the live app (`data/cloud-config.json` + defaults in `index.html`).  
-**Any phone or PC that opens the page auto-connects** and pulls the shared schedule. Edits auto-push while connected.
+The Vestavia store cloud key is built into the live app (`data/cloud-config.json` + defaults in `app.html`).  
+**Any phone or PC that opens the app auto-connects** and pulls the shared schedule. Edits auto-push while connected.
 
 First-time Supabase project setup (already done for this store):
 
@@ -38,7 +45,7 @@ This project URL: `https://oikrcoccaepgtvdswuuo.supabase.co`
 
 ## Local file
 
-Open `index.html`, or:
+Open `index.html` (landing) or `app.html` (the tool), or:
 
 ```bash
 npx --yes serve .
