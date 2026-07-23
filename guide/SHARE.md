@@ -4,7 +4,7 @@
 
 ## https://roudic.github.io/boh-shift-ops/guide/
 
-That’s the **shift leader guide**: how to schedule the week, assign leads, set up stations, handovers, and print the 2-page gameplan.
+That’s the **shift leader guide**: sign in, schedule the week, assign leads, set up stations, publish each period, print the 2-page gameplan, and use My Week for personal hours + leadership.
 
 ---
 
@@ -24,17 +24,19 @@ That’s the **shift leader guide**: how to schedule the week, assign leads, set
 
 | Need | Path |
 |------|------|
-| App | `boh-shift-app/index.html` |
-| Leader guide | `boh-shift-app/guide/index.html` |
+| App | `app.html` |
+| Leader guide | `guide/index.html` |
+| Product landing | `index.html` |
 
 ---
 
 ### 30-second start for a new leader
 
-1. Open the **app**  
-2. If cloud is connected → **Pull from DB**  
-3. Read **Schedule → Leaders → Shift Setup → Print** in the guide  
-4. Build the week, set stations, print the gameplan  
+1. Open the **app** → sign in (manager account from Admin)  
+2. **Link my roster name**  
+3. If cloud is connected → **Pull** if the board looks stale  
+4. Follow the guide: **Schedule → Leaders → Shift Setup → Publish → Print**  
+5. Check **My Week** for your own lead days  
 
 ---
 
@@ -43,6 +45,7 @@ That’s the **shift leader guide**: how to schedule the week, assign leads, set
 - Open the live app — cloud connects automatically  
 - If a phone still says **Local only**, refresh once  
 - **Pull** if the board looks stale · edits auto-push when connected  
+- Admin adds managers/members under **Admin → Users**  
 - Supabase dashboard (admin only): https://supabase.com/dashboard  
 
 ---
